@@ -1,0 +1,10 @@
+{
+  "name": "ffwrap",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev": "bun run --filter @ffwrap/cli dev",
+    "dev:tui": "bun run --filter @ffwrap/tui dev",
+    "build": "bun run --filter '@ffwrap/*' build"
+  }
+}

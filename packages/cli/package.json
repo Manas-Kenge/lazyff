@@ -1,0 +1,21 @@
+{
+  "name": "@ffwrap/cli",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "src/index.ts",
+  "bin": {
+    "ffwrap": "./bin/ffwrap"
+  },
+  "scripts": {
+    "dev": "bun run src/cli.ts",
+    "build": "bun build src/cli.ts --outdir dist --target bun"
+  },
+  "dependencies": {
+    "@ffwrap/tui": "workspace:*",
+    "yargs": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/yargs": "^17.0.33"
+  }
+}
