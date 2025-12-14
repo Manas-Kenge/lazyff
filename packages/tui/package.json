@@ -5,18 +5,20 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun run --watch src/index.tsx"
+    "dev": "bun run src/index.tsx"
+  },
+  "dependencies": {
+    "@ffwrap/cli": "workspace:*",
+    "@opentui/core": "^0.1.59",
+    "@opentui/react": "^0.1.59",
+    "fuzzysort": "^3.1.0",
+    "react": "^19.1.1"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/react": "^19.1.0"
   },
   "peerDependencies": {
     "typescript": "^5"
-  },
-  "dependencies": {
-    "@opentui/core": "^0.1.59",
-    "@opentui/react": "^0.1.59",
-    "react": "^19.1.1",
-    "zod": "^4.1.13"
   }
 }

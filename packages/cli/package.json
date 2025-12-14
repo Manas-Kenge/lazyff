@@ -11,8 +11,10 @@
     "build": "bun build src/cli.ts --outdir dist --target bun"
   },
   "dependencies": {
-    "@ffwrap/tui": "workspace:*",
     "yargs": "^18.0.0"
+  },
+  "optionalDependencies": {
+    "@ffwrap/tui": "workspace:*"
   },
   "devDependencies": {
     "@types/bun": "latest",
