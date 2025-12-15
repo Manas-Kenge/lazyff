@@ -3,8 +3,8 @@
   "private": true,
   "workspaces": ["packages/*"],
   "scripts": {
-    "dev": "bun run --filter @ffwrap/cli dev",
-    "dev:tui": "bun run --filter @ffwrap/tui dev",
+    "dev": "bun run packages/cli/src/cli.ts",
+    "dev:tui": "bun run packages/tui/src/index.tsx",
     "build": "bun run --filter '@ffwrap/*' build"
   }
 }
