@@ -1,7 +1,7 @@
-import React from "react"
-import { createCliRenderer, TextAttributes, type CliRenderer } from "@opentui/core"
-import { createRoot, useKeyboard } from "@opentui/react"
-import { AppProvider, useApp } from "./context/app"
+import React, { useEffect } from "react"
+import { createCliRenderer, type CliRenderer, TextAttributes } from "@opentui/core"
+import { createRoot, useKeyboard, useTerminalDimensions } from "@opentui/react"
+import { AppProvider, useApp, BREAKPOINTS } from "./context/app"
 import { ThemeProvider, useTheme, resetTerminalBackground } from "./context/theme"
 import { DialogProvider, useDialog } from "./components/ui/dialog"
 import { ToastProvider } from "./components/ui/toast"
@@ -61,30 +61,53 @@ function InitialView() {
       >
         <Prompt focused={focusedPanel === "input"} />
       </box>
+
+      {/* Keyboard hints - outside the border */}
+      <box flexDirection="row" justifyContent="flex-end" width={80} marginTop={1}>
+        <text attributes={TextAttributes.DIM} fg={theme.text}>F1</text>
+        <text attributes={TextAttributes.DIM} fg={theme.textMuted}> help  </text>
+        <text attributes={TextAttributes.DIM} fg={theme.text}>ctrl+c</text>
+        <text attributes={TextAttributes.DIM} fg={theme.textMuted}> quit</text>
+      </box>
     </box>
   )
 }
 
 function MainApp() {
-  const { cwd, focusedPanel, cycleFocus, viewMode } = useApp()
+  const { cwd, focusedPanel, cycleFocus, viewMode, sidebarVisible, toggleSidebar, setTerminalDimensions, terminalWidth } = useApp()
   const { theme } = useTheme()
   const dialog = useDialog()
+  const { width, height } = useTerminalDimensions()
+
+  // Update terminal dimensions in app state when they change
+  useEffect(() => {
+    setTerminalDimensions(width, height)
+  }, [width, height, setTerminalDimensions])
+
+  // Check if we're on a small screen
+  const isSmallScreen = terminalWidth < BREAKPOINTS.MD
 
   // Global keyboard shortcuts
   // Note: Ctrl+C is handled by the renderer's built-in exitOnCtrlC (default: true)
   useKeyboard((event) => {
-    const { name } = event
+    const { name, ctrl } = event
 
     // Don't handle shortcuts when dialog is open
     if (dialog.isOpen) return
 
-    // ? to toggle help (only when not in input)
-    if (name === "?" && focusedPanel !== "input") {
+    // Ctrl+B to toggle sidebar
+    if (ctrl && name === "b") {
+      toggleSidebar()
+      return
+    }
+
+    // F1 or ? (when sidebar focused) to toggle help
+    if (name === "f1" || (name === "?" && focusedPanel !== "input")) {
       dialog.replace(() => <DialogHelp />)
       return
     }
 
-    // Tab to cycle focus
+    // Tab to cycle focus (only if sidebar is visible)
     if (name === "tab") {
       cycleFocus()
       return
@@ -92,7 +115,7 @@ function MainApp() {
   })
 
   return (
-    <box flexDirection="column" flexGrow={1} padding={1}>
+    <box flexDirection="column" flexGrow={1} padding={0}>
       {/* Main container with background */}
       <box
         flexDirection="column"
@@ -103,8 +126,10 @@ function MainApp() {
       >
         {/* Main content row */}
         <box flexDirection="row" flexGrow={1}>
-          {/* Sidebar - File Tree */}
-          <FileTree focused={focusedPanel === "sidebar"} width={40} />
+          {/* Sidebar - File Tree (conditionally rendered) */}
+          {sidebarVisible && (
+            <FileTree focused={focusedPanel === "sidebar"} width={40} />
+          )}
 
           {/* Main Panel - Initial or Chat view */}
           {viewMode === "initial" ? (
@@ -115,10 +140,20 @@ function MainApp() {
         </box>
 
         {/* Footer */}
-        <box flexDirection="row" justifyContent="space-between" paddingLeft={1} paddingRight={1}>
-          <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
-            {cwd}
-          </text>
+        <box flexDirection="row" justifyContent="space-between" paddingLeft={1} paddingRight={1} marginTop={1}>
+          <box flexDirection="row">
+            <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
+              {cwd}
+            </text>
+            {/* Show toggle hint when sidebar is hidden */}
+            {!sidebarVisible && (
+              <>
+                <text attributes={TextAttributes.DIM} fg={theme.textMuted}>  </text>
+                <text attributes={TextAttributes.DIM} fg={theme.text}>ctrl+b</text>
+                <text attributes={TextAttributes.DIM} fg={theme.textMuted}> files</text>
+              </>
+            )}
+          </box>
           <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
             {VERSION}
           </text>

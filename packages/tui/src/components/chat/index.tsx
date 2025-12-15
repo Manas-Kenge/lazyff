@@ -20,7 +20,9 @@ export function ChatView() {
         paddingLeft={1}
         paddingRight={1}
         paddingTop={1}
-        scrollbarOptions={{ visible: true }}
+        scrollbarOptions={{ visible: false }}
+        horizontalScrollbarOptions={{ visible: false }}
+        scrollX={false}
       >
         {messages.map((msg) => (
           <ChatMessageItem key={msg.id} message={msg} />

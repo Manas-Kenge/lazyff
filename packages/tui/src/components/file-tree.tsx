@@ -317,51 +317,75 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
             // Calculate available space for filename
             const prefixLen = indentGuides.length + expander.length + 2 // icon + space
             const sizeLen = fileSize ? fileSize.length + 1 : 0
-            const availableWidth = width - 4 - prefixLen - sizeLen // -4 for padding/border
-            const displayName =
-              node.name.length > availableWidth
-                ? node.name.slice(0, availableWidth - 2) + ".."
-                : node.name
+            const availableWidth = width - 4 - prefixLen // -4 for padding/border
+            const availableWidthWithSize = availableWidth - sizeLen
 
-            // Pad name to align file sizes
-            const namePadding = Math.max(0, availableWidth - displayName.length)
+            // Wrap long file names into multiple lines
+            const wrapText = (text: string, maxWidth: number): string[] => {
+              if (text.length <= maxWidth) return [text]
+              const lines: string[] = []
+              let remaining = text
+              while (remaining.length > 0) {
+                lines.push(remaining.slice(0, maxWidth))
+                remaining = remaining.slice(maxWidth)
+              }
+              return lines
+            }
+
+            const wrappedName = wrapText(node.name, availableWidthWithSize)
+            const isMultiLine = wrappedName.length > 1
+
+            // For single line, pad name to align file sizes
+            const namePadding = !isMultiLine 
+              ? Math.max(0, availableWidthWithSize - node.name.length)
+              : 0
 
             return (
               <box
                 key={node.path}
-                flexDirection="row"
+                flexDirection="column"
                 backgroundColor={isSelected && focused ? theme.primary : undefined}
               >
-                {/* Indent guides */}
-                {depth > 0 && (
-                  <text fg={theme.border}>{indentGuides}</text>
-                )}
+                {wrappedName.map((line, lineIndex) => (
+                  <box key={lineIndex} flexDirection="row">
+                    {/* Indent guides - only on first line */}
+                    {lineIndex === 0 && depth > 0 && (
+                      <text fg={theme.border}>{indentGuides}</text>
+                    )}
+                    {/* Continuation indent for wrapped lines */}
+                    {lineIndex > 0 && (
+                      <text fg={theme.border}>{" ".repeat(prefixLen)}</text>
+                    )}
 
-                {/* Expander */}
-                <text fg={isSelected && focused ? textColor : theme.textMuted}>
-                  {expander}
-                </text>
+                    {/* Expander - only on first line */}
+                    {lineIndex === 0 && (
+                      <text fg={isSelected && focused ? textColor : theme.textMuted}>
+                        {expander}
+                      </text>
+                    )}
 
-                {/* Icon */}
-                <text fg={textColor}>{icon} </text>
+                    {/* Icon - only on first line */}
+                    {lineIndex === 0 && <text fg={textColor}>{icon} </text>}
 
-                {/* Filename */}
-                <text
-                  fg={textColor}
-                  attributes={isSelected && focused ? TextAttributes.BOLD : undefined}
-                >
-                  {displayName}
-                </text>
-
-                {/* Padding + File size */}
-                {fileSize && (
-                  <>
-                    <text fg={theme.textMuted}>{" ".repeat(namePadding)} </text>
-                    <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
-                      {fileSize}
+                    {/* Filename line */}
+                    <text
+                      fg={textColor}
+                      attributes={isSelected && focused ? TextAttributes.BOLD : undefined}
+                    >
+                      {line}
                     </text>
-                  </>
-                )}
+
+                    {/* Padding + File size - only on last line */}
+                    {lineIndex === wrappedName.length - 1 && fileSize && (
+                      <>
+                        <text fg={theme.textMuted}>{" ".repeat(namePadding)} </text>
+                        <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
+                          {fileSize}
+                        </text>
+                      </>
+                    )}
+                  </box>
+                ))}
               </box>
             )
           })

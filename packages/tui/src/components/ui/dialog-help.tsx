@@ -40,27 +40,15 @@ export function DialogHelp() {
           <text fg={theme.textMuted}>/quit                - Exit ffwrap</text>
         </box>
         <text fg={theme.text} attributes={TextAttributes.BOLD}>
-          Examples
-        </text>
-        <box paddingLeft={2}>
-          <text fg={theme.textMuted}>/convert mp4         - Convert to MP4</text>
-          <text fg={theme.textMuted}>/trim 0 30           - Keep first 30 seconds</text>
-          <text fg={theme.textMuted}>/compress 50         - Compress to 50%</text>
-          <text fg={theme.textMuted}>/compress 25MB       - Compress to 25MB</text>
-          <text fg={theme.textMuted}>/extract audio       - Extract audio as MP3</text>
-          <text fg={theme.textMuted}>/gif 320 10          - GIF 320px wide, 10fps</text>
-          <text fg={theme.textMuted}>/thumbnail grid      - Create 3x3 grid</text>
-        </box>
-        <text fg={theme.text} attributes={TextAttributes.BOLD}>
           Keyboard Shortcuts
         </text>
         <box paddingLeft={2}>
+          <text fg={theme.textMuted}>F1 - Show/hide help</text>
+          <text fg={theme.textMuted}>Ctrl+B - Toggle file tree</text>
           <text fg={theme.textMuted}>Tab - Switch panel focus</text>
-          <text fg={theme.textMuted}>/ - Focus command input</text>
-          <text fg={theme.textMuted}>? - Show/hide help</text>
-          <text fg={theme.textMuted}>q - Quit</text>
           <text fg={theme.textMuted}>↑/↓ - Navigate file tree</text>
           <text fg={theme.textMuted}>Enter - Select file</text>
+          <text fg={theme.textMuted}>Ctrl+C - Quit</text>
         </box>
         <text fg={theme.text} attributes={TextAttributes.BOLD}>
           Formats

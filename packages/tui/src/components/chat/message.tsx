@@ -34,7 +34,7 @@ export function ChatMessageItem({ message }: ChatMessageProps) {
     >
       {/* Label */}
       <box marginBottom={1}>
-        <text fg={labelColor} attributes={TextAttributes.BOLD}>
+        <text fg={labelColor} attributes={TextAttributes.BOLD} wrapMode="word">
           {label}
         </text>
       </box>
@@ -43,20 +43,20 @@ export function ChatMessageItem({ message }: ChatMessageProps) {
       <box paddingLeft={2}>
         {message.status === "running" ? (
           <box flexDirection="column">
-            <text fg={theme.textMuted}>{message.content}</text>
+            <text fg={theme.textMuted} wrapMode="word">{message.content}</text>
             <box marginTop={1}>
               <text fg={theme.primary}>⬥◆⬩⬪···</text>
             </box>
           </box>
         ) : message.status === "error" ? (
-          <text fg={theme.error}>✗ {message.content}</text>
+          <text fg={theme.error} wrapMode="word">✗ {message.content}</text>
         ) : message.status === "success" ? (
           <box flexDirection="column">
-            <text fg={theme.success}>✓ {message.content}</text>
+            <text fg={theme.success} wrapMode="word">✓ {message.content}</text>
             {message.metadata && (
               <box marginTop={1}>
                 {message.metadata.duration && (
-                  <text fg={theme.textMuted}>
+                  <text fg={theme.textMuted} wrapMode="word">
                     {message.metadata.duration}
                     {message.metadata.resolution ? ` | ${message.metadata.resolution}` : ""}
                     {message.metadata.sizeChange ? ` | ${message.metadata.sizeChange}` : ""}
@@ -66,7 +66,7 @@ export function ChatMessageItem({ message }: ChatMessageProps) {
             )}
           </box>
         ) : (
-          <text fg={theme.text}>{message.content}</text>
+          <text fg={theme.text} wrapMode="word">{message.content}</text>
         )}
       </box>
     </box>

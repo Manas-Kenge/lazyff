@@ -677,22 +677,14 @@ export function Prompt({ focused = true }: PromptProps) {
           </box>
 
           {/* Selected file line */}
-          <box flexDirection="row">
+          <box flexDirection="row" marginTop={1}>
             <text fg={theme.info}>File  </text>
             <text fg={theme.textMuted}>{selectedFileDisplay}</text>
           </box>
         </box>
       </box>
 
-      {/* Keyboard hints - only show in initial view */}
-      {viewMode === "initial" && (
-        <box flexDirection="row" justifyContent="flex-end" marginTop={1}>
-          <text attributes={TextAttributes.DIM} fg={theme.text}>?</text>
-          <text attributes={TextAttributes.DIM} fg={theme.textMuted}> help  </text>
-          <text attributes={TextAttributes.DIM} fg={theme.text}>ctrl+c</text>
-          <text attributes={TextAttributes.DIM} fg={theme.textMuted}> quit</text>
-        </box>
-      )}
+
     </box>
   )
 }
