@@ -64,7 +64,7 @@ export async function getFfmpegVersion(): Promise<string> {
     const output = result.stdout.toString()
     // Extract version from first line: "ffmpeg version X.X.X ..."
     const match = output.match(/ffmpeg version (\S+)/)
-    return match ? match[1] : "unknown"
+    return match?.[1] ?? "unknown"
   } catch {
     return "not installed"
   }
@@ -78,7 +78,7 @@ export async function getFfprobeVersion(): Promise<string> {
     const result = await $`ffprobe -version`.quiet()
     const output = result.stdout.toString()
     const match = output.match(/ffprobe version (\S+)/)
-    return match ? match[1] : "unknown"
+    return match?.[1] ?? "unknown"
   } catch {
     return "not installed"
   }

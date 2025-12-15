@@ -1,6 +1,16 @@
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
 import { checkFfmpeg, getFfmpegVersion } from "./ffmpeg/index.ts"
+import {
+  convertCommand,
+  infoCommand,
+  trimCommand,
+  compressCommand,
+  extractCommand,
+  mergeCommand,
+  gifCommand,
+  thumbnailCommand,
+} from "./commands/index.ts"
 
 async function launchTui() {
   try {
@@ -32,6 +42,16 @@ async function main() {
         await launchTui()
       }
     )
+    // Media operations
+    .command(convertCommand)
+    .command(trimCommand)
+    .command(compressCommand)
+    .command(mergeCommand)
+    .command(extractCommand)
+    .command(gifCommand)
+    .command(thumbnailCommand)
+    // Info
+    .command(infoCommand)
     .command(
       "version",
       "Show ffwrap and ffmpeg versions",
@@ -42,10 +62,6 @@ async function main() {
         console.log(`ffmpeg: ${ffmpegVersion}`)
       }
     )
-    // Future commands will be added here:
-    // .command(compressCommand)
-    // .command(convertCommand)
-    // .command(trimCommand)
     .help()
     .alias("h", "help")
     .version(false) // Disable default version, we have our own
