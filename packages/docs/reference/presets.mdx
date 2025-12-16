@@ -1,0 +1,298 @@
+---
+title: "Presets"
+description: "Quality and resolution presets"
+---
+
+ffwrap provides presets for common quality levels and resolutions, making it easy to get good results without memorizing technical settings.
+
+## Quality Presets
+
+Use with the `--quality` or `-q` option:
+
+```bash
+ffwrap convert input.mov output.mp4 --quality high
+```
+
+### Overview
+
+| Preset | CRF | Speed | Audio | File Size | Use Case |
+|--------|-----|-------|-------|-----------|----------|
+| `low` | 28 | fast | 96k | Smallest | Previews, drafts |
+| `medium` | 23 | medium | 128k | Balanced | General use (default) |
+| `high` | 18 | slow | 192k | Larger | Final output |
+| `lossless` | 0 | veryslow | 320k | Largest | Archiving, editing |
+
+### Low Quality
+
+```bash
+ffwrap convert input.mov output.mp4 -q low
+```
+
+| Setting | Value |
+|---------|-------|
+| CRF | 28 |
+| Preset | fast |
+| Audio bitrate | 96 kbps |
+
+**Best for:**
+- Quick previews
+- Test encodes
+- When file size is critical
+- Low-bandwidth sharing
+
+**Trade-offs:**
+- Visible compression artifacts
+- Loss of fine detail
+
+### Medium Quality (Default)
+
+```bash
+ffwrap convert input.mov output.mp4 -q medium
+# or simply
+ffwrap convert input.mov output.mp4
+```
+
+| Setting | Value |
+|---------|-------|
+| CRF | 23 |
+| Preset | medium |
+| Audio bitrate | 128 kbps |
+
+**Best for:**
+- General sharing
+- Social media
+- Web video
+- Most use cases
+
+**Trade-offs:**
+- Good balance of quality and size
+- Minor artifacts on close inspection
+
+### High Quality
+
+```bash
+ffwrap convert input.mov output.mp4 -q high
+```
+
+| Setting | Value |
+|---------|-------|
+| CRF | 18 |
+| Preset | slow |
+| Audio bitrate | 192 kbps |
+
+**Best for:**
+- Final delivery
+- Client work
+- YouTube uploads
+- Archiving
+
+**Trade-offs:**
+- Larger files
+- Slower encoding
+
+### Lossless Quality
+
+```bash
+ffwrap convert input.mov output.mp4 -q lossless
+```
+
+| Setting | Value |
+|---------|-------|
+| CRF | 0 |
+| Preset | veryslow |
+| Audio bitrate | 320 kbps |
+
+**Best for:**
+- Master copies
+- Professional archiving
+- Source for future edits
+- Maximum quality preservation
+
+**Trade-offs:**
+- Very large files
+- Very slow encoding
+
+<Warning>
+  Lossless encoding creates files that can be 10-50x larger than medium quality. Only use when absolutely necessary.
+</Warning>
+
+## Resolution Presets
+
+Use with the `--resolution` or `-r` option:
+
+```bash
+ffwrap convert input.mov output.mp4 --resolution 720p
+```
+
+### Overview
+
+| Preset | Width | Height | Aspect | Common Name |
+|--------|-------|--------|--------|-------------|
+| `360p` | 640 | 360 | 16:9 | Low |
+| `480p` | 854 | 480 | 16:9 | SD |
+| `720p` | 1280 | 720 | 16:9 | HD |
+| `1080p` | 1920 | 1080 | 16:9 | Full HD |
+| `1440p` | 2560 | 1440 | 16:9 | 2K / QHD |
+| `4k` | 3840 | 2160 | 16:9 | 4K UHD |
+
+### Custom Resolution
+
+You can also specify exact dimensions:
+
+```bash
+# Specific width x height
+ffwrap convert input.mov output.mp4 -r 1280x720
+
+# Width only (height auto-calculated)
+ffwrap convert input.mov output.mp4 -r 1280
+```
+
+<Note>
+  When specifying only width, height is automatically calculated to maintain aspect ratio, rounded to the nearest even number.
+</Note>
+
+### Resolution Details
+
+#### 360p
+
+```bash
+ffwrap convert input.mov output.mp4 -r 360p
+```
+
+| Property | Value |
+|----------|-------|
+| Dimensions | 640 x 360 |
+| Megapixels | 0.23 MP |
+| Use case | Mobile data saving, thumbnails |
+
+#### 480p (SD)
+
+```bash
+ffwrap convert input.mov output.mp4 -r 480p
+```
+
+| Property | Value |
+|----------|-------|
+| Dimensions | 854 x 480 |
+| Megapixels | 0.41 MP |
+| Use case | Standard definition, low bandwidth |
+
+#### 720p (HD)
+
+```bash
+ffwrap convert input.mov output.mp4 -r 720p
+```
+
+| Property | Value |
+|----------|-------|
+| Dimensions | 1280 x 720 |
+| Megapixels | 0.92 MP |
+| Use case | HD video, web streaming |
+
+#### 1080p (Full HD)
+
+```bash
+ffwrap convert input.mov output.mp4 -r 1080p
+```
+
+| Property | Value |
+|----------|-------|
+| Dimensions | 1920 x 1080 |
+| Megapixels | 2.07 MP |
+| Use case | Standard for most content |
+
+#### 1440p (2K/QHD)
+
+```bash
+ffwrap convert input.mov output.mp4 -r 1440p
+```
+
+| Property | Value |
+|----------|-------|
+| Dimensions | 2560 x 1440 |
+| Megapixels | 3.69 MP |
+| Use case | High-end displays, gaming |
+
+#### 4K (UHD)
+
+```bash
+ffwrap convert input.mov output.mp4 -r 4k
+```
+
+| Property | Value |
+|----------|-------|
+| Dimensions | 3840 x 2160 |
+| Megapixels | 8.29 MP |
+| Use case | 4K displays, future-proofing |
+
+## Combining Presets
+
+Use quality and resolution together:
+
+```bash
+# 720p at high quality
+ffwrap convert input.mov output.mp4 -r 720p -q high
+
+# 1080p at low quality (smaller file)
+ffwrap convert input.mov output.mp4 -r 1080p -q low
+
+# 4K at medium quality
+ffwrap convert input.mov output.mp4 -r 4k -q medium
+```
+
+## Preset Recommendations
+
+### By Platform
+
+| Platform | Resolution | Quality |
+|----------|------------|---------|
+| YouTube | 1080p or 4k | high |
+| Twitter/X | 720p or 1080p | medium |
+| Instagram | 1080p | medium |
+| TikTok | 1080p | medium |
+| Discord | 720p | low or medium |
+| Email | 480p or 720p | low |
+
+### By File Size Target
+
+| Target | Resolution | Quality |
+|--------|------------|---------|
+| < 10 MB/min | 480p | low |
+| 10-25 MB/min | 720p | medium |
+| 25-50 MB/min | 1080p | medium |
+| 50-100 MB/min | 1080p | high |
+| > 100 MB/min | 4k | high |
+
+### By Content Type
+
+| Content | Resolution | Quality |
+|---------|------------|---------|
+| Screencast | 1080p | medium |
+| Talking head | 720p-1080p | medium |
+| Gaming | 1080p-1440p | high |
+| Film/cinematic | 1080p-4k | high |
+| Quick share | 720p | low |
+
+## Understanding CRF
+
+CRF (Constant Rate Factor) controls quality for H.264/H.265:
+
+| CRF Range | Quality Level |
+|-----------|---------------|
+| 0 | Lossless |
+| 1-17 | Visually lossless |
+| 18-23 | High quality |
+| 24-28 | Medium quality |
+| 29-35 | Low quality |
+| 36-51 | Very low quality |
+
+<Tip>
+  CRF 23 is the default for x264 and is considered "good quality" for most content. Lower CRF = higher quality = larger files.
+</Tip>
+
+## See Also
+
+- [Codecs Reference](/reference/codecs) - Video and audio codecs
+- [Formats Reference](/reference/formats) - Container formats
+- [convert Command](/commands/convert) - Using presets
+- [compress Command](/commands/compress) - Size-based compression

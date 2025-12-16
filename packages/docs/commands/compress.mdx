@@ -1,0 +1,183 @@
+---
+title: "compress"
+description: "Reduce file size with target size or bitrate"
+---
+
+The `compress` command reduces video file size by targeting a specific file size, bitrate, or percentage of the original.
+
+## Syntax
+
+```bash
+ffwrap compress <input> [output] [options]
+```
+
+## Arguments
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `input` | Yes | Path to the input file |
+| `output` | No | Path for the output file (default: `input_compressed.ext`) |
+
+## Options
+
+You must specify exactly one of `--target-size`, `--bitrate`, or `--percent`.
+
+| Option | Alias | Type | Description |
+|--------|-------|------|-------------|
+| `--target-size` | `-s` | string | Target file size (e.g., 25MB, 100MB) |
+| `--bitrate` | `-b` | string | Target video bitrate (e.g., 2M, 500k) |
+| `--percent` | `-p` | number | Target percentage of original size (1-100) |
+| `--audio-bitrate` | `-ab` | string | Audio bitrate (default: 128k) |
+| `--overwrite` | `-y` | boolean | Overwrite output if exists |
+
+## Examples
+
+### Target File Size
+
+The most intuitive way to compress - specify the size you want:
+
+```bash
+# Compress to approximately 25MB
+ffwrap compress video.mp4 --target-size 25MB
+
+# Compress to 50MB with custom output name
+ffwrap compress video.mp4 small.mp4 --target-size 50MB
+
+# Short form
+ffwrap compress video.mp4 -s 10MB
+```
+
+<Note>
+  The actual output size may vary slightly from the target. ffwrap calculates the optimal bitrate to hit your target while maintaining quality.
+</Note>
+
+### Target Bitrate
+
+For precise control over video quality:
+
+```bash
+# 2 Mbps video bitrate
+ffwrap compress video.mp4 --bitrate 2M
+
+# 500 Kbps (very small file)
+ffwrap compress video.mp4 --bitrate 500k
+
+# 5 Mbps (higher quality)
+ffwrap compress video.mp4 --bitrate 5M
+```
+
+### Percentage Reduction
+
+Compress relative to the original size:
+
+```bash
+# Reduce to 50% of original size
+ffwrap compress video.mp4 --percent 50
+
+# Reduce to 25% of original size
+ffwrap compress video.mp4 --percent 25
+```
+
+### Audio Bitrate Control
+
+Lower audio bitrate for additional size savings:
+
+```bash
+# Lower audio quality for smaller file
+ffwrap compress video.mp4 -s 10MB --audio-bitrate 64k
+
+# Higher audio quality
+ffwrap compress video.mp4 -s 50MB --audio-bitrate 192k
+```
+
+## How It Works
+
+### Target Size Calculation
+
+When you specify `--target-size`, ffwrap:
+
+1. Gets the video duration from the input file
+2. Calculates the required total bitrate: `(target_bytes × 8) / duration`
+3. Subtracts the audio bitrate to get the video bitrate
+4. Applies a 5% buffer for container overhead
+
+**Formula:**
+```
+video_bitrate = (target_size × 8 / duration) × 0.95 - audio_bitrate
+```
+
+### Encoding Settings
+
+Compression uses H.264 with constrained quality:
+
+- **Codec**: libx264
+- **Bitrate mode**: Target bitrate with maxrate buffer
+- **Max bitrate**: 1.5× target (handles peaks)
+- **Buffer size**: 2× target (smooths out variations)
+- **Preset**: medium (balance of speed and compression)
+
+## Size Guidelines
+
+| Content Type | Suggested Bitrate | 1 min file size |
+|--------------|-------------------|-----------------|
+| Screencast | 500k - 1M | ~4-7 MB |
+| Talking head | 1M - 2M | ~7-15 MB |
+| General video | 2M - 4M | ~15-30 MB |
+| Action/sports | 4M - 8M | ~30-60 MB |
+| High quality | 8M+ | ~60+ MB |
+
+## Tips
+
+<Tip>
+  For Discord (25MB limit), use:
+  ```bash
+  ffwrap compress video.mp4 --target-size 24MB
+  ```
+  Leave 1MB buffer to ensure it fits.
+</Tip>
+
+<Tip>
+  For Twitter/X (512MB video limit, but quality degrades above ~15MB):
+  ```bash
+  ffwrap compress video.mp4 --target-size 15MB
+  ```
+</Tip>
+
+<Warning>
+  Compressing an already compressed video will degrade quality. If possible, start from the original source file.
+</Warning>
+
+## Common Use Cases
+
+### Discord Upload
+
+```bash
+# Discord has 25MB limit (50MB with Nitro)
+ffwrap compress video.mp4 -s 24MB -o discord_ready.mp4
+```
+
+### Email Attachment
+
+```bash
+# Most email services limit to 20-25MB
+ffwrap compress video.mp4 -s 20MB
+```
+
+### Quick Preview
+
+```bash
+# Create a small preview file
+ffwrap compress video.mp4 --percent 10
+```
+
+### Archive Compression
+
+```bash
+# Reduce storage size while maintaining reasonable quality
+ffwrap compress video.mp4 --bitrate 2M
+```
+
+## See Also
+
+- [convert](/commands/convert) - Full format conversion with quality presets
+- [Presets Reference](/reference/presets) - Quality and resolution presets

@@ -1,0 +1,279 @@
+---
+title: "Codecs"
+description: "Supported video and audio codecs"
+---
+
+Codecs determine how video and audio are compressed. ffwrap supports all major codecs through ffmpeg.
+
+## Video Codecs
+
+### Summary Table
+
+| Codec | Alias | ffmpeg Name | Quality | Speed | Compatibility |
+|-------|-------|-------------|---------|-------|---------------|
+| H.264 | `h264`, `x264` | libx264 | Good | Fast | Excellent |
+| H.265 | `h265`, `x265`, `hevc` | libx265 | Better | Slow | Good |
+| VP9 | `vp9` | libvpx-vp9 | Better | Slow | Good (web) |
+| AV1 | `av1` | libaom-av1 | Best | Very slow | Limited |
+| Copy | `copy` | copy | Original | Instant | N/A |
+
+### H.264 (AVC)
+
+The most widely supported video codec.
+
+```bash
+ffwrap convert input.mov output.mp4 --video-codec h264
+```
+
+| Property | Value |
+|----------|-------|
+| ffmpeg encoder | libx264 |
+| Compression | Good |
+| Encoding speed | Fast |
+| Compatibility | Excellent |
+| Best containers | MP4, MKV, MOV |
+
+**When to use:**
+- Maximum compatibility needed
+- Fast encoding required
+- Streaming to devices
+
+### H.265 (HEVC)
+
+Next-generation codec with better compression.
+
+```bash
+ffwrap convert input.mov output.mp4 --video-codec h265
+```
+
+| Property | Value |
+|----------|-------|
+| ffmpeg encoder | libx265 |
+| Compression | ~50% better than H.264 |
+| Encoding speed | Slow |
+| Compatibility | Good |
+| Best containers | MP4, MKV |
+
+**When to use:**
+- Smaller file size needed
+- 4K content
+- Modern devices only
+
+<Note>
+  H.265 encoding is significantly slower than H.264 but produces smaller files at the same quality.
+</Note>
+
+### VP9
+
+Google's open-source codec for web.
+
+```bash
+ffwrap convert input.mp4 output.webm --video-codec vp9
+```
+
+| Property | Value |
+|----------|-------|
+| ffmpeg encoder | libvpx-vp9 |
+| Compression | Similar to H.265 |
+| Encoding speed | Slow |
+| Compatibility | Good (browsers) |
+| Best containers | WebM, MKV |
+
+**When to use:**
+- Web video
+- Royalty-free requirement
+- YouTube uploads
+
+### AV1
+
+Newest codec with best compression.
+
+```bash
+ffwrap convert input.mp4 output.mp4 --video-codec av1
+```
+
+| Property | Value |
+|----------|-------|
+| ffmpeg encoder | libaom-av1 |
+| Compression | Best |
+| Encoding speed | Very slow |
+| Compatibility | Limited (growing) |
+| Best containers | MP4, WebM, MKV |
+
+**When to use:**
+- Maximum compression needed
+- Future-proofing
+- Time is not a concern
+
+<Warning>
+  AV1 encoding can be 10-50x slower than H.264. Only use when file size is critical.
+</Warning>
+
+### Copy (Stream Copy)
+
+Copy video without re-encoding.
+
+```bash
+ffwrap convert input.mkv output.mp4 --video-codec copy
+```
+
+| Property | Value |
+|----------|-------|
+| Speed | Instant |
+| Quality | Unchanged |
+| Compatibility | Depends on source |
+
+**When to use:**
+- Changing containers only
+- Preserving exact quality
+- Fast extraction
+
+<Note>
+  Stream copy only works if the source codec is compatible with the target container.
+</Note>
+
+## Audio Codecs
+
+### Summary Table
+
+| Codec | Alias | ffmpeg Name | Quality | Size | Compatibility |
+|-------|-------|-------------|---------|------|---------------|
+| AAC | `aac` | aac | Good | Small | Excellent |
+| MP3 | `mp3` | libmp3lame | Good | Small | Universal |
+| Opus | `opus` | libopus | Excellent | Smallest | Good (web) |
+| Vorbis | `vorbis` | libvorbis | Good | Small | Good |
+| FLAC | `flac` | flac | Lossless | Large | Good |
+| WAV | `wav` | pcm_s16le | Lossless | Largest | Universal |
+| Copy | `copy` | copy | Original | Original | N/A |
+
+### AAC
+
+Industry standard for video audio.
+
+```bash
+ffwrap convert input.mov output.mp4 --audio-codec aac
+```
+
+| Property | Value |
+|----------|-------|
+| Quality | Good |
+| Compatibility | Excellent |
+| Best containers | MP4, MOV, MKV |
+
+**When to use:**
+- Video files (MP4, MOV)
+- Streaming
+- Maximum compatibility
+
+### MP3
+
+Universal audio format.
+
+```bash
+ffwrap extract video.mp4 --audio -f mp3
+```
+
+| Property | Value |
+|----------|-------|
+| Quality | Good |
+| Compatibility | Universal |
+| Best containers | MP3, MKV |
+
+**When to use:**
+- Audio-only files
+- Legacy systems
+- Podcast distribution
+
+### Opus
+
+Modern, highly efficient codec.
+
+```bash
+ffwrap convert input.mp4 output.webm --audio-codec opus
+```
+
+| Property | Value |
+|----------|-------|
+| Quality | Excellent at low bitrates |
+| Compatibility | Good (web, modern apps) |
+| Best containers | WebM, OGG, MKV |
+
+**When to use:**
+- WebM video
+- Voice/speech content
+- Low bandwidth streaming
+
+### FLAC
+
+Lossless audio compression.
+
+```bash
+ffwrap extract video.mp4 --audio -f flac
+```
+
+| Property | Value |
+|----------|-------|
+| Quality | Perfect (lossless) |
+| Size | 50-60% of WAV |
+| Compatibility | Good |
+
+**When to use:**
+- Music archiving
+- Audio editing source
+- Quality-critical applications
+
+## Codec Comparison
+
+### Quality vs File Size
+
+At similar quality:
+
+| Codec | Relative Size |
+|-------|---------------|
+| H.264 | 100% (baseline) |
+| H.265 | ~50% |
+| VP9 | ~50% |
+| AV1 | ~30% |
+
+### Encoding Speed
+
+| Codec | Relative Speed |
+|-------|----------------|
+| H.264 | 100% (fastest) |
+| H.265 | ~30% |
+| VP9 | ~20% |
+| AV1 | ~5% |
+
+## Choosing a Codec
+
+### Decision Tree
+
+```
+Need maximum compatibility?
+├─ Yes → H.264 + AAC
+└─ No
+   └─ Need smallest file?
+      ├─ Yes → H.265 or VP9
+      └─ No
+         └─ Need fastest encoding?
+            ├─ Yes → H.264
+            └─ No → H.265
+```
+
+### Recommendations by Platform
+
+| Platform | Video Codec | Audio Codec |
+|----------|-------------|-------------|
+| YouTube | H.264 or VP9 | AAC |
+| Twitter/X | H.264 | AAC |
+| Instagram | H.264 | AAC |
+| Discord | H.264 | AAC |
+| Web (HTML5) | VP9 or H.264 | Opus or AAC |
+| iOS/macOS | H.264 or H.265 | AAC |
+| Android | H.264 or VP9 | AAC or Opus |
+
+## See Also
+
+- [Formats Reference](/reference/formats) - Container formats
+- [Presets Reference](/reference/presets) - Quality presets
+- [convert Command](/commands/convert) - Using codecs

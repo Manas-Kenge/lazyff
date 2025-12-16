@@ -1,0 +1,224 @@
+---
+title: "Shortcuts"
+description: "Keyboard shortcuts reference"
+---
+
+Complete reference for keyboard shortcuts in ffwrap TUI mode.
+
+## Global Shortcuts
+
+These shortcuts work anywhere in the TUI:
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+C` | Exit ffwrap |
+| `?` | Open help dialog |
+| `Esc` | Close current dialog / Cancel operation |
+
+## Prompt Shortcuts
+
+When the prompt is focused:
+
+### Navigation
+
+| Shortcut | Action |
+|----------|--------|
+| `←` / `→` | Move cursor left/right |
+| `Ctrl+A` | Move to beginning of line |
+| `Ctrl+E` | Move to end of line |
+| `Ctrl+←` | Move word left |
+| `Ctrl+→` | Move word right |
+
+### Editing
+
+| Shortcut | Action |
+|----------|--------|
+| `Backspace` | Delete character before cursor |
+| `Delete` | Delete character after cursor |
+| `Ctrl+U` | Clear entire line |
+| `Ctrl+K` | Clear from cursor to end |
+| `Ctrl+W` | Delete word before cursor |
+
+### History
+
+| Shortcut | Action |
+|----------|--------|
+| `↑` | Previous command in history |
+| `↓` | Next command in history |
+| `Ctrl+R` | Search command history |
+
+### Autocomplete
+
+| Shortcut | Action |
+|----------|--------|
+| `Tab` | Accept current suggestion |
+| `↑` / `↓` | Navigate suggestions (when open) |
+| `Enter` | Accept selected suggestion |
+| `Esc` | Close suggestions |
+
+### Execution
+
+| Shortcut | Action |
+|----------|--------|
+| `Enter` | Execute current command |
+
+## Dialog Shortcuts
+
+When a dialog is open:
+
+### General
+
+| Shortcut | Action |
+|----------|--------|
+| `Esc` | Close dialog / Cancel |
+| `Enter` | Confirm / Select |
+
+### Selection Dialog
+
+| Shortcut | Action |
+|----------|--------|
+| `↑` / `↓` | Navigate options |
+| `Enter` | Select highlighted option |
+| `j` / `k` | Navigate options (vim-style) |
+| `1-9` | Quick select by number |
+
+### Confirmation Dialog
+
+| Shortcut | Action |
+|----------|--------|
+| `y` / `Enter` | Confirm (Yes) |
+| `n` / `Esc` | Cancel (No) |
+| `←` / `→` | Switch between Yes/No |
+
+### Input Dialog
+
+| Shortcut | Action |
+|----------|--------|
+| `Enter` | Submit input |
+| `Esc` | Cancel input |
+| Standard editing shortcuts | Edit text |
+
+## File Browser Shortcuts
+
+When the file browser is open:
+
+### Navigation
+
+| Shortcut | Action |
+|----------|--------|
+| `↑` / `↓` | Navigate files |
+| `Enter` | Select file / Enter directory |
+| `Backspace` | Go to parent directory |
+| `Home` | Go to first item |
+| `End` | Go to last item |
+| `PageUp` | Page up |
+| `PageDown` | Page down |
+
+### Actions
+
+| Shortcut | Action |
+|----------|--------|
+| `Enter` | Select current file |
+| `Esc` | Cancel file selection |
+| `.` | Toggle hidden files |
+| `/` | Start search/filter |
+
+### Vim-style Navigation
+
+| Shortcut | Action |
+|----------|--------|
+| `j` | Move down |
+| `k` | Move up |
+| `g` | Go to first item |
+| `G` | Go to last item |
+| `h` | Go to parent directory |
+| `l` | Enter directory / Select file |
+
+## Progress View Shortcuts
+
+During operations with progress display:
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+C` | Cancel current operation |
+| `q` | Cancel current operation |
+
+## Help Dialog Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `?` | Close help (toggle) |
+| `Esc` | Close help |
+| `↑` / `↓` | Scroll help content |
+| `j` / `k` | Scroll help content (vim-style) |
+
+## Quick Reference Card
+
+### Most Used
+
+| Shortcut | Action |
+|----------|--------|
+| `Enter` | Execute / Confirm / Select |
+| `Tab` | Accept autocomplete |
+| `↑` / `↓` | Navigate |
+| `Esc` | Cancel / Close |
+| `?` | Help |
+| `Ctrl+C` | Exit |
+
+### Editing
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+U` | Clear line |
+| `Ctrl+W` | Delete word |
+| `Ctrl+A` | Start of line |
+| `Ctrl+E` | End of line |
+
+### History
+
+| Shortcut | Action |
+|----------|--------|
+| `↑` | Previous command |
+| `↓` | Next command |
+| `Ctrl+R` | Search history |
+
+## Customization
+
+Currently, keyboard shortcuts are not customizable. This feature may be added in a future release.
+
+## Terminal Compatibility
+
+Some shortcuts may behave differently depending on your terminal emulator:
+
+| Terminal | Notes |
+|----------|-------|
+| iTerm2 | Full support |
+| Terminal.app | Full support |
+| Windows Terminal | Full support |
+| Alacritty | Full support |
+| Kitty | Full support |
+| GNOME Terminal | Full support |
+| Konsole | Full support |
+
+<Note>
+  If shortcuts aren't working, ensure your terminal isn't intercepting them. Check your terminal's keyboard settings.
+</Note>
+
+## Tips
+
+<Tip>
+  Learn these three shortcuts first: `Tab` (autocomplete), `↑` (history), and `?` (help). They'll make you productive quickly.
+</Tip>
+
+<Tip>
+  Vim users: `j`/`k` navigation works in most places for a familiar experience.
+</Tip>
+
+<Tip>
+  Use `Ctrl+U` to quickly clear the prompt and start over.
+</Tip>
+
+## See Also
+
+- [TUI Mode](/tui) - TUI overview and features
+- [Usage Guide](/commands/index) - Available commands

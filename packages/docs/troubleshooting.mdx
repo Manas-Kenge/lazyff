@@ -1,0 +1,353 @@
+---
+title: "Troubleshooting"
+description: "Common issues and solutions"
+---
+
+Solutions for common issues when using ffwrap.
+
+## Installation Issues
+
+### "Command not found: ffwrap"
+
+The ffwrap binary is not in your PATH.
+
+<Tabs>
+  <Tab title="Bun">
+    ```bash
+    # Add Bun's bin directory to PATH
+    export PATH="$HOME/.bun/bin:$PATH"
+    
+    # Add to your shell profile for persistence
+    echo 'export PATH="$HOME/.bun/bin:$PATH"' >> ~/.bashrc
+    # or ~/.zshrc for zsh
+    ```
+  </Tab>
+  <Tab title="npm">
+    ```bash
+    # Find npm's global bin directory
+    npm bin -g
+    
+    # Add it to PATH
+    export PATH="$(npm bin -g):$PATH"
+    ```
+  </Tab>
+</Tabs>
+
+### "Command not found: ffmpeg"
+
+ffmpeg is not installed or not in PATH.
+
+<Tabs>
+  <Tab title="macOS">
+    ```bash
+    brew install ffmpeg
+    ```
+  </Tab>
+  <Tab title="Ubuntu/Debian">
+    ```bash
+    sudo apt update && sudo apt install ffmpeg
+    ```
+  </Tab>
+  <Tab title="Windows">
+    ```powershell
+    choco install ffmpeg
+    # or
+    scoop install ffmpeg
+    ```
+  </Tab>
+</Tabs>
+
+### Permission Denied Errors
+
+**On Unix systems:**
+
+```bash
+# Fix npm global permissions
+mkdir -p ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH="$HOME/.npm-global/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+# Then reinstall
+npm install -g @ffwrap/cli
+```
+
+**Better solution:** Use a Node version manager like nvm.
+
+## FFmpeg Errors
+
+### "Unknown encoder"
+
+The requested codec is not available in your ffmpeg installation.
+
+```
+Error: Codec not available
+  → The requested codec is not installed
+```
+
+**Solution:** Install ffmpeg with full codec support:
+
+<Tabs>
+  <Tab title="macOS">
+    ```bash
+    brew reinstall ffmpeg
+    ```
+  </Tab>
+  <Tab title="Ubuntu">
+    ```bash
+    sudo apt install libavcodec-extra
+    ```
+  </Tab>
+</Tabs>
+
+### "Invalid data found when processing input"
+
+The input file is corrupted or in an unsupported format.
+
+```
+Error: Corrupted or unsupported file
+  → The input file may be corrupted or in an unsupported format
+```
+
+**Solutions:**
+1. Try playing the file in VLC to verify it works
+2. Re-download or re-export the file
+3. Try a different input file
+4. Check file extension matches actual format
+
+### "No such file or directory"
+
+The specified file doesn't exist.
+
+```
+Error: File not found
+  → Check if the input file path is correct
+```
+
+**Solutions:**
+1. Verify the file path is correct
+2. Use absolute paths to avoid confusion
+3. Check for typos in the filename
+4. Ensure the file hasn't been moved/deleted
+
+### "Output file already exists"
+
+Trying to write to an existing file without overwrite flag.
+
+```
+Error: Output file already exists
+  → Use --overwrite (-y) to replace it
+```
+
+**Solution:**
+```bash
+ffwrap convert input.mp4 output.mp4 --overwrite
+# or
+ffwrap convert input.mp4 output.mp4 -y
+```
+
+### "Permission denied"
+
+Can't read input or write output file.
+
+```
+Error: Permission denied
+  → Check if you have read/write permissions for the file
+```
+
+**Solutions:**
+1. Check file permissions: `ls -la filename`
+2. Check directory permissions
+3. Don't try to write to system directories
+4. On macOS, grant Terminal disk access in System Preferences
+
+### "Height/width not divisible by 2"
+
+Video dimensions must be even numbers for most codecs.
+
+```
+Error: Invalid resolution
+  → Video dimensions must be divisible by 2
+```
+
+**Solution:** Use a standard resolution preset:
+```bash
+ffwrap convert input.mp4 -r 720p
+ffwrap convert input.mp4 -r 1080p
+```
+
+Or specify even dimensions:
+```bash
+ffwrap convert input.mp4 -r 1280x720  # Good
+ffwrap convert input.mp4 -r 1281x721  # Bad - odd numbers
+```
+
+### "No space left on device"
+
+Disk is full.
+
+```
+Error: Disk full
+  → Free up disk space and try again
+```
+
+**Solutions:**
+1. Free up disk space
+2. Output to a different drive
+3. Use a smaller output resolution or quality
+
+### "Moov atom not found"
+
+Incomplete MP4 file (usually from interrupted recording).
+
+```
+Error: Incomplete MP4 file
+  → The MP4 file appears to be incomplete or corrupted
+```
+
+**Solutions:**
+1. Try to recover with: `ffmpeg -i broken.mp4 -c copy fixed.mp4`
+2. Re-record or re-download the file
+3. Use a different source file
+
+## Conversion Issues
+
+### Output file is larger than input
+
+This can happen when:
+
+1. **Upscaling resolution** - Higher resolution = more data
+2. **Higher quality preset** - Using `high` or `lossless` 
+3. **Different codec** - Some codecs compress differently
+4. **Short duration** - Overhead is proportionally larger
+
+**Solutions:**
+```bash
+# Use lower quality
+ffwrap convert input.mp4 output.mp4 -q low
+
+# Use compress instead for size control
+ffwrap compress input.mp4 --target-size 50MB
+```
+
+### Output quality is poor
+
+**Solutions:**
+```bash
+# Use higher quality preset
+ffwrap convert input.mp4 output.mp4 -q high
+
+# Avoid multiple re-encodes - always work from original source
+```
+
+### Conversion is very slow
+
+**Causes:**
+1. Large file size
+2. High resolution (4K)
+3. Slow codec (H.265, VP9, AV1)
+4. High quality preset (slow, veryslow)
+
+**Solutions:**
+```bash
+# Use faster preset
+ffwrap convert input.mp4 output.mp4 -q low
+
+# Use H.264 instead of H.265
+ffwrap convert input.mp4 output.mp4 --video-codec h264
+
+# Copy instead of re-encode (if just changing container)
+ffwrap convert input.mkv output.mp4 --video-codec copy --audio-codec copy
+```
+
+### Audio/video out of sync
+
+**Solutions:**
+1. Re-encode both streams (don't use copy mode)
+2. Check if source file has sync issues
+3. Try different container format
+
+## Merge Issues
+
+### "Non-monotonic DTS" or timestamp errors
+
+Files have incompatible timestamps.
+
+**Solution:** Use re-encode mode:
+```bash
+ffwrap merge file1.mp4 file2.mp4 -o output.mp4 --reencode
+```
+
+### Output is garbled or glitchy
+
+Files have different codecs or settings.
+
+**Solution:** Use re-encode mode or convert to same format first:
+```bash
+# Option 1: Re-encode during merge
+ffwrap merge file1.mp4 file2.webm -o output.mp4 --reencode
+
+# Option 2: Convert first
+ffwrap convert file2.webm file2.mp4
+ffwrap merge file1.mp4 file2.mp4 -o output.mp4
+```
+
+## GIF Issues
+
+### GIF is too large
+
+**Solutions:**
+```bash
+# Reduce width
+ffwrap gif video.mp4 --width 320
+
+# Reduce frame rate
+ffwrap gif video.mp4 --fps 10
+
+# Shorter duration
+ffwrap gif video.mp4 --duration 3
+```
+
+### GIF colors look wrong
+
+**Solution:** Enable high quality mode:
+```bash
+ffwrap gif video.mp4 --high-quality
+```
+
+## TUI Issues
+
+### TUI doesn't display correctly
+
+**Causes:**
+- Terminal doesn't support required features
+- Terminal size too small
+
+**Solutions:**
+1. Use a modern terminal (iTerm2, Windows Terminal, Alacritty)
+2. Resize terminal to at least 80x24
+3. Check `TERM` environment variable is set correctly
+
+### Keyboard shortcuts not working
+
+**Solutions:**
+1. Check terminal isn't intercepting keys
+2. Disable terminal's own shortcuts that conflict
+3. Try a different terminal emulator
+
+## Getting Help
+
+If you're still stuck:
+
+1. Check the [FAQ](/faq) for common questions
+2. Run `ffwrap info input.mp4` to check your file
+3. Try the same operation with plain ffmpeg to see detailed errors
+4. Open an issue on [GitHub](https://github.com/Manas-Kenge/ffwrap/issues)
+
+When reporting issues, include:
+- ffwrap version (`ffwrap version`)
+- ffmpeg version (`ffmpeg -version`)
+- Operating system
+- Command you ran
+- Error message
+- Sample file (if possible)

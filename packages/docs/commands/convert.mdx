@@ -1,0 +1,169 @@
+---
+title: "convert"
+description: "Convert media files between formats"
+---
+
+The `convert` command transforms media files between different formats, codecs, resolutions, and quality levels.
+
+## Syntax
+
+```bash
+ffwrap convert <input> [output] [options]
+```
+
+## Arguments
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `input` | Yes | Path to the input file |
+| `output` | No | Path for the output file (auto-generated if not provided) |
+
+## Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--format` | `-f` | string | (from input) | Output format: mp4, webm, mkv, mov, gif, mp3, wav, flac |
+| `--quality` | `-q` | string | `medium` | Quality preset: low, medium, high, lossless |
+| `--video-codec` | `-vc` | string | (auto) | Video codec: h264, h265, vp9, av1, copy |
+| `--audio-codec` | `-ac` | string | (auto) | Audio codec: aac, mp3, opus, flac, copy |
+| `--resolution` | `-r` | string | (original) | Resolution: 360p, 480p, 720p, 1080p, 1440p, 4k, or WxH |
+| `--fps` | | number | (original) | Frame rate (e.g., 24, 30, 60) |
+| `--start` | `-ss` | string | | Start time (e.g., 00:01:30 or 90) |
+| `--end` | `-to` | string | | End time (e.g., 00:02:00 or 120) |
+| `--duration` | `-t` | string | | Duration from start (e.g., 30) |
+| `--strip-audio` | `-an` | boolean | false | Remove audio track |
+| `--strip-video` | `-vn` | boolean | false | Remove video track (audio only) |
+| `--overwrite` | `-y` | boolean | false | Overwrite output if exists |
+
+## Examples
+
+### Basic Conversion
+
+```bash
+# Convert MOV to MP4
+ffwrap convert video.mov video.mp4
+
+# Convert to WebM (auto-names output)
+ffwrap convert video.mp4 -f webm
+# Output: video.webm
+```
+
+### Quality Control
+
+```bash
+# High quality conversion
+ffwrap convert video.mp4 output.mp4 -q high
+
+# Low quality (smaller file)
+ffwrap convert video.mp4 output.mp4 -q low
+
+# Lossless (largest file)
+ffwrap convert video.mp4 output.mp4 -q lossless
+```
+
+### Resolution Scaling
+
+```bash
+# Scale to 720p
+ffwrap convert video.mp4 -r 720p
+
+# Scale to 1080p
+ffwrap convert video.mp4 -r 1080p
+
+# Custom resolution
+ffwrap convert video.mp4 -r 1280x720
+```
+
+### Codec Selection
+
+```bash
+# Use H.265 (HEVC) for better compression
+ffwrap convert video.mp4 output.mp4 --video-codec h265
+
+# Use VP9 for web
+ffwrap convert video.mp4 output.webm --video-codec vp9
+
+# Copy video stream (no re-encoding)
+ffwrap convert video.mp4 output.mkv --video-codec copy
+```
+
+### Time Range
+
+```bash
+# Convert only a portion
+ffwrap convert video.mp4 --start 00:01:00 --duration 30
+
+# From timestamp to timestamp
+ffwrap convert video.mp4 --start 00:01:00 --end 00:02:00
+```
+
+### Audio Extraction
+
+```bash
+# Extract audio to MP3
+ffwrap convert video.mp4 audio.mp3 --strip-video
+
+# Extract audio to WAV
+ffwrap convert video.mp4 audio.wav --strip-video
+```
+
+### Remove Audio
+
+```bash
+# Create silent video
+ffwrap convert video.mp4 silent.mp4 --strip-audio
+```
+
+### Frame Rate
+
+```bash
+# Change to 30fps
+ffwrap convert video.mp4 output.mp4 --fps 30
+
+# Slow motion effect (lower fps)
+ffwrap convert video.mp4 output.mp4 --fps 15
+```
+
+## Quality Presets
+
+| Preset | CRF | Speed | Audio | Best For |
+|--------|-----|-------|-------|----------|
+| `low` | 28 | fast | 96k | Quick previews, small files |
+| `medium` | 23 | medium | 128k | General use (default) |
+| `high` | 18 | slow | 192k | Final output, archiving |
+| `lossless` | 0 | veryslow | 320k | Professional editing |
+
+<Note>
+  Lower CRF = higher quality = larger file. CRF 23 is considered visually lossless for most content.
+</Note>
+
+## Format Presets
+
+When you specify a format, ffwrap automatically selects optimal codecs:
+
+| Format | Video Codec | Audio Codec | Description |
+|--------|-------------|-------------|-------------|
+| mp4 | H.264 | AAC | Most compatible |
+| webm | VP9 | Opus | Web-optimized |
+| mkv | H.264 | AAC | Flexible container |
+| mov | H.264 | AAC | Apple QuickTime |
+| mp3 | - | MP3 | Audio only |
+| wav | - | PCM | Uncompressed audio |
+| flac | - | FLAC | Lossless audio |
+
+## Tips
+
+<Tip>
+  Use `--video-codec copy` to change containers without re-encoding. This is much faster but only works if the codec is compatible with the target format.
+</Tip>
+
+<Warning>
+  Converting to GIF with the convert command creates a basic GIF. For better quality, use the dedicated `ffwrap gif` command which supports palette optimization.
+</Warning>
+
+## See Also
+
+- [compress](/commands/compress) - Reduce file size
+- [trim](/commands/trim) - Cut portions of media
+- [Formats Reference](/reference/formats) - All supported formats
+- [Codecs Reference](/reference/codecs) - All supported codecs

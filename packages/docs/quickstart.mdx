@@ -1,0 +1,164 @@
+---
+title: "Quickstart"
+description: "Get started with ffwrap in under 2 minutes"
+---
+
+## Prerequisites
+
+Before installing ffwrap, make sure you have:
+
+1. **Bun** - Fast JavaScript runtime ([install Bun](https://bun.sh))
+2. **ffmpeg** - Media processing tool ([install ffmpeg](https://ffmpeg.org/download.html))
+
+<Tabs>
+  <Tab title="macOS">
+    ```bash
+    # Install Bun
+    curl -fsSL https://bun.sh/install | bash
+
+    # Install ffmpeg
+    brew install ffmpeg
+    ```
+  </Tab>
+  <Tab title="Linux">
+    ```bash
+    # Install Bun
+    curl -fsSL https://bun.sh/install | bash
+
+    # Install ffmpeg (Ubuntu/Debian)
+    sudo apt update && sudo apt install ffmpeg
+
+    # Install ffmpeg (Fedora)
+    sudo dnf install ffmpeg
+    ```
+  </Tab>
+  <Tab title="Windows">
+    ```powershell
+    # Install Bun
+    powershell -c "irm bun.sh/install.ps1 | iex"
+
+    # Install ffmpeg via Chocolatey
+    choco install ffmpeg
+
+    # Or via Scoop
+    scoop install ffmpeg
+    ```
+  </Tab>
+</Tabs>
+
+## Install ffwrap
+
+```bash
+bun install -g @ffwrap/cli
+```
+
+<Note>
+  You can also use npm: `npm install -g @ffwrap/cli`
+</Note>
+
+## Verify Installation
+
+```bash
+# Check ffwrap version
+ffwrap version
+
+# Should output:
+# ffwrap: 0.0.1
+# ffmpeg: 6.x.x (your version)
+```
+
+## Your First Command
+
+Let's convert a video to MP4:
+
+```bash
+ffwrap convert input.mov output.mp4
+```
+
+<Frame caption="ffwrap convert command output">
+  <img src="/images/placeholder-convert-output.png" alt="Convert command terminal output" />
+</Frame>
+
+## Try the Interactive TUI
+
+Launch ffwrap without any arguments to open the interactive interface:
+
+```bash
+ffwrap
+```
+
+<Frame caption="ffwrap TUI interface">
+  <img src="/images/placeholder-tui-main.png" alt="ffwrap TUI interface" />
+</Frame>
+
+## Common Commands
+
+Here are some commands to try:
+
+<AccordionGroup>
+  <Accordion title="Convert video format">
+    ```bash
+    # Convert MOV to MP4
+    ffwrap convert video.mov video.mp4
+
+    # Convert to WebM for web
+    ffwrap convert video.mp4 -f webm
+
+    # Convert with high quality
+    ffwrap convert video.mp4 output.mp4 -q high
+    ```
+  </Accordion>
+  <Accordion title="Compress video">
+    ```bash
+    # Compress to target file size
+    ffwrap compress video.mp4 --target-size 25MB
+
+    # Compress to 50% of original
+    ffwrap compress video.mp4 --percent 50
+
+    # Set specific bitrate
+    ffwrap compress video.mp4 --bitrate 2M
+    ```
+  </Accordion>
+  <Accordion title="Trim video">
+    ```bash
+    # Cut from 1:00 to 2:00
+    ffwrap trim video.mp4 --start 00:01:00 --end 00:02:00
+
+    # Extract 30 seconds starting at 1 minute
+    ffwrap trim video.mp4 --start 00:01:00 --duration 30
+
+    # Fast trim (no re-encoding)
+    ffwrap trim video.mp4 --start 10 --duration 5 --copy
+    ```
+  </Accordion>
+  <Accordion title="Create GIF">
+    ```bash
+    # Create GIF from video
+    ffwrap gif video.mp4
+
+    # Create 3-second GIF starting at 5s
+    ffwrap gif video.mp4 --start 5 --duration 3
+
+    # High quality with smaller size
+    ffwrap gif video.mp4 --width 320 --fps 10 --high-quality
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Detailed installation for all platforms
+  </Card>
+  <Card title="All Commands" icon="terminal" href="/commands/index">
+    Complete command reference
+  </Card>
+  <Card title="TUI Mode" icon="window" href="/tui">
+    Learn the interactive interface
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/troubleshooting">
+    Fix common issues
+  </Card>
+</CardGroup>

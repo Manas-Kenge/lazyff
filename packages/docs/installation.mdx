@@ -1,0 +1,267 @@
+---
+title: "Installation"
+description: "Detailed installation guide for all platforms"
+---
+
+## System Requirements
+
+- **Operating System**: macOS, Linux, or Windows
+- **Runtime**: Bun (recommended) or Node.js 18+
+- **ffmpeg**: Version 4.0 or higher
+
+## Step 1: Install Runtime
+
+ffwrap runs on Bun (recommended for speed) or Node.js.
+
+<Tabs>
+  <Tab title="Bun (Recommended)">
+    Bun is a fast JavaScript runtime that makes ffwrap snappy.
+
+    **macOS / Linux:**
+    ```bash
+    curl -fsSL https://bun.sh/install | bash
+    ```
+
+    **Windows (PowerShell):**
+    ```powershell
+    powershell -c "irm bun.sh/install.ps1 | iex"
+    ```
+
+    Verify installation:
+    ```bash
+    bun --version
+    ```
+  </Tab>
+  <Tab title="Node.js">
+    If you prefer Node.js, version 18 or higher is required.
+
+    **Using nvm (recommended):**
+    ```bash
+    nvm install 20
+    nvm use 20
+    ```
+
+    **Direct download:**
+    Visit [nodejs.org](https://nodejs.org) and download the LTS version.
+
+    Verify installation:
+    ```bash
+    node --version  # Should be 18.x or higher
+    ```
+  </Tab>
+</Tabs>
+
+## Step 2: Install ffmpeg
+
+ffwrap requires ffmpeg to be installed and available in your PATH.
+
+<Tabs>
+  <Tab title="macOS">
+    **Using Homebrew (recommended):**
+    ```bash
+    brew install ffmpeg
+    ```
+
+    **Using MacPorts:**
+    ```bash
+    sudo port install ffmpeg
+    ```
+
+    For full codec support:
+    ```bash
+    brew install ffmpeg --with-libvpx --with-libvorbis --with-libopus
+    ```
+  </Tab>
+  <Tab title="Ubuntu/Debian">
+    ```bash
+    sudo apt update
+    sudo apt install ffmpeg
+    ```
+
+    For the latest version, use the official PPA:
+    ```bash
+    sudo add-apt-repository ppa:savoury1/ffmpeg4
+    sudo apt update
+    sudo apt install ffmpeg
+    ```
+  </Tab>
+  <Tab title="Fedora">
+    First, enable RPM Fusion:
+    ```bash
+    sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+    ```
+
+    Then install ffmpeg:
+    ```bash
+    sudo dnf install ffmpeg
+    ```
+  </Tab>
+  <Tab title="Arch Linux">
+    ```bash
+    sudo pacman -S ffmpeg
+    ```
+  </Tab>
+  <Tab title="Windows">
+    **Using Chocolatey:**
+    ```powershell
+    choco install ffmpeg
+    ```
+
+    **Using Scoop:**
+    ```powershell
+    scoop install ffmpeg
+    ```
+
+    **Manual installation:**
+    1. Download from [ffmpeg.org/download.html](https://ffmpeg.org/download.html)
+    2. Extract to `C:\ffmpeg`
+    3. Add `C:\ffmpeg\bin` to your PATH environment variable
+  </Tab>
+</Tabs>
+
+Verify ffmpeg installation:
+```bash
+ffmpeg -version
+```
+
+## Step 3: Install ffwrap
+
+<Tabs>
+  <Tab title="Bun">
+    ```bash
+    bun install -g @ffwrap/cli
+    ```
+  </Tab>
+  <Tab title="npm">
+    ```bash
+    npm install -g @ffwrap/cli
+    ```
+  </Tab>
+  <Tab title="pnpm">
+    ```bash
+    pnpm add -g @ffwrap/cli
+    ```
+  </Tab>
+  <Tab title="yarn">
+    ```bash
+    yarn global add @ffwrap/cli
+    ```
+  </Tab>
+</Tabs>
+
+## Verify Installation
+
+Run the version command to verify everything is set up:
+
+```bash
+ffwrap version
+```
+
+Expected output:
+```
+ffwrap: 0.0.1
+ffmpeg: 6.1.1 (or your version)
+```
+
+## Updating ffwrap
+
+To update to the latest version:
+
+<Tabs>
+  <Tab title="Bun">
+    ```bash
+    bun update -g @ffwrap/cli
+    ```
+  </Tab>
+  <Tab title="npm">
+    ```bash
+    npm update -g @ffwrap/cli
+    ```
+  </Tab>
+</Tabs>
+
+## Uninstalling
+
+To remove ffwrap:
+
+<Tabs>
+  <Tab title="Bun">
+    ```bash
+    bun remove -g @ffwrap/cli
+    ```
+  </Tab>
+  <Tab title="npm">
+    ```bash
+    npm uninstall -g @ffwrap/cli
+    ```
+  </Tab>
+</Tabs>
+
+## Troubleshooting Installation
+
+<AccordionGroup>
+  <Accordion title="Command not found: ffwrap">
+    This usually means the global bin directory isn't in your PATH.
+
+    **For Bun:**
+    ```bash
+    # Add to your shell profile (.bashrc, .zshrc, etc.)
+    export PATH="$HOME/.bun/bin:$PATH"
+    ```
+
+    **For npm:**
+    ```bash
+    # Find npm's global bin directory
+    npm bin -g
+
+    # Add it to your PATH
+    export PATH="$(npm bin -g):$PATH"
+    ```
+  </Accordion>
+  <Accordion title="Command not found: ffmpeg">
+    ffmpeg is not installed or not in your PATH.
+
+    1. Verify ffmpeg is installed: `which ffmpeg` (Unix) or `where ffmpeg` (Windows)
+    2. If not found, follow the installation steps above
+    3. If installed but not found, add the ffmpeg binary location to your PATH
+  </Accordion>
+  <Accordion title="Permission denied errors">
+    **On Unix systems:**
+    ```bash
+    # Don't use sudo with npm -g, fix permissions instead
+    mkdir -p ~/.npm-global
+    npm config set prefix '~/.npm-global'
+    export PATH="$HOME/.npm-global/bin:$PATH"
+    ```
+
+    **Or use a version manager like nvm** which handles permissions correctly.
+  </Accordion>
+  <Accordion title="Codec not available errors">
+    Some ffmpeg installations don't include all codecs.
+
+    **macOS (reinstall with full codecs):**
+    ```bash
+    brew reinstall ffmpeg
+    ```
+
+    **Linux (install additional codecs):**
+    ```bash
+    # Ubuntu/Debian
+    sudo apt install libavcodec-extra
+
+    # Fedora
+    sudo dnf install ffmpeg-libs
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Try your first commands
+  </Card>
+  <Card title="Usage Guide" icon="book" href="/commands/index">
+    Learn all available commands
+  </Card>
+</CardGroup>

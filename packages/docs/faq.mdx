@@ -1,0 +1,283 @@
+---
+title: "FAQ"
+description: "Frequently asked questions"
+---
+
+Answers to common questions about ffwrap.
+
+## General
+
+### What is ffwrap?
+
+ffwrap is a command-line tool that wraps ffmpeg, providing a simpler interface for common video and audio operations. Instead of memorizing complex ffmpeg commands, you can use intuitive commands like `ffwrap convert`, `ffwrap compress`, etc.
+
+### Why use ffwrap instead of ffmpeg directly?
+
+**ffwrap advantages:**
+- Simpler syntax for common operations
+- Sensible defaults (codecs, quality, etc.)
+- Human-readable error messages with suggestions
+- Interactive TUI mode
+- No need to memorize ffmpeg flags
+
+**When to use ffmpeg directly:**
+- Advanced/custom operations
+- Fine-grained control over every parameter
+- Operations ffwrap doesn't support
+
+### Is ffwrap free?
+
+Yes, ffwrap is free and open source. It's released under the MIT license.
+
+### What platforms does ffwrap support?
+
+ffwrap works on:
+- macOS
+- Linux (all major distributions)
+- Windows (via PowerShell or WSL)
+
+### Does ffwrap require ffmpeg?
+
+Yes, ffwrap is a wrapper around ffmpeg. You must have ffmpeg installed and available in your PATH.
+
+## Installation
+
+### How do I install ffwrap?
+
+```bash
+# Using Bun (recommended)
+bun install -g @ffwrap/cli
+
+# Using npm
+npm install -g @ffwrap/cli
+```
+
+See the [Installation](/installation) guide for detailed instructions.
+
+### How do I update ffwrap?
+
+```bash
+# Using Bun
+bun update -g @ffwrap/cli
+
+# Using npm
+npm update -g @ffwrap/cli
+```
+
+### How do I uninstall ffwrap?
+
+```bash
+# Using Bun
+bun remove -g @ffwrap/cli
+
+# Using npm
+npm uninstall -g @ffwrap/cli
+```
+
+## Usage
+
+### How do I convert a video?
+
+```bash
+ffwrap convert input.mov output.mp4
+```
+
+See the [convert command](/commands/convert) for all options.
+
+### How do I compress a video to a specific size?
+
+```bash
+ffwrap compress video.mp4 --target-size 25MB
+```
+
+See the [compress command](/commands/compress) for all options.
+
+### How do I trim a video?
+
+```bash
+ffwrap trim video.mp4 --start 00:01:00 --duration 30
+```
+
+See the [trim command](/commands/trim) for all options.
+
+### How do I create a GIF?
+
+```bash
+ffwrap gif video.mp4 --start 5 --duration 3 --width 480
+```
+
+See the [gif command](/commands/gif) for all options.
+
+### How do I extract audio from a video?
+
+```bash
+ffwrap extract video.mp4 --audio
+```
+
+See the [extract command](/commands/extract) for all options.
+
+### What formats does ffwrap support?
+
+ffwrap supports all formats that ffmpeg supports, including:
+- Video: MP4, WebM, MKV, MOV, AVI, and more
+- Audio: MP3, WAV, FLAC, AAC, OGG, and more
+
+See the [Formats reference](/reference/formats) for details.
+
+### What codecs does ffwrap support?
+
+ffwrap supports major codecs including:
+- Video: H.264, H.265, VP9, AV1
+- Audio: AAC, MP3, Opus, FLAC
+
+See the [Codecs reference](/reference/codecs) for details.
+
+## Quality & Size
+
+### What quality preset should I use?
+
+| Preset | When to use |
+|--------|------------|
+| `low` | Previews, drafts, when size is critical |
+| `medium` | General use, social media (default) |
+| `high` | Final delivery, archiving |
+| `lossless` | Professional work, source for editing |
+
+### Why is my output larger than input?
+
+This can happen when:
+1. Upscaling resolution
+2. Using higher quality preset
+3. Converting to less efficient codec
+4. Very short clips (fixed overhead)
+
+Use `ffwrap compress --target-size` for size control.
+
+### How do I get the smallest file size?
+
+```bash
+# Use compress with target size
+ffwrap compress video.mp4 --target-size 10MB
+
+# Or use low quality preset with lower resolution
+ffwrap convert video.mp4 output.mp4 -q low -r 480p
+```
+
+### How do I get the best quality?
+
+```bash
+# Use high or lossless quality preset
+ffwrap convert video.mp4 output.mp4 -q high
+
+# For perfect quality (very large files)
+ffwrap convert video.mp4 output.mp4 -q lossless
+```
+
+## Technical
+
+### Does ffwrap re-encode files?
+
+By default, yes. ffwrap re-encodes to ensure quality and compatibility.
+
+To avoid re-encoding (faster but less flexible):
+```bash
+ffwrap convert input.mkv output.mp4 --video-codec copy --audio-codec copy
+ffwrap trim video.mp4 --start 10 --duration 5 --copy
+```
+
+### Can I use ffwrap in scripts?
+
+Yes! The CLI mode is fully scriptable:
+
+```bash
+#!/bin/bash
+for file in *.mov; do
+  ffwrap convert "$file" "${file%.mov}.mp4"
+done
+```
+
+### Does ffwrap support batch processing?
+
+Not directly in a single command, but you can use shell scripting:
+
+```bash
+# Convert all MOV files to MP4
+for f in *.mov; do ffwrap convert "$f" -f mp4; done
+
+# Compress all MP4 files
+for f in *.mp4; do ffwrap compress "$f" -s 25MB; done
+```
+
+### Can I see the ffmpeg command ffwrap runs?
+
+Currently, ffwrap doesn't expose the underlying ffmpeg command. This feature may be added in a future release.
+
+As a workaround, you can use `ffmpeg -hide_banner` with verbose flags to see what parameters are typically used.
+
+## TUI
+
+### What is the TUI?
+
+TUI stands for Terminal User Interface. It's an interactive mode that guides you through operations with menus, prompts, and visual feedback.
+
+Launch it by running `ffwrap` without any arguments.
+
+### When should I use CLI vs TUI?
+
+**Use CLI when:**
+- You know exactly what you want
+- Writing scripts
+- Quick one-off commands
+
+**Use TUI when:**
+- Exploring features
+- Learning ffwrap
+- Prefer visual guidance
+
+### Can I customize the TUI theme?
+
+Theme selection is not currently exposed as a user setting. The TUI includes multiple built-in themes.
+
+## Troubleshooting
+
+### Where can I get help?
+
+1. Check the [Troubleshooting](/troubleshooting) guide
+2. Read command help: `ffwrap <command> --help`
+3. Open an issue on [GitHub](https://github.com/Manas-Kenge/ffwrap/issues)
+4. Contact support: [man.kng02@gmail.com](mailto:man.kng02@gmail.com)
+
+### ffwrap says "command not found"
+
+The binary isn't in your PATH. See [Troubleshooting](/troubleshooting#command-not-found-ffwrap).
+
+### ffwrap says "ffmpeg not found"
+
+ffmpeg isn't installed or not in PATH. See [Installation](/installation#step-2-install-ffmpeg).
+
+### My file won't convert
+
+Check:
+1. File exists and isn't corrupted
+2. You have read/write permissions
+3. Disk space available
+4. Run `ffwrap info file.mp4` to check the file
+
+See [Troubleshooting](/troubleshooting) for more solutions.
+
+## Contributing
+
+### How can I contribute?
+
+See the [Contributing](/contributing) guide for how to:
+- Report bugs
+- Suggest features
+- Submit code changes
+
+### Where's the source code?
+
+[github.com/Manas-Kenge/ffwrap](https://github.com/Manas-Kenge/ffwrap)
+
+### Is there a roadmap?
+
+Check the [GitHub Issues](https://github.com/Manas-Kenge/ffwrap/issues) and [Changelog](/changelog) for planned and recent changes.

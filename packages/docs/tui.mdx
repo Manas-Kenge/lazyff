@@ -1,0 +1,260 @@
+---
+title: "TUI Mode"
+description: "Interactive terminal user interface"
+---
+
+ffwrap includes an interactive Terminal User Interface (TUI) that provides a guided experience for media operations.
+
+## Launching the TUI
+
+Simply run ffwrap without any command:
+
+```bash
+ffwrap
+```
+
+<Frame caption="ffwrap TUI main interface">
+  <img src="/images/placeholder-tui-main.png" alt="ffwrap TUI main interface" />
+</Frame>
+
+## Interface Overview
+
+The TUI consists of several components:
+
+### Main Screen
+
+<Frame caption="TUI main screen layout">
+  <img src="/images/placeholder-tui-layout.png" alt="TUI layout diagram" />
+</Frame>
+
+| Component | Description |
+|-----------|-------------|
+| Logo | ffwrap branding |
+| Prompt | Command input with autocomplete |
+| History | Previous commands |
+| Status | Current operation status |
+
+### Prompt
+
+The prompt supports:
+
+- **Autocomplete** - Type to see suggestions
+- **History** - Navigate previous commands
+- **Fuzzy search** - Find commands quickly
+
+<Frame caption="TUI autocomplete in action">
+  <img src="/images/placeholder-tui-autocomplete.png" alt="Autocomplete suggestions" />
+</Frame>
+
+## Navigation
+
+### Keyboard Controls
+
+| Key | Action |
+|-----|--------|
+| `Enter` | Execute command / Select item |
+| `Tab` | Accept autocomplete suggestion |
+| `↑` / `↓` | Navigate history / suggestions |
+| `Ctrl+C` | Exit ffwrap |
+| `?` | Open help dialog |
+| `Esc` | Close dialog / Cancel |
+
+See the full [Shortcuts](/shortcuts) reference for all keyboard controls.
+
+## Dialogs
+
+The TUI uses dialogs for various interactions:
+
+### Help Dialog
+
+Press `?` to open the help dialog:
+
+<Frame caption="Help dialog">
+  <img src="/images/placeholder-tui-help.png" alt="Help dialog showing available commands" />
+</Frame>
+
+### Confirmation Dialog
+
+Appears when actions need confirmation:
+
+<Frame caption="Confirmation dialog">
+  <img src="/images/placeholder-tui-confirm.png" alt="Confirmation dialog example" />
+</Frame>
+
+### Selection Dialog
+
+Choose from multiple options:
+
+<Frame caption="Selection dialog">
+  <img src="/images/placeholder-tui-select.png" alt="Selection dialog for choosing format" />
+</Frame>
+
+## Using the TUI
+
+### Basic Workflow
+
+1. Launch ffwrap: `ffwrap`
+2. Start typing a command (e.g., "convert")
+3. Select from autocomplete suggestions
+4. Enter file paths when prompted
+5. Choose options from dialogs
+6. Confirm and execute
+
+### Example: Converting a Video
+
+<Steps>
+  <Step title="Launch ffwrap">
+    ```bash
+    ffwrap
+    ```
+  </Step>
+  <Step title="Type 'convert'">
+    Start typing and select from autocomplete
+  </Step>
+  <Step title="Enter input file">
+    Type or browse to your input file
+  </Step>
+  <Step title="Select format">
+    Choose output format from the selection dialog
+  </Step>
+  <Step title="Choose quality">
+    Select quality preset
+  </Step>
+  <Step title="Confirm">
+    Review settings and confirm to start conversion
+  </Step>
+</Steps>
+
+### Example: Compressing a Video
+
+<Steps>
+  <Step title="Select compress command">
+    Type "compress" and press Enter
+  </Step>
+  <Step title="Enter input file">
+    Provide the path to your video
+  </Step>
+  <Step title="Choose compression method">
+    Select target size, bitrate, or percentage
+  </Step>
+  <Step title="Enter target">
+    Input your target (e.g., "25MB")
+  </Step>
+  <Step title="Execute">
+    Confirm to start compression
+  </Step>
+</Steps>
+
+## Progress Display
+
+During operations, the TUI shows progress:
+
+<Frame caption="Progress display during conversion">
+  <img src="/images/placeholder-tui-progress.png" alt="Progress bar during conversion" />
+</Frame>
+
+| Element | Description |
+|---------|-------------|
+| Progress bar | Visual progress indicator |
+| Percentage | Current completion |
+| Time | Elapsed / estimated time |
+| Speed | Processing speed |
+
+## Toasts & Notifications
+
+The TUI displays notifications for:
+
+- **Success** - Operation completed
+- **Error** - Something went wrong
+- **Warning** - Important notices
+- **Info** - General information
+
+<Frame caption="Toast notification examples">
+  <img src="/images/placeholder-tui-toast.png" alt="Toast notification examples" />
+</Frame>
+
+## File Browser
+
+The TUI includes a file browser for selecting files:
+
+<Frame caption="File browser interface">
+  <img src="/images/placeholder-tui-filebrowser.png" alt="File browser showing directory contents" />
+</Frame>
+
+### File Browser Controls
+
+| Key | Action |
+|-----|--------|
+| `↑` / `↓` | Navigate files |
+| `Enter` | Select file / Enter directory |
+| `Backspace` | Go to parent directory |
+| `Esc` | Cancel selection |
+
+## Media Info Display
+
+View detailed file information in the TUI:
+
+<Frame caption="Media info display">
+  <img src="/images/placeholder-tui-mediainfo.png" alt="Media information panel" />
+</Frame>
+
+Shows:
+- File format and size
+- Video codec, resolution, frame rate
+- Audio codec, sample rate, channels
+- Duration and bitrate
+
+## Themes
+
+The TUI supports multiple color themes. Current themes include:
+
+- Catppuccin
+- Dracula
+- Nord
+- Tokyo Night
+- Gruvbox
+- And many more...
+
+<Frame caption="Theme examples">
+  <img src="/images/placeholder-tui-themes.png" alt="Different TUI themes" />
+</Frame>
+
+## Tips
+
+<Tip>
+  Use `Tab` to quickly accept autocomplete suggestions without typing the full command.
+</Tip>
+
+<Tip>
+  Press `?` at any time to see available commands and shortcuts.
+</Tip>
+
+<Tip>
+  The TUI remembers your command history. Use `↑` to quickly repeat previous commands.
+</Tip>
+
+## CLI vs TUI
+
+| Feature | CLI | TUI |
+|---------|-----|-----|
+| Speed | Faster for known commands | Better for exploration |
+| Scripting | Yes | No |
+| Guidance | Help flags only | Interactive prompts |
+| Learning | Steeper | Gentler |
+
+**Use CLI when:**
+- You know exactly what you want
+- Scripting or automation
+- Quick one-off commands
+
+**Use TUI when:**
+- Exploring features
+- Learning ffwrap
+- Need guided workflow
+- Prefer visual interface
+
+## See Also
+
+- [Shortcuts](/shortcuts) - Complete keyboard shortcuts
+- [Usage Guide](/commands/index) - All commands
+- [Quickstart](/quickstart) - Getting started

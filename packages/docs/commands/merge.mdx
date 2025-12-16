@@ -1,0 +1,186 @@
+---
+title: "merge"
+description: "Concatenate multiple media files into one"
+---
+
+The `merge` command joins multiple video or audio files into a single file.
+
+## Syntax
+
+```bash
+ffwrap merge <inputs...> --output <output> [options]
+```
+
+## Arguments
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `inputs` | Yes | Two or more input files to concatenate |
+
+## Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--output` | `-o` | string | **required** | Output file path |
+| `--reencode` | `-r` | boolean | false | Re-encode files (for different codecs) |
+| `--overwrite` | `-y` | boolean | false | Overwrite output if exists |
+
+## Examples
+
+### Basic Merge
+
+```bash
+# Merge two videos
+ffwrap merge part1.mp4 part2.mp4 -o full.mp4
+
+# Merge multiple videos
+ffwrap merge clip1.mp4 clip2.mp4 clip3.mp4 -o final.mp4
+```
+
+### Merge Different Formats
+
+When merging files with different codecs, use `--reencode`:
+
+```bash
+# Merge MP4 and WebM (re-encode required)
+ffwrap merge video1.mp4 video2.webm -o combined.mp4 --reencode
+
+# Merge videos with different resolutions
+ffwrap merge hd.mp4 sd.mp4 -o mixed.mp4 --reencode
+```
+
+### Merge Audio Files
+
+```bash
+# Merge MP3 files
+ffwrap merge song1.mp3 song2.mp3 song3.mp3 -o album.mp3
+
+# Merge WAV files
+ffwrap merge track1.wav track2.wav -o combined.wav
+```
+
+## Modes
+
+### Copy Mode (Default)
+
+Fast concatenation by copying streams directly:
+
+- **Pros**: Very fast, preserves quality
+- **Cons**: All files must have same codec, resolution, and frame rate
+- **Best for**: Files from the same source or same recording session
+
+```bash
+# Fast merge (same codec required)
+ffwrap merge part1.mp4 part2.mp4 -o full.mp4
+```
+
+### Re-encode Mode
+
+Decodes and re-encodes all inputs:
+
+- **Pros**: Works with any combination of files
+- **Cons**: Slower, slight quality reduction
+- **Best for**: Mixing different sources, codecs, or resolutions
+
+```bash
+# Re-encode merge (handles different codecs)
+ffwrap merge clip1.mp4 clip2.webm -o combined.mp4 --reencode
+```
+
+## Re-encode Settings
+
+When using `--reencode`, ffwrap uses:
+
+| Setting | Value |
+|---------|-------|
+| Video codec | H.264 (libx264) |
+| Video CRF | 18 (high quality) |
+| Video preset | medium |
+| Audio codec | AAC |
+| Audio bitrate | 192k |
+
+## Requirements for Copy Mode
+
+For copy mode to work, all input files must have:
+
+- Same video codec (e.g., all H.264)
+- Same audio codec (e.g., all AAC)
+- Same resolution (e.g., all 1920x1080)
+- Same frame rate (e.g., all 30fps)
+
+If any of these differ, use `--reencode`.
+
+## Tips
+
+<Tip>
+  If copy mode fails with a codec error, add `--reencode`:
+  ```bash
+  ffwrap merge a.mp4 b.mp4 -o out.mp4 --reencode
+  ```
+</Tip>
+
+<Tip>
+  For best quality when merging clips from different sources, first convert them to the same format:
+  ```bash
+  ffwrap convert clip1.mov -f mp4 -r 1080p
+  ffwrap convert clip2.avi -f mp4 -r 1080p
+  ffwrap merge clip1.mp4 clip2.mp4 -o final.mp4
+  ```
+</Tip>
+
+<Warning>
+  File order matters! Files are concatenated in the order you list them.
+</Warning>
+
+## Common Use Cases
+
+### Join Video Parts
+
+```bash
+# Recorded video split into parts
+ffwrap merge recording_001.mp4 recording_002.mp4 recording_003.mp4 -o full_recording.mp4
+```
+
+### Combine Clips for YouTube
+
+```bash
+# Intro + main content + outro
+ffwrap merge intro.mp4 main.mp4 outro.mp4 -o youtube_video.mp4 --reencode
+```
+
+### Merge Audio Tracks
+
+```bash
+# Combine podcast segments
+ffwrap merge intro.mp3 episode.mp3 outro.mp3 -o full_episode.mp3
+```
+
+### Combine Screen Recording with Webcam
+
+```bash
+# Different sources, need re-encode
+ffwrap merge screen.mp4 webcam.mp4 -o presentation.mp4 --reencode
+```
+
+## Troubleshooting
+
+### "Discarding invalid channel/sample rate"
+
+Files have different audio settings. Use `--reencode`.
+
+### "Non-monotonic DTS"
+
+Files have timestamp issues. Use `--reencode`.
+
+### "Discarding unused streams"
+
+Some files have extra streams (subtitles, etc.). This is usually fine - the output will have the common streams.
+
+### Output is garbled or glitchy
+
+Files have incompatible codecs. Use `--reencode`.
+
+## See Also
+
+- [trim](/commands/trim) - Cut files before merging
+- [convert](/commands/convert) - Convert files to same format before merging

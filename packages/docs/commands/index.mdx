@@ -1,0 +1,142 @@
+---
+title: "Usage Overview"
+description: "All ffwrap commands at a glance"
+---
+
+ffwrap provides 8 commands for common media operations. Each command has sensible defaults so you can get started quickly, with options for fine-tuning when needed.
+
+## Command Summary
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| [convert](/commands/convert) | Convert between formats | `ffwrap convert video.mov video.mp4` |
+| [compress](/commands/compress) | Reduce file size | `ffwrap compress video.mp4 -s 25MB` |
+| [trim](/commands/trim) | Cut a portion of media | `ffwrap trim video.mp4 -s 00:01:00 -t 30` |
+| [merge](/commands/merge) | Concatenate files | `ffwrap merge part1.mp4 part2.mp4 -o full.mp4` |
+| [extract](/commands/extract) | Extract audio/video/frames | `ffwrap extract video.mp4 --audio` |
+| [gif](/commands/gif) | Create animated GIF | `ffwrap gif video.mp4 -s 5 -t 3` |
+| [thumbnail](/commands/thumbnail) | Generate thumbnails | `ffwrap thumbnail video.mp4 --grid 3x3` |
+| [info](/commands/info) | Show media information | `ffwrap info video.mp4` |
+
+## Common Options
+
+These options are available across most commands:
+
+| Option | Alias | Description |
+|--------|-------|-------------|
+| `--overwrite` | `-y` | Overwrite output file if it exists |
+| `--help` | `-h` | Show command help |
+
+## Output Naming
+
+When you don't specify an output file, ffwrap automatically generates one:
+
+| Command | Input | Auto-generated Output |
+|---------|-------|----------------------|
+| convert | `video.mov` | `video.mp4` (based on format) |
+| compress | `video.mp4` | `video_compressed.mp4` |
+| trim | `video.mp4` | `video_trimmed.mp4` |
+| extract (audio) | `video.mp4` | `video.mp3` |
+| extract (video) | `video.mp4` | `video_video.mp4` |
+| gif | `video.mp4` | `video.gif` |
+| thumbnail | `video.mp4` | `video_thumb.png` |
+
+## Quick Reference
+
+<CardGroup cols={2}>
+  <Card title="convert" icon="repeat" href="/commands/convert">
+    Change formats, codecs, resolution, and quality
+  </Card>
+  <Card title="compress" icon="compress" href="/commands/compress">
+    Target size, bitrate, or percentage reduction
+  </Card>
+  <Card title="trim" icon="scissors" href="/commands/trim">
+    Cut by start/end time or duration
+  </Card>
+  <Card title="merge" icon="layer-group" href="/commands/merge">
+    Join multiple files into one
+  </Card>
+  <Card title="extract" icon="file-export" href="/commands/extract">
+    Separate audio, video, or extract frames
+  </Card>
+  <Card title="gif" icon="image" href="/commands/gif">
+    Animated GIF with quality control
+  </Card>
+  <Card title="thumbnail" icon="images" href="/commands/thumbnail">
+    Single, multiple, or grid thumbnails
+  </Card>
+  <Card title="info" icon="circle-info" href="/commands/info">
+    Detailed codec and format information
+  </Card>
+</CardGroup>
+
+## Command Comparison
+
+### When to Use Each Command
+
+<AccordionGroup>
+  <Accordion title="I want to change the video format">
+    Use **convert**:
+    ```bash
+    ffwrap convert video.mov video.mp4
+    ```
+  </Accordion>
+  <Accordion title="My file is too large">
+    Use **compress** with a target size:
+    ```bash
+    ffwrap compress video.mp4 --target-size 25MB
+    ```
+  </Accordion>
+  <Accordion title="I only need part of the video">
+    Use **trim**:
+    ```bash
+    ffwrap trim video.mp4 --start 00:01:00 --end 00:02:00
+    ```
+  </Accordion>
+  <Accordion title="I have multiple clips to join">
+    Use **merge**:
+    ```bash
+    ffwrap merge clip1.mp4 clip2.mp4 clip3.mp4 -o final.mp4
+    ```
+  </Accordion>
+  <Accordion title="I need just the audio track">
+    Use **extract** with `--audio`:
+    ```bash
+    ffwrap extract video.mp4 --audio
+    ```
+  </Accordion>
+  <Accordion title="I want to make a GIF">
+    Use **gif**:
+    ```bash
+    ffwrap gif video.mp4 --start 5 --duration 3
+    ```
+  </Accordion>
+  <Accordion title="I need a preview image">
+    Use **thumbnail**:
+    ```bash
+    ffwrap thumbnail video.mp4 --time 00:01:00
+    ```
+  </Accordion>
+  <Accordion title="I want to see video details">
+    Use **info**:
+    ```bash
+    ffwrap info video.mp4
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Getting Help
+
+Every command has built-in help:
+
+```bash
+ffwrap convert --help
+ffwrap compress --help
+# etc.
+```
+
+Or see the general help:
+
+```bash
+ffwrap --help
+```

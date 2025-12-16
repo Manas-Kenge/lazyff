@@ -1,0 +1,242 @@
+---
+title: "Formats"
+description: "Supported media formats and containers"
+---
+
+ffwrap supports a wide range of media formats for both input and output.
+
+## Video Formats
+
+| Format | Extension | Description | Best For |
+|--------|-----------|-------------|----------|
+| **MP4** | `.mp4` | MPEG-4 Part 14 | Universal compatibility |
+| **WebM** | `.webm` | Web-optimized format | Web browsers, streaming |
+| **MKV** | `.mkv` | Matroska container | Archiving, multiple tracks |
+| **MOV** | `.mov` | Apple QuickTime | Apple ecosystem, editing |
+| **AVI** | `.avi` | Audio Video Interleave | Legacy compatibility |
+| **TS** | `.ts` | MPEG Transport Stream | Broadcasting, streaming |
+
+## Audio Formats
+
+| Format | Extension | Description | Best For |
+|--------|-----------|-------------|----------|
+| **MP3** | `.mp3` | MPEG Audio Layer 3 | Universal compatibility |
+| **WAV** | `.wav` | Waveform Audio | Uncompressed, editing |
+| **FLAC** | `.flac` | Free Lossless Audio | Lossless archiving |
+| **OGG** | `.ogg` | Ogg Vorbis | Open source, web |
+| **AAC** | `.aac`, `.m4a` | Advanced Audio Coding | High quality streaming |
+
+## Format Details
+
+### MP4
+
+The most widely supported video format.
+
+```bash
+ffwrap convert input.mov output.mp4
+```
+
+| Property | Default Value |
+|----------|---------------|
+| Container | MPEG-4 |
+| Video Codec | H.264 (libx264) |
+| Audio Codec | AAC |
+| Compatibility | Excellent |
+
+**Pros:**
+- Works everywhere (browsers, devices, players)
+- Good compression with H.264
+- Supports streaming (fast start)
+
+**Cons:**
+- Limited to H.264/H.265 video codecs
+- No support for multiple audio tracks
+
+### WebM
+
+Optimized for web delivery.
+
+```bash
+ffwrap convert input.mp4 output.webm
+```
+
+| Property | Default Value |
+|----------|---------------|
+| Container | WebM |
+| Video Codec | VP9 (libvpx-vp9) |
+| Audio Codec | Opus |
+| Compatibility | Good (modern browsers) |
+
+**Pros:**
+- Royalty-free
+- Excellent compression with VP9
+- Opus audio is highly efficient
+
+**Cons:**
+- Slower to encode than H.264
+- Limited device support outside browsers
+
+### MKV (Matroska)
+
+Flexible container for any content.
+
+```bash
+ffwrap convert input.mp4 output.mkv
+```
+
+| Property | Default Value |
+|----------|---------------|
+| Container | Matroska |
+| Video Codec | H.264 (libx264) |
+| Audio Codec | AAC |
+| Compatibility | Good (players, limited devices) |
+
+**Pros:**
+- Supports any codec
+- Multiple audio/subtitle tracks
+- Chapter markers
+- Attachment support
+
+**Cons:**
+- Not universally supported on devices
+- Larger overhead than MP4
+
+### MOV
+
+Apple QuickTime format.
+
+```bash
+ffwrap convert input.mp4 output.mov
+```
+
+| Property | Default Value |
+|----------|---------------|
+| Container | QuickTime |
+| Video Codec | H.264 (libx264) |
+| Audio Codec | AAC |
+| Compatibility | Good (excellent on Apple) |
+
+**Pros:**
+- Native Apple support
+- Good for video editing workflows
+- Supports ProRes codec
+
+**Cons:**
+- Larger files than MP4
+- Less compatible on non-Apple systems
+
+### MP3
+
+Universal audio format.
+
+```bash
+ffwrap extract video.mp4 --audio -f mp3
+```
+
+| Property | Default Value |
+|----------|---------------|
+| Codec | libmp3lame |
+| Sample Rate | Preserved |
+| Quality | VBR quality 2 |
+| Compatibility | Universal |
+
+**Pros:**
+- Works everywhere
+- Small file size
+- Fast encoding
+
+**Cons:**
+- Lossy compression
+- Limited to stereo
+
+### WAV
+
+Uncompressed audio.
+
+```bash
+ffwrap extract video.mp4 --audio -f wav
+```
+
+| Property | Default Value |
+|----------|---------------|
+| Codec | PCM 16-bit |
+| Sample Rate | Preserved |
+| Compression | None |
+| Compatibility | Universal |
+
+**Pros:**
+- No quality loss
+- Universal support
+- Best for editing
+
+**Cons:**
+- Very large files
+- No metadata support
+
+### FLAC
+
+Lossless compressed audio.
+
+```bash
+ffwrap extract video.mp4 --audio -f flac
+```
+
+| Property | Default Value |
+|----------|---------------|
+| Codec | FLAC |
+| Sample Rate | Preserved |
+| Compression | Lossless |
+| Compatibility | Good |
+
+**Pros:**
+- No quality loss
+- 50-60% smaller than WAV
+- Good metadata support
+
+**Cons:**
+- Limited device support
+- Still larger than lossy formats
+
+## Format Selection Guide
+
+### By Use Case
+
+| Use Case | Recommended Format |
+|----------|-------------------|
+| Share on social media | MP4 |
+| Embed on website | WebM (with MP4 fallback) |
+| Archive original | MKV or MOV |
+| Edit in software | MOV or MKV |
+| Stream online | MP4 or WebM |
+| Audio podcast | MP3 |
+| Music archiving | FLAC |
+| Audio editing | WAV |
+
+### By Priority
+
+| Priority | Format |
+|----------|--------|
+| Maximum compatibility | MP4 |
+| Smallest file size | WebM |
+| Best quality | MKV (with lossless codec) |
+| Apple workflow | MOV |
+
+## Input Format Support
+
+ffwrap can read virtually any format that ffmpeg supports, including:
+
+- All formats listed above
+- Legacy formats (WMV, FLV, 3GP, etc.)
+- Camera formats (AVCHD, MTS, etc.)
+- Professional formats (ProRes, DNxHD, etc.)
+
+```bash
+# Check if your format is supported
+ffwrap info strange_format.xyz
+```
+
+## See Also
+
+- [Codecs Reference](/reference/codecs) - Video and audio codecs
+- [Presets Reference](/reference/presets) - Quality presets
+- [convert Command](/commands/convert) - Format conversion

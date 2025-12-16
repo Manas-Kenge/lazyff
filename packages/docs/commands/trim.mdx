@@ -1,0 +1,195 @@
+---
+title: "trim"
+description: "Cut a portion of a media file"
+---
+
+The `trim` command extracts a portion of a media file by specifying start time, end time, or duration.
+
+## Syntax
+
+```bash
+ffwrap trim <input> [output] [options]
+```
+
+## Arguments
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `input` | Yes | Path to the input file |
+| `output` | No | Path for the output file (default: `input_trimmed.ext`) |
+
+## Options
+
+At least one of `--start`, `--end`, or `--duration` is required.
+
+| Option | Alias | Type | Description |
+|--------|-------|------|-------------|
+| `--start` | `-s` | string | Start time (e.g., 00:01:30 or 90) |
+| `--end` | `-e` | string | End time (e.g., 00:02:00 or 120) |
+| `--duration` | `-t` | string | Duration from start (e.g., 30) |
+| `--copy` | `-c` | boolean | Copy streams without re-encoding (fast) |
+| `--overwrite` | `-y` | boolean | Overwrite output if exists |
+
+<Warning>
+  You cannot use `--end` and `--duration` together. Use one or the other.
+</Warning>
+
+## Time Formats
+
+ffwrap accepts times in multiple formats:
+
+| Format | Example | Meaning |
+|--------|---------|---------|
+| `HH:MM:SS` | `01:30:00` | 1 hour, 30 minutes |
+| `MM:SS` | `01:30` | 1 minute, 30 seconds |
+| `SS` | `90` | 90 seconds |
+| `SS.ms` | `90.5` | 90.5 seconds |
+
+## Examples
+
+### Basic Trimming
+
+```bash
+# Cut from 1:00 to 2:00
+ffwrap trim video.mp4 --start 00:01:00 --end 00:02:00
+
+# Extract 30 seconds starting at 1 minute
+ffwrap trim video.mp4 --start 00:01:00 --duration 30
+
+# Keep first 30 seconds
+ffwrap trim video.mp4 --end 00:00:30
+
+# Remove first 5 minutes
+ffwrap trim video.mp4 --start 00:05:00
+```
+
+### Using Seconds
+
+```bash
+# Start at 90 seconds, extract 30 seconds
+ffwrap trim video.mp4 -s 90 -t 30
+
+# Cut from 10s to 60s
+ffwrap trim video.mp4 -s 10 -e 60
+```
+
+### Fast Trim (Copy Mode)
+
+Use `--copy` for instant trimming without re-encoding:
+
+```bash
+# Fast trim - copies streams directly
+ffwrap trim video.mp4 --start 10 --duration 5 --copy
+
+# Much faster than re-encoding
+ffwrap trim video.mp4 -s 00:05:00 -e 00:10:00 -c
+```
+
+<Note>
+  Copy mode is much faster but may be imprecise at the start/end. This happens because video can only be cut at keyframes. If precision is important, don't use `--copy`.
+</Note>
+
+### Custom Output
+
+```bash
+# Specify output filename
+ffwrap trim video.mp4 clip.mp4 --start 00:01:00 --duration 30
+
+# Overwrite if exists
+ffwrap trim video.mp4 clip.mp4 -s 60 -t 30 -y
+```
+
+## Copy vs Re-encode
+
+| Mode | Speed | Precision | Quality |
+|------|-------|-----------|---------|
+| Copy (`--copy`) | Very fast | Keyframe-aligned | Unchanged |
+| Re-encode (default) | Slower | Frame-accurate | Slightly reduced |
+
+### When to Use Copy Mode
+
+- Quick extractions where exact timing doesn't matter
+- Preserving original quality is critical
+- Working with very long videos
+
+### When to Re-encode
+
+- Need precise start/end times
+- Combining with other operations (resize, etc.)
+- File will be further edited
+
+## How It Works
+
+### Without `--copy` (Re-encode)
+
+ffwrap decodes and re-encodes the video:
+- **Video codec**: H.264 (libx264)
+- **CRF**: 18 (high quality)
+- **Preset**: medium
+- **Audio codec**: AAC at 192k
+
+This ensures frame-accurate cuts.
+
+### With `--copy`
+
+ffwrap copies the streams directly:
+- No decoding/encoding
+- Preserves original quality
+- Cuts only at keyframes (I-frames)
+- May include a few extra frames at start/end
+
+## Tips
+
+<Tip>
+  To find the exact timestamp for trimming, use `ffwrap info video.mp4` to see the duration, then play the video to find your desired start/end points.
+</Tip>
+
+<Tip>
+  For extracting multiple clips from one video, run trim multiple times with different output names:
+  ```bash
+  ffwrap trim video.mp4 clip1.mp4 -s 00:00:00 -t 30
+  ffwrap trim video.mp4 clip2.mp4 -s 00:01:00 -t 30
+  ffwrap trim video.mp4 clip3.mp4 -s 00:02:00 -t 30
+  ```
+</Tip>
+
+## Common Use Cases
+
+### Extract a Scene
+
+```bash
+# Get the scene from 5:30 to 6:15
+ffwrap trim movie.mp4 scene.mp4 --start 05:30 --end 06:15
+```
+
+### Create a Preview
+
+```bash
+# First 15 seconds as preview
+ffwrap trim video.mp4 preview.mp4 --end 15
+```
+
+### Remove Intro/Outro
+
+```bash
+# Skip first 10 seconds (intro)
+ffwrap trim video.mp4 no_intro.mp4 --start 10
+
+# For removing outro, first check duration with info
+ffwrap info video.mp4
+# Then trim to end before outro
+ffwrap trim video.mp4 no_outro.mp4 --end 02:45:00
+```
+
+### Quick Clip for Social Media
+
+```bash
+# Fast 15-second clip for TikTok/Reels
+ffwrap trim video.mp4 -s 30 -t 15 --copy
+```
+
+## See Also
+
+- [merge](/commands/merge) - Join multiple clips together
+- [convert](/commands/convert) - Convert with time range options
+- [gif](/commands/gif) - Create GIF from a portion

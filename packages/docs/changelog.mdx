@@ -1,0 +1,135 @@
+---
+title: "Changelog"
+description: "Version history and release notes"
+---
+
+All notable changes to ffwrap are documented here.
+
+## [0.0.1] - Initial Release
+
+The first release of ffwrap, providing a simple wrapper around ffmpeg with an interactive TUI.
+
+### Added
+
+#### CLI Commands
+
+- **convert** - Convert media files between formats
+  - Format presets (MP4, WebM, MKV, MOV, etc.)
+  - Quality presets (low, medium, high, lossless)
+  - Resolution presets (360p to 4K)
+  - Video codec selection (H.264, H.265, VP9, AV1)
+  - Audio codec selection (AAC, MP3, Opus, FLAC)
+  - Time range extraction
+  - Strip audio/video options
+
+- **compress** - Reduce file size
+  - Target file size mode
+  - Target bitrate mode
+  - Percentage reduction mode
+  - Audio bitrate control
+
+- **trim** - Cut media files
+  - Start/end time specification
+  - Duration-based cutting
+  - Copy mode for fast trimming
+  - Re-encode mode for precision
+
+- **merge** - Concatenate files
+  - Copy mode for same-codec files
+  - Re-encode mode for mixed codecs
+
+- **extract** - Extract components
+  - Audio extraction (MP3, WAV, FLAC, AAC, OGG, Opus)
+  - Video extraction (remove audio)
+  - Frame extraction (single or multiple)
+
+- **gif** - Create animated GIFs
+  - Timing control (start, duration)
+  - Size control (width, fps)
+  - High quality mode with palette optimization
+
+- **thumbnail** - Generate thumbnails
+  - Single thumbnail at specific time
+  - Multiple thumbnails (evenly spaced)
+  - Grid preview images
+
+- **info** - Display media information
+  - Format, duration, size, bitrate
+  - Video codec, resolution, frame rate
+  - Audio codec, sample rate, channels
+  - Subtitle tracks
+  - JSON output option
+
+#### TUI Features
+
+- Interactive terminal user interface
+- Command autocomplete with fuzzy search
+- Command history
+- Dialog system (help, confirm, select, prompt)
+- Progress display during operations
+- Toast notifications
+- File browser
+- Media info display
+- Multiple color themes
+
+#### Error Handling
+
+- Human-readable error messages
+- Actionable suggestions for common errors
+- Pattern-based error parsing for ffmpeg errors
+
+### Technical
+
+- Built with Bun and TypeScript
+- CLI powered by yargs
+- TUI powered by @opentui/react
+- Monorepo structure with workspaces
+
+---
+
+## Upcoming
+
+Features planned for future releases:
+
+### Planned Features
+
+- [ ] Batch processing support
+- [ ] Preset management (save/load custom presets)
+- [ ] Video filters (crop, rotate, watermark)
+- [ ] Audio normalization
+- [ ] Subtitle support
+- [ ] Progress callback API
+- [ ] Config file support
+- [ ] Custom theme support
+
+### Under Consideration
+
+- Two-pass encoding for better compression
+- Hardware acceleration (NVENC, VideoToolbox)
+- Watch mode for automatic conversion
+- Queue system for multiple operations
+- Plugin system for extensions
+
+---
+
+## Version Format
+
+ffwrap follows [Semantic Versioning](https://semver.org/):
+
+- **MAJOR** - Incompatible API changes
+- **MINOR** - New functionality (backward compatible)
+- **PATCH** - Bug fixes (backward compatible)
+
+## Upgrade Guide
+
+### From Pre-release to 0.0.1
+
+This is the initial release. No upgrade path needed.
+
+---
+
+## Links
+
+- [GitHub Releases](https://github.com/Manas-Kenge/ffwrap/releases)
+- [GitHub Issues](https://github.com/Manas-Kenge/ffwrap/issues)
+- [Contributing Guide](/contributing)

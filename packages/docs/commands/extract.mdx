@@ -1,0 +1,202 @@
+---
+title: "extract"
+description: "Extract audio, video, or frames from media files"
+---
+
+The `extract` command separates components from media files - audio tracks, video streams, or individual frames.
+
+## Syntax
+
+```bash
+ffwrap extract <input> [output] [options]
+```
+
+## Arguments
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `input` | Yes | Path to the input file |
+| `output` | No | Path for the output file (auto-generated based on mode) |
+
+## Options
+
+You must specify exactly one of `--audio`, `--video`, or `--frames`.
+
+| Option | Alias | Type | Description |
+|--------|-------|------|-------------|
+| `--audio` | `-a` | boolean | Extract audio track |
+| `--video` | `-v` | boolean | Extract video track (remove audio) |
+| `--frames` | | boolean | Extract frames as images |
+| `--time` | `-t` | string | Time for single frame extraction |
+| `--fps` | | number | Frames per second for extraction (default: 1) |
+| `--format` | `-f` | string | Audio format: mp3, wav, flac, aac, ogg, opus |
+| `--overwrite` | `-y` | boolean | Overwrite output if exists |
+
+## Extract Audio
+
+Extract the audio track from a video file.
+
+### Examples
+
+```bash
+# Extract audio as MP3 (default)
+ffwrap extract video.mp4 --audio
+# Output: video.mp3
+
+# Extract as WAV (uncompressed)
+ffwrap extract video.mp4 --audio -f wav
+# Output: video.wav
+
+# Extract as FLAC (lossless)
+ffwrap extract video.mp4 --audio -f flac
+
+# Custom output name
+ffwrap extract video.mp4 soundtrack.mp3 --audio
+```
+
+### Supported Audio Formats
+
+| Format | Codec | Description |
+|--------|-------|-------------|
+| `mp3` | libmp3lame | Most compatible, lossy |
+| `wav` | PCM | Uncompressed, large files |
+| `flac` | FLAC | Lossless compression |
+| `aac` | AAC | Good quality, small files |
+| `ogg` | Vorbis | Open format, lossy |
+| `opus` | Opus | Modern, excellent quality |
+
+## Extract Video
+
+Remove the audio track from a video file.
+
+### Examples
+
+```bash
+# Remove audio, keep video
+ffwrap extract video.mp4 --video
+# Output: video_video.mp4
+
+# Custom output name
+ffwrap extract video.mp4 silent.mp4 --video
+```
+
+<Note>
+  Video extraction copies the video stream directly (no re-encoding), so it's very fast and preserves quality.
+</Note>
+
+## Extract Frames
+
+Extract frames from video as image files.
+
+### Single Frame
+
+```bash
+# Extract frame at 5 seconds
+ffwrap extract video.mp4 --frames --time 00:00:05
+# Output: video_frame.png
+
+# Extract frame at 1 minute 30 seconds
+ffwrap extract video.mp4 --frames --time 01:30
+```
+
+### Multiple Frames
+
+```bash
+# Extract 1 frame per second (default)
+ffwrap extract video.mp4 --frames
+# Output: video_frame_0001.png, video_frame_0002.png, ...
+
+# Extract 1 frame every 2 seconds
+ffwrap extract video.mp4 --frames --fps 0.5
+
+# Extract 5 frames per second
+ffwrap extract video.mp4 --frames --fps 5
+```
+
+### Custom Output Pattern
+
+```bash
+# Custom filename pattern
+ffwrap extract video.mp4 frame_%03d.png --frames
+# Output: frame_001.png, frame_002.png, ...
+```
+
+## Frame Extraction Tips
+
+<Tip>
+  For a thumbnail, extract a single frame at a specific timestamp:
+  ```bash
+  ffwrap extract video.mp4 thumbnail.png --frames --time 30
+  ```
+</Tip>
+
+<Tip>
+  To extract frames for creating a timelapse or sprite sheet, use a low fps:
+  ```bash
+  # 1 frame every 10 seconds
+  ffwrap extract video.mp4 --frames --fps 0.1
+  ```
+</Tip>
+
+<Warning>
+  Extracting many frames creates many files. A 10-minute video at 1 fps creates 600 images!
+</Warning>
+
+## Common Use Cases
+
+### Podcast from Video
+
+```bash
+# Extract audio for podcast distribution
+ffwrap extract interview.mp4 podcast.mp3 --audio
+```
+
+### Background Music Track
+
+```bash
+# Extract music in high quality
+ffwrap extract music_video.mp4 song.flac --audio -f flac
+```
+
+### Silent Video for Looping
+
+```bash
+# Remove audio for seamless video loops
+ffwrap extract background.mp4 loop.mp4 --video
+```
+
+### Video Thumbnails
+
+```bash
+# Get a thumbnail at the 30-second mark
+ffwrap extract video.mp4 --frames --time 30
+```
+
+### Storyboard Images
+
+```bash
+# Extract key frames for storyboard
+ffwrap extract movie.mp4 --frames --fps 0.1
+```
+
+### GIF Source Frames
+
+```bash
+# Extract frames to manually create GIF
+ffwrap extract clip.mp4 --frames --fps 10
+```
+
+## Output Naming
+
+| Mode | Default Output |
+|------|----------------|
+| Audio | `{input}.{format}` (e.g., video.mp3) |
+| Video | `{input}_video.{ext}` (e.g., video_video.mp4) |
+| Single frame | `{input}_frame.png` |
+| Multiple frames | `{input}_frame_%04d.png` |
+
+## See Also
+
+- [thumbnail](/commands/thumbnail) - More thumbnail options including grids
+- [convert](/commands/convert) - Extract audio using `--strip-video`
+- [gif](/commands/gif) - Create animated GIF from video

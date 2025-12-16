@@ -1,0 +1,97 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "linden",
+  "name": "ffwrap",
+  "colors": {
+    "primary": "#16A34A",
+    "light": "#07C983",
+    "dark": "#15803D"
+  },
+  "favicon": "/favicon.svg",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "index",
+              "quickstart",
+              "installation"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "commands/index",
+              "commands/convert",
+              "commands/compress",
+              "commands/trim",
+              "commands/merge",
+              "commands/extract",
+              "commands/gif",
+              "commands/thumbnail",
+              "commands/info"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "reference/formats",
+              "reference/codecs",
+              "reference/presets"
+            ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              "tui",
+              "shortcuts",
+              "troubleshooting",
+              "faq",
+              "contributing",
+              "changelog"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "GitHub",
+          "href": "https://github.com/Manas-Kenge/ffwrap",
+          "icon": "github"
+        },
+        {
+          "anchor": "Twitter",
+          "href": "https://x.com/manas_kng",
+          "icon": "x-twitter"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:man.kng02@gmail.com"
+      }
+    ],
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/Manas-Kenge/ffwrap"
+    }
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/manas_kng",
+      "github": "https://github.com/Manas-Kenge/ffwrap"
+    }
+  }
+}

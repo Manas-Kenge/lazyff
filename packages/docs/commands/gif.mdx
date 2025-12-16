@@ -1,0 +1,236 @@
+---
+title: "gif"
+description: "Convert video to animated GIF"
+---
+
+The `gif` command creates animated GIFs from video files with options for quality, size, and timing.
+
+## Syntax
+
+```bash
+ffwrap gif <input> [output] [options]
+```
+
+## Arguments
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `input` | Yes | Path to the input video |
+| `output` | No | Path for the output GIF (default: `input.gif`) |
+
+## Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--start` | `-s` | string | 0 | Start time (e.g., 00:00:05 or 5) |
+| `--duration` | `-t` | string | (full) | Duration in seconds |
+| `--width` | `-w` | number | 480 | Output width in pixels |
+| `--fps` | | number | 15 | Frames per second |
+| `--high-quality` | `-hq` | boolean | false | Enable palette optimization |
+| `--overwrite` | `-y` | boolean | false | Overwrite output if exists |
+
+## Examples
+
+### Basic GIF
+
+```bash
+# Convert entire video to GIF
+ffwrap gif video.mp4
+# Output: video.gif (480px wide, 15fps)
+
+# Custom output name
+ffwrap gif video.mp4 animation.gif
+```
+
+### Time Range
+
+```bash
+# Create GIF from seconds 5-8
+ffwrap gif video.mp4 --start 5 --duration 3
+
+# Using timestamp format
+ffwrap gif video.mp4 --start 00:01:30 --duration 5
+```
+
+### Size Control
+
+```bash
+# Smaller GIF (320px wide)
+ffwrap gif video.mp4 --width 320
+
+# Larger GIF (640px wide)
+ffwrap gif video.mp4 --width 640
+```
+
+### Frame Rate
+
+```bash
+# Smoother (more frames, larger file)
+ffwrap gif video.mp4 --fps 24
+
+# Smaller file (fewer frames)
+ffwrap gif video.mp4 --fps 10
+
+# Very small file
+ffwrap gif video.mp4 --fps 5
+```
+
+### High Quality Mode
+
+```bash
+# Enable palette optimization
+ffwrap gif video.mp4 --high-quality
+
+# Short form
+ffwrap gif video.mp4 -hq
+```
+
+### Combined Options
+
+```bash
+# Optimized for Discord/Slack (under 8MB)
+ffwrap gif video.mp4 --start 5 --duration 3 --width 320 --fps 10
+
+# High quality reaction GIF
+ffwrap gif video.mp4 -s 10 -t 2 -w 480 --fps 15 -hq
+```
+
+## Quality Modes
+
+### Standard Mode (Default)
+
+Fast conversion with reasonable quality:
+- Direct color quantization
+- Good for most uses
+- Faster processing
+
+### High Quality Mode (`--high-quality`)
+
+Uses palette optimization for better colors:
+- Generates optimal color palette per frame
+- Uses dithering for smoother gradients
+- Better color accuracy
+- Larger file size
+- Slower processing
+
+<Tip>
+  Use `--high-quality` when your video has gradients, skin tones, or needs accurate colors. Skip it for simple graphics or when file size is critical.
+</Tip>
+
+## Size Optimization
+
+GIF file size depends on:
+
+1. **Duration** - Shorter = smaller
+2. **Width** - Smaller = smaller
+3. **FPS** - Lower = smaller
+4. **Content** - Less motion = smaller
+
+### Size Estimates
+
+| Settings | ~File Size per Second |
+|----------|----------------------|
+| 480px, 15fps | ~1-2 MB |
+| 320px, 15fps | ~0.5-1 MB |
+| 480px, 10fps | ~0.7-1.5 MB |
+| 320px, 10fps | ~0.3-0.7 MB |
+
+### Platform Limits
+
+| Platform | Size Limit | Recommended Settings |
+|----------|------------|---------------------|
+| Discord | 8MB | `--width 320 --fps 10 --duration 5` |
+| Slack | 5MB | `--width 320 --fps 10 --duration 3` |
+| Twitter | 15MB | `--width 480 --fps 15 --duration 5` |
+| Giphy | 200MB | `--width 480 --fps 15` |
+
+## Tips
+
+<Tip>
+  Start with these settings and adjust:
+  ```bash
+  ffwrap gif video.mp4 --width 480 --fps 12 --duration 5
+  ```
+</Tip>
+
+<Warning>
+  GIFs over 10MB will trigger a warning. Consider:
+  - Reducing `--width`
+  - Reducing `--fps`
+  - Shortening `--duration`
+</Warning>
+
+<Tip>
+  For smooth loops, find a good loop point in your video and trim precisely:
+  ```bash
+  ffwrap gif video.mp4 --start 5.2 --duration 2.0 --width 480 --fps 15
+  ```
+</Tip>
+
+## Common Use Cases
+
+### Reaction GIF
+
+```bash
+# Short, high quality
+ffwrap gif video.mp4 -s 12 -t 2 -w 400 --fps 15 -hq -o reaction.gif
+```
+
+### Demo/Tutorial GIF
+
+```bash
+# Longer, smaller file
+ffwrap gif screencast.mp4 --width 640 --fps 10
+```
+
+### Social Media
+
+```bash
+# Under 8MB for Discord
+ffwrap gif clip.mp4 -s 0 -t 5 -w 320 --fps 10 -o discord.gif
+```
+
+### Meme GIF
+
+```bash
+# Quick and dirty
+ffwrap gif video.mp4 -s 30 -t 3 -w 400
+```
+
+### High Quality Loop
+
+```bash
+# For website backgrounds
+ffwrap gif loop.mp4 --width 800 --fps 24 --high-quality
+```
+
+## Troubleshooting
+
+### GIF is too large
+
+Reduce size with any combination of:
+```bash
+ffwrap gif video.mp4 --width 320  # Smaller dimensions
+ffwrap gif video.mp4 --fps 8      # Fewer frames
+ffwrap gif video.mp4 --duration 3 # Shorter clip
+```
+
+### Colors look bad
+
+Enable high quality mode:
+```bash
+ffwrap gif video.mp4 --high-quality
+```
+
+### GIF is choppy
+
+Increase frame rate:
+```bash
+ffwrap gif video.mp4 --fps 20
+```
+
+## See Also
+
+- [extract](/commands/extract) - Extract frames as images
+- [thumbnail](/commands/thumbnail) - Generate static thumbnails
+- [trim](/commands/trim) - Cut video before converting to GIF

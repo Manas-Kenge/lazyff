@@ -1,0 +1,112 @@
+---
+title: "Introduction"
+description: "A simple, powerful wrapper around ffmpeg for the terminal"
+---
+
+<Frame>
+  <img src="/images/hero-dark.png" alt="ffwrap terminal interface" />
+</Frame>
+
+## What is ffwrap?
+
+ffwrap is a command-line tool that makes working with ffmpeg simple and intuitive. Instead of memorizing complex ffmpeg commands, you can use straightforward commands with sensible defaults.
+
+**ffwrap provides:**
+
+- **Simple CLI commands** - Convert, compress, trim, merge, and more with easy-to-remember syntax
+- **Interactive TUI** - A beautiful terminal interface for guided media operations
+- **Smart defaults** - Optimal presets for quality, formats, and codecs
+- **Helpful errors** - Clear error messages with actionable suggestions
+
+## Quick Example
+
+```bash
+# Convert a video to MP4
+ffwrap convert video.mov video.mp4
+
+# Compress to a target file size
+ffwrap compress video.mp4 --target-size 25MB
+
+# Trim a clip
+ffwrap trim video.mp4 --start 00:01:00 --duration 30
+
+# Create a GIF
+ffwrap gif video.mp4 --start 5 --duration 3 --width 480
+```
+
+## Features
+
+<CardGroup cols={2}>
+  <Card title="Convert" icon="repeat" href="/commands/convert">
+    Convert between formats with optimal codec settings
+  </Card>
+  <Card title="Compress" icon="compress" href="/commands/compress">
+    Reduce file size with target size, bitrate, or percentage
+  </Card>
+  <Card title="Trim" icon="scissors" href="/commands/trim">
+    Cut portions of media with precise timing
+  </Card>
+  <Card title="Merge" icon="layer-group" href="/commands/merge">
+    Concatenate multiple files into one
+  </Card>
+  <Card title="Extract" icon="file-export" href="/commands/extract">
+    Extract audio, video, or frames from media
+  </Card>
+  <Card title="GIF" icon="image" href="/commands/gif">
+    Create animated GIFs with palette optimization
+  </Card>
+  <Card title="Thumbnail" icon="images" href="/commands/thumbnail">
+    Generate thumbnails, sequences, or grid previews
+  </Card>
+  <Card title="Info" icon="circle-info" href="/commands/info">
+    Display detailed media file information
+  </Card>
+</CardGroup>
+
+## Two Ways to Use
+
+### CLI Mode
+
+Run commands directly from your terminal:
+
+```bash
+ffwrap convert input.mov output.mp4 --quality high
+```
+
+### TUI Mode
+
+Launch the interactive terminal interface:
+
+```bash
+ffwrap
+```
+
+<Frame>
+  <img src="/images/placeholder-tui-main.png" alt="ffwrap TUI interface" />
+</Frame>
+
+## Get Started
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Get up and running in under 2 minutes
+  </Card>
+  <Card title="Installation" icon="download" href="/installation">
+    Detailed setup for all platforms
+  </Card>
+  <Card title="Usage Guide" icon="book" href="/commands/index">
+    Learn all available commands
+  </Card>
+  <Card title="TUI Mode" icon="terminal" href="/tui">
+    Explore the interactive interface
+  </Card>
+</CardGroup>
+
+## Requirements
+
+- **Bun** (or Node.js) - JavaScript runtime
+- **ffmpeg** - Must be installed and available in your PATH
+
+<Note>
+  ffwrap is a wrapper around ffmpeg. All the heavy lifting is done by ffmpeg - ffwrap just makes it easier to use.
+</Note>

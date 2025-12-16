@@ -1,0 +1,297 @@
+---
+title: "Contributing"
+description: "How to contribute to ffwrap"
+---
+
+Thank you for your interest in contributing to ffwrap! This guide will help you get started.
+
+## Ways to Contribute
+
+- **Report bugs** - Found a problem? Open an issue
+- **Suggest features** - Have an idea? We'd love to hear it
+- **Improve documentation** - Fix typos, clarify explanations
+- **Submit code** - Fix bugs, add features
+
+## Getting Started
+
+### Prerequisites
+
+- [Bun](https://bun.sh) (JavaScript runtime)
+- [ffmpeg](https://ffmpeg.org) (media processing)
+- [Git](https://git-scm.com)
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/Manas-Kenge/ffwrap.git
+cd ffwrap
+```
+
+### Install Dependencies
+
+```bash
+bun install
+```
+
+### Project Structure
+
+```
+ffwrap/
+├── packages/
+│   ├── cli/              # CLI package
+│   │   ├── src/
+│   │   │   ├── commands/ # Command implementations
+│   │   │   ├── ffmpeg/   # FFmpeg wrapper utilities
+│   │   │   └── cli.ts    # CLI entry point
+│   │   └── package.json
+│   ├── tui/              # TUI package
+│   │   ├── src/
+│   │   │   ├── components/ # UI components
+│   │   │   ├── context/    # React contexts
+│   │   │   └── index.tsx   # TUI entry point
+│   │   └── package.json
+│   └── docs/             # Documentation (you're reading it!)
+├── package.json          # Root package.json
+└── AGENTS.md            # AI coding agent instructions
+```
+
+### Development Commands
+
+```bash
+# Run CLI in development mode
+bun run dev
+
+# Run TUI in development mode
+bun run dev:tui
+
+# Build all packages
+bun run build
+```
+
+## Code Style
+
+### TypeScript
+
+- Strict mode enabled
+- Use `import type { X }` for type-only imports
+- Include `.ts` extension in relative imports
+
+```typescript
+// Good
+import type { ConvertOptions } from "./types.ts"
+import { buildArgs } from "./builder.ts"
+
+// Bad
+import { ConvertOptions } from "./types"
+import { buildArgs } from "./builder"
+```
+
+### Naming Conventions
+
+| Type | Convention | Example |
+|------|------------|---------|
+| Files | kebab-case | `file-tree.tsx` |
+| Functions | camelCase | `buildConvertArgs` |
+| Constants | SCREAMING_SNAKE_CASE | `FORMAT_PRESETS` |
+| Types/Interfaces | PascalCase | `ConvertOptions` |
+| React hooks | useXxx | `useTheme` |
+
+### Error Handling
+
+Return result objects for operations that can fail:
+
+```typescript
+// Good
+function convert(options: Options): Promise<{
+  success: boolean
+  outputPath: string
+  error?: string
+}> {
+  // ...
+}
+
+// For CLI fatal errors
+process.exit(1)
+
+// For graceful failures
+return null
+```
+
+### Documentation
+
+- Use JSDoc `/** */` for functions and interfaces
+- Add per-field comments for interface properties
+
+```typescript
+/**
+ * Options for the convert command
+ */
+interface ConvertOptions {
+  /** Input file path */
+  input: string
+  /** Output format (mp4, webm, etc.) */
+  format?: string
+}
+```
+
+## Adding Features
+
+### Adding a New CLI Command
+
+1. Create command file in `packages/cli/src/commands/`:
+
+```typescript
+// packages/cli/src/commands/mycommand.ts
+import type { CommandModule } from "yargs"
+
+export interface MyCommandOptions {
+  input: string
+  // ... options
+}
+
+export const myCommandCommand: CommandModule = {
+  command: "mycommand <input>",
+  describe: "Description of command",
+  builder: (yargs) => {
+    return yargs
+      .positional("input", {
+        type: "string",
+        describe: "Input file",
+        demandOption: true,
+      })
+      // ... more options
+  },
+  handler: async (argv) => {
+    // Implementation
+  },
+}
+
+// Programmatic function for TUI
+export async function myCommand(options: MyCommandOptions) {
+  // Implementation
+}
+```
+
+2. Export from `packages/cli/src/commands/index.ts`:
+
+```typescript
+export { myCommandCommand } from "./mycommand.ts"
+export { myCommand } from "./mycommand.ts"
+export type { MyCommandOptions } from "./mycommand.ts"
+```
+
+3. Register in `packages/cli/src/cli.ts`:
+
+```typescript
+import { myCommandCommand } from "./commands/index.ts"
+
+// In the yargs chain:
+.command(myCommandCommand)
+```
+
+### Adding a New FFmpeg Preset
+
+1. Update `packages/cli/src/ffmpeg/presets.ts`:
+
+```typescript
+export const FORMAT_PRESETS = {
+  // ... existing presets
+  newformat: {
+    container: "newformat",
+    videoCodec: "libx264",
+    audioCodec: "aac",
+    extension: "new",
+    description: "Description",
+  },
+}
+```
+
+2. Update types in `packages/cli/src/ffmpeg/types.ts` if needed
+
+3. Ensure builder handles the new preset in `packages/cli/src/ffmpeg/builder.ts`
+
+### Adding a TUI Component
+
+1. Create component in `packages/tui/src/components/`:
+
+```tsx
+// packages/tui/src/components/my-component.tsx
+import { box, text } from "@opentui/react"
+
+export function MyComponent() {
+  return (
+    <box>
+      <text>My Component</text>
+    </box>
+  )
+}
+```
+
+2. Use in the TUI where appropriate
+
+## Submitting Changes
+
+### Commit Messages
+
+Write clear, concise commit messages:
+
+```
+Add compress command with target size support
+
+- Add --target-size option for file size targeting
+- Add --bitrate option for direct bitrate control
+- Add --percent option for relative compression
+- Include size calculation utilities
+```
+
+### Pull Request Process
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/my-feature`
+3. Make your changes
+4. Test your changes
+5. Commit with clear messages
+6. Push to your fork
+7. Open a Pull Request
+
+### PR Guidelines
+
+- Describe what your PR does
+- Reference any related issues
+- Include test cases if applicable
+- Update documentation if needed
+- Keep changes focused and atomic
+
+## Reporting Issues
+
+### Bug Reports
+
+Include:
+- ffwrap version (`ffwrap version`)
+- ffmpeg version (`ffmpeg -version`)
+- Operating system
+- Command you ran
+- Expected behavior
+- Actual behavior
+- Error messages
+- Sample file (if possible)
+
+### Feature Requests
+
+Include:
+- Clear description of the feature
+- Use case / why it's needed
+- Example of how it might work
+- Any relevant references
+
+## Questions?
+
+- Open a [GitHub Discussion](https://github.com/Manas-Kenge/ffwrap/discussions)
+- Email: [man.kng02@gmail.com](mailto:man.kng02@gmail.com)
+- Twitter: [@manas_kng](https://x.com/manas_kng)
+
+## Code of Conduct
+
+Be respectful, inclusive, and constructive. We're all here to make ffwrap better.
+
+Thank you for contributing!

@@ -1,0 +1,264 @@
+---
+title: "info"
+description: "Show detailed media file information"
+---
+
+The `info` command displays detailed information about media files including format, codecs, resolution, duration, and more.
+
+## Syntax
+
+```bash
+ffwrap info <input> [options]
+```
+
+## Arguments
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `input` | Yes | Path to the media file |
+
+## Options
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--json` | `-j` | boolean | false | Output as JSON |
+
+## Examples
+
+### Basic Info
+
+```bash
+ffwrap info video.mp4
+```
+
+Output:
+```
+File:      video.mp4
+Format:    QuickTime / MOV
+Duration:  2:35
+Size:      125.4 MB
+Bitrate:   6.8 Mbps
+Streams:   2
+
+Video:
+  Codec:      H264 (High)
+  Resolution: 1920x1080
+  Aspect:     16:9
+  Frame rate: 29.97 fps
+  Pixel fmt:  yuv420p
+  Bitrate:    6.5 Mbps
+
+Audio:
+  Codec:      AAC
+  Sample:     48000 Hz
+  Channels:   stereo
+  Bitrate:    256 kbps
+```
+
+### Audio File Info
+
+```bash
+ffwrap info song.mp3
+```
+
+Output:
+```
+File:      song.mp3
+Format:    MP3 (MPEG audio layer 3)
+Duration:  3:42
+Size:      5.2 MB
+Bitrate:   192 kbps
+Streams:   1
+
+Audio:
+  Codec:      MP3
+  Sample:     44100 Hz
+  Channels:   stereo
+  Bitrate:    192 kbps
+```
+
+### JSON Output
+
+```bash
+ffwrap info video.mp4 --json
+```
+
+Output:
+```json
+{
+  "format": {
+    "name": "mov,mp4,m4a,3gp,3g2,mj2",
+    "longName": "QuickTime / MOV",
+    "duration": 155.4,
+    "size": 131502080,
+    "bitrate": 6769024,
+    "nbStreams": 2
+  },
+  "video": {
+    "codec": "h264",
+    "codecLongName": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+    "profile": "High",
+    "width": 1920,
+    "height": 1080,
+    "aspectRatio": "16:9",
+    "pixelFormat": "yuv420p",
+    "frameRate": 29.97,
+    "bitrate": 6513024
+  },
+  "audio": {
+    "codec": "aac",
+    "codecLongName": "AAC (Advanced Audio Coding)",
+    "sampleRate": 48000,
+    "channels": 2,
+    "channelLayout": "stereo",
+    "bitrate": 256000
+  }
+}
+```
+
+### File with Subtitles
+
+```bash
+ffwrap info movie.mkv
+```
+
+Output:
+```
+File:      movie.mkv
+Format:    Matroska / WebM
+Duration:  1:42:15
+Size:      2.1 GB
+Bitrate:   2.9 Mbps
+Streams:   4
+
+Video:
+  Codec:      H264 (High)
+  Resolution: 1920x1080
+  Aspect:     16:9
+  Frame rate: 23.98 fps
+  Pixel fmt:  yuv420p
+
+Audio:
+  Codec:      AAC
+  Sample:     48000 Hz
+  Channels:   5.1 surround
+  Bitrate:    384 kbps
+
+Subtitles:
+  [0] subrip (eng)
+  [1] subrip (spa)
+```
+
+## Information Displayed
+
+### Format Section
+
+| Field | Description |
+|-------|-------------|
+| File | Filename |
+| Format | Container format |
+| Duration | Total duration (HH:MM:SS) |
+| Size | File size |
+| Bitrate | Overall bitrate |
+| Streams | Number of streams |
+
+### Video Section
+
+| Field | Description |
+|-------|-------------|
+| Codec | Video codec and profile |
+| Resolution | Width x Height |
+| Aspect | Display aspect ratio |
+| Frame rate | Frames per second |
+| Pixel fmt | Pixel format (color space) |
+| Bitrate | Video stream bitrate |
+
+### Audio Section
+
+| Field | Description |
+|-------|-------------|
+| Codec | Audio codec |
+| Sample | Sample rate in Hz |
+| Channels | Channel layout |
+| Bitrate | Audio stream bitrate |
+
+### Subtitles Section
+
+| Field | Description |
+|-------|-------------|
+| Index | Stream index |
+| Codec | Subtitle format |
+| Language | Language code (if available) |
+
+## Tips
+
+<Tip>
+  Use JSON output to pipe info to other tools:
+  ```bash
+  ffwrap info video.mp4 --json | jq '.video.resolution'
+  ```
+</Tip>
+
+<Tip>
+  Check video duration before trimming:
+  ```bash
+  ffwrap info video.mp4  # Note the duration
+  ffwrap trim video.mp4 --start 00:01:00 --end 00:02:00
+  ```
+</Tip>
+
+<Tip>
+  Verify video specs before uploading to platforms:
+  ```bash
+  ffwrap info youtube_ready.mp4
+  # Check: H.264, AAC, reasonable bitrate
+  ```
+</Tip>
+
+## Common Use Cases
+
+### Check Before Converting
+
+```bash
+# See current format/codec
+ffwrap info input.mov
+# Then convert as needed
+ffwrap convert input.mov output.mp4
+```
+
+### Verify Compression Results
+
+```bash
+# Before
+ffwrap info original.mp4
+# Size: 500 MB, Bitrate: 15 Mbps
+
+ffwrap compress original.mp4 --target-size 100MB
+
+# After
+ffwrap info original_compressed.mp4
+# Size: 98 MB, Bitrate: 3 Mbps
+```
+
+### Debug Merge Issues
+
+```bash
+# Check if files are compatible
+ffwrap info part1.mp4
+ffwrap info part2.mp4
+# Compare codecs, resolution, fps
+```
+
+### Batch Info (Shell)
+
+```bash
+# Get info for all MP4 files
+for f in *.mp4; do echo "=== $f ==="; ffwrap info "$f"; done
+```
+
+## See Also
+
+- [convert](/commands/convert) - Change format/codec based on info
+- [compress](/commands/compress) - Reduce bitrate
+- [Formats Reference](/reference/formats) - Supported formats
+- [Codecs Reference](/reference/codecs) - Supported codecs
