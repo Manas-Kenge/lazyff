@@ -1,7 +1,8 @@
 import React from "react"
 import { TextAttributes } from "@opentui/core"
-import { useTheme } from "../../context/theme"
-import type { ChatMessage } from "../../context/app"
+import { useTheme } from "../../context/theme.tsx"
+import type { ChatMessage } from "../../context/app.tsx"
+import { Spinner } from "../ui/spinner-component.tsx"
 
 export interface ChatMessageProps {
   message: ChatMessage
@@ -45,7 +46,7 @@ export function ChatMessageItem({ message }: ChatMessageProps) {
           <box flexDirection="column">
             <text fg={theme.textMuted} wrapMode="word">{message.content}</text>
             <box marginTop={1}>
-              <text fg={theme.primary}>⬥◆⬩⬪···</text>
+              <Spinner width={8} interval={80} />
             </box>
           </box>
         ) : message.status === "error" ? (

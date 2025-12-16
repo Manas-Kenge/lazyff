@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react"
-import { useKeyboard } from "@opentui/react"
-import { TextAttributes } from "@opentui/core"
+import React, { useState, useEffect, useCallback, useRef } from "react"
+import { useKeyboard, useTerminalDimensions } from "@opentui/react"
+import { TextAttributes, type ScrollBoxRenderable } from "@opentui/core"
 import { useApp, type FileNode } from "../context/app"
 import { useTheme } from "../context/theme"
 import {
@@ -34,9 +34,19 @@ interface FlatNode {
 export function FileTree({ focused, width = 40 }: FileTreeProps) {
   const { cwd, setCwd, selectFile, selectedFile, setStatusMessage, setFocusedPanel } = useApp()
   const { theme } = useTheme()
+  const { height: termHeight } = useTerminalDimensions()
   const [files, setFiles] = useState<FileNode[]>([])
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set())
+  const scrollRef = useRef<ScrollBoxRenderable>(null)
+
+  // Calculate max height for file list
+  // Reserve space for: border (2) + header (1) + path (2) + footer (2) + margin (1)
+  const fileListHeight = Math.max(5, termHeight - 8)
+
+  // Calculate number of visible items for scroll calculation
+  // Account for padding inside scrollbox
+  const visibleItemCount = Math.max(3, fileListHeight - 2)
 
   // Load directory contents
   useEffect(() => {
@@ -242,11 +252,6 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
           setExpandedPaths(new Set())
         }
         break
-
-      case "tab":
-        // Switch to input panel
-        setFocusedPanel("input")
-        break
     }
   })
 
@@ -257,6 +262,16 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
       selectFile(currentNode.node)
     }
   }, [selectedIndex, visibleNodes, selectFile])
+
+  // Keep the selected item in view when navigating
+  useEffect(() => {
+    if (scrollRef.current && visibleNodes.length > 0) {
+      // Center the selected item in the visible area
+      const half = Math.max(0, Math.floor(visibleItemCount / 2))
+      const target = Math.max(0, selectedIndex - half)
+      scrollRef.current.scrollTo(target)
+    }
+  }, [selectedIndex, visibleItemCount, visibleNodes.length])
 
   // Truncate path for display
   const displayPath = cwd.length > width - 4 ? "..." + cwd.slice(-(width - 7)) : cwd
@@ -284,7 +299,17 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
       </box>
 
       {/* File list */}
-      <box flexDirection="column" flexGrow={1} paddingLeft={1} paddingRight={1}>
+      <scrollbox
+        flexDirection="column"
+        flexGrow={1}
+        paddingLeft={1}
+        paddingRight={1}
+        maxHeight={fileListHeight}
+        scrollbarOptions={{ visible: false }}
+        ref={(r: ScrollBoxRenderable) => {
+          scrollRef.current = r
+        }}
+      >
         {visibleNodes.length === 0 ? (
           <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
             No media files
@@ -390,7 +415,7 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
             )
           })
         )}
-      </box>
+      </scrollbox>
 
       {/* Footer with hints */}
       <box paddingLeft={1} paddingRight={1} marginTop={1}>

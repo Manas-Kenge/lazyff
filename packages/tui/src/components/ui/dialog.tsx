@@ -31,8 +31,8 @@ export function Dialog({
       width={width}
       height={height}
       alignItems="center"
+      justifyContent="center"
       position="absolute"
-      paddingTop={Math.floor(height / 4)}
       left={0}
       top={0}
       backgroundColor={RGBA.fromInts(0, 0, 0, 150)}

@@ -63,11 +63,9 @@ function InitialView() {
       </box>
 
       {/* Keyboard hints - outside the border */}
-      <box flexDirection="row" justifyContent="flex-end" width={80} marginTop={1}>
-        <text attributes={TextAttributes.DIM} fg={theme.text}>F1</text>
+      <box flexDirection="row" justifyContent="flex-end" width={80}>
+        <text attributes={TextAttributes.BOLD} fg={theme.text}>ctrl+p</text>
         <text attributes={TextAttributes.DIM} fg={theme.textMuted}> help  </text>
-        <text attributes={TextAttributes.DIM} fg={theme.text}>ctrl+c</text>
-        <text attributes={TextAttributes.DIM} fg={theme.textMuted}> quit</text>
       </box>
     </box>
   )
@@ -101,8 +99,8 @@ function MainApp() {
       return
     }
 
-    // F1 or ? (when sidebar focused) to toggle help
-    if (name === "f1" || (name === "?" && focusedPanel !== "input")) {
+    // Ctrl+P to toggle help
+    if (ctrl && name === "p") {
       dialog.replace(() => <DialogHelp />)
       return
     }

@@ -2,8 +2,15 @@ import React, { useState, useMemo, useCallback, useEffect, useImperativeHandle, 
 import { TextAttributes, RGBA, type BoxRenderable } from "@opentui/core"
 import { useTerminalDimensions } from "@opentui/react"
 import fuzzysort from "fuzzysort"
-import { useTheme, selectedForeground } from "../../context/theme"
+import { useTheme, selectedForeground } from "../../context/theme.tsx"
 import { FORMAT_PRESETS, QUALITY_PRESETS } from "@ffwrap/cli"
+import { getAllMediaFiles } from "../../utils/fs.ts"
+import type { FileNode } from "../../context/app.tsx"
+
+/**
+ * Autocomplete option type
+ */
+export type AutocompleteOptionType = "command" | "file"
 
 /**
  * Autocomplete option
@@ -15,6 +22,10 @@ export interface AutocompleteOption {
   aliases?: string[]
   disabled?: boolean
   onSelect?: () => void
+  /** Type of option: command or file */
+  type?: AutocompleteOptionType
+  /** File node reference for file type options */
+  fileNode?: FileNode
 }
 
 /**
@@ -37,6 +48,7 @@ export interface AutocompleteProps {
   anchorY: number
   anchorX: number
   anchorWidth: number
+  cwd: string
   onSelect: (option: AutocompleteOption) => void
 }
 
@@ -152,24 +164,101 @@ function getCommands(): AutocompleteOption[] {
     description: "extract frames as images",
   })
 
-  // Add thumbnail shortcuts
+  // Add trim presets
+  commands.push({
+    display: "/trim 0 10",
+    value: "/trim 0 10",
+    description: "first 10 seconds",
+  })
+  commands.push({
+    display: "/trim 0 30",
+    value: "/trim 0 30",
+    description: "first 30 seconds",
+  })
+  commands.push({
+    display: "/trim 0 60",
+    value: "/trim 0 60",
+    description: "first minute",
+  })
+  commands.push({
+    display: "/trim 00:01:00 30",
+    value: "/trim 00:01:00 30",
+    description: "30s starting at 1:00",
+  })
+  commands.push({
+    display: "/trim 00:05:00 60",
+    value: "/trim 00:05:00 60",
+    description: "1min starting at 5:00",
+  })
+
+  // Add thumbnail presets
   commands.push({
     display: "/thumbnail grid",
     value: "/thumbnail grid",
     description: "create 3x3 thumbnail grid",
+  })
+  commands.push({
+    display: "/thumbnail 00:00:01",
+    value: "/thumbnail 00:00:01",
+    description: "frame at 1 second",
+  })
+  commands.push({
+    display: "/thumbnail 00:00:05",
+    value: "/thumbnail 00:00:05",
+    description: "frame at 5 seconds",
+  })
+  commands.push({
+    display: "/thumbnail 00:00:30",
+    value: "/thumbnail 00:00:30",
+    description: "frame at 30 seconds",
+  })
+  commands.push({
+    display: "/thumbnail 00:01:00",
+    value: "/thumbnail 00:01:00",
+    description: "frame at 1 minute",
+  })
+  commands.push({
+    display: "/thumbnail 00:05:00",
+    value: "/thumbnail 00:05:00",
+    description: "frame at 5 minutes",
   })
 
   // Pad display for alignment
   const maxLen = Math.max(...commands.map((c) => c.display.length))
   return commands.map((c) => ({
     ...c,
+    type: "command" as const,
     display: c.display.padEnd(maxLen + 2),
   }))
 }
 
+/**
+ * Get file options for @ autocomplete
+ * @param cwd Current working directory to search from
+ * @returns Array of autocomplete options for media files
+ */
+function getFileOptions(cwd: string): AutocompleteOption[] {
+  const files = getAllMediaFiles(cwd, 3)
+
+  return files.map((file) => {
+    // Calculate relative path from cwd for description
+    const relativePath = file.path.startsWith(cwd)
+      ? file.path.slice(cwd.length + 1)
+      : file.path
+
+    return {
+      display: file.name,
+      value: file.path,
+      description: relativePath !== file.name ? relativePath : undefined,
+      type: "file" as const,
+      fileNode: file,
+    }
+  })
+}
+
 export const Autocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
   function Autocomplete(
-    { value, cursorOffset, anchorY, anchorX, anchorWidth, onSelect },
+    { value, cursorOffset, anchorY, anchorX, anchorWidth, cwd, onSelect },
     ref
   ) {
     const { theme } = useTheme()
@@ -190,9 +279,11 @@ export const Autocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
       if (visible === "/") {
         return getCommands()
       }
-      // For "@" mode, we could add file completion in the future
+      if (visible === "@") {
+        return getFileOptions(cwd)
+      }
       return []
-    }, [visible])
+    }, [visible, cwd])
 
     // Filter options based on input
     const options = useMemo(() => {
@@ -264,11 +355,11 @@ export const Autocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
         },
         onKeyDown: (key: string, ctrl?: boolean): boolean => {
           if (visible) {
-            if (key === "up" || (ctrl && key === "p")) {
+            if (key === "up") {
               move(-1)
               return true
             }
-            if (key === "down" || (ctrl && key === "n")) {
+            if (key === "down") {
               move(1)
               return true
             }
@@ -276,7 +367,7 @@ export const Autocomplete = forwardRef<AutocompleteRef, AutocompleteProps>(
               hide()
               return true
             }
-            if (key === "return" || key === "tab") {
+            if (key === "return") {
               select()
               return true
             }

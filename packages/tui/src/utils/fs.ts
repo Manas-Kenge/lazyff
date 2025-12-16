@@ -205,3 +205,60 @@ export function formatPath(filePath: string, maxLength: number = 40): string {
   const last = parts.slice(-2).join(path.sep)
   return `${first}/.../${last}`
 }
+
+/**
+ * Recursively get all media files from a directory up to maxDepth levels
+ * @param dirPath Starting directory path
+ * @param maxDepth Maximum depth to recurse (default: 3)
+ * @param basePath Base path for calculating relative paths (defaults to dirPath)
+ * @returns Flat array of FileNode objects for all media files found
+ */
+export function getAllMediaFiles(
+  dirPath: string,
+  maxDepth: number = 3,
+  basePath?: string
+): FileNode[] {
+  const base = basePath ?? dirPath
+  const results: FileNode[] = []
+
+  function recurse(currentPath: string, depth: number): void {
+    if (depth > maxDepth) return
+
+    try {
+      const entries = fs.readdirSync(currentPath, { withFileTypes: true })
+
+      for (const entry of entries) {
+        // Skip hidden files
+        if (entry.name.startsWith(".")) continue
+
+        const fullPath = path.join(currentPath, entry.name)
+
+        if (entry.isDirectory()) {
+          // Recurse into subdirectory
+          recurse(fullPath, depth + 1)
+        } else {
+          // Check if it's a media file
+          const extension = path.extname(entry.name).slice(1).toLowerCase()
+          const mediaType = getMediaType(extension)
+
+          if (mediaType !== null) {
+            results.push({
+              name: entry.name,
+              path: fullPath,
+              type: "file",
+              extension,
+              mediaType,
+            })
+          }
+        }
+      }
+    } catch {
+      // Ignore permission errors or other issues
+    }
+  }
+
+  recurse(dirPath, 1)
+
+  // Sort alphabetically by name
+  return results.sort((a, b) => a.name.localeCompare(b.name))
+}

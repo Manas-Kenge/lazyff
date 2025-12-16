@@ -9,18 +9,18 @@ export function DialogHelp() {
   const { theme } = useTheme()
 
   useKeyboard((evt) => {
-    if (evt.name === "return" || evt.name === "escape") {
+    if (evt.name === "escape") {
       dialog.clear()
     }
   })
 
   return (
-    <box paddingLeft={2} paddingRight={2} gap={1}>
+    <box paddingLeft={3} paddingRight={3} paddingTop={1} paddingBottom={1} gap={1}>
       <box flexDirection="row" justifyContent="space-between">
         <text attributes={TextAttributes.BOLD} fg={theme.text}>
           Help
         </text>
-        <text fg={theme.textMuted}>esc/enter</text>
+        <text fg={theme.textMuted}>esc</text>
       </box>
       <box paddingBottom={1} gap={1}>
         <text fg={theme.text} attributes={TextAttributes.BOLD}>
@@ -43,7 +43,7 @@ export function DialogHelp() {
           Keyboard Shortcuts
         </text>
         <box paddingLeft={2}>
-          <text fg={theme.textMuted}>F1 - Show/hide help</text>
+          <text fg={theme.textMuted}>Ctrl+P - Show/hide help</text>
           <text fg={theme.textMuted}>Ctrl+B - Toggle file tree</text>
           <text fg={theme.textMuted}>Tab - Switch panel focus</text>
           <text fg={theme.textMuted}>↑/↓ - Navigate file tree</text>
@@ -56,16 +56,6 @@ export function DialogHelp() {
         <box paddingLeft={2}>
           <text fg={theme.textMuted}>Video: mp4, webm, mkv, avi, mov, gif</text>
           <text fg={theme.textMuted}>Audio: mp3, aac, wav, flac, ogg</text>
-        </box>
-      </box>
-      <box flexDirection="row" justifyContent="flex-end" paddingBottom={1}>
-        <box
-          paddingLeft={3}
-          paddingRight={3}
-          backgroundColor={theme.primary}
-          onMouseUp={() => dialog.clear()}
-        >
-          <text fg={selectedForeground(theme)}>ok</text>
         </box>
       </box>
     </box>

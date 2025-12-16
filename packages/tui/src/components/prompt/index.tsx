@@ -1,14 +1,14 @@
 import React, { useState, useCallback, useRef, useEffect } from "react"
 import { TextAttributes, type InputRenderable, type BoxRenderable } from "@opentui/core"
 import { useKeyboard } from "@opentui/react"
-import { useTheme } from "../../context/theme"
-import { useApp } from "../../context/app"
-import { useDialog } from "../ui/dialog"
-import { useToast } from "../ui/toast"
-import { DialogSelect, type DialogSelectOption } from "../ui/dialog-select"
-import { DialogHelp } from "../ui/dialog-help"
-import { usePromptHistory } from "./history"
-import { Autocomplete, type AutocompleteRef, type AutocompleteOption } from "./autocomplete"
+import { useTheme } from "../../context/theme.tsx"
+import { useApp } from "../../context/app.tsx"
+import { useDialog } from "../ui/dialog.tsx"
+import { useToast } from "../ui/toast.tsx"
+import { DialogSelect, type DialogSelectOption } from "../ui/dialog-select.tsx"
+import { DialogHelp } from "../ui/dialog-help.tsx"
+import { usePromptHistory } from "./history.tsx"
+import { Autocomplete, type AutocompleteRef, type AutocompleteOption } from "./autocomplete.tsx"
 import {
   convert,
   trim,
@@ -20,8 +20,8 @@ import {
   FORMAT_PRESETS,
   QUALITY_PRESETS,
 } from "@ffwrap/cli"
-import { THEME_NAMES, type ThemeName } from "../../context/theme"
-import { exit } from "../../index"
+import { THEME_NAMES, type ThemeName } from "../../context/theme.tsx"
+import { exit } from "../../index.tsx"
 import path from "path"
 import fs from "fs"
 
@@ -49,9 +49,11 @@ function formatSize(bytes: number): string {
 export function Prompt({ focused = true }: PromptProps) {
   const { theme, setTheme, themeName } = useTheme()
   const {
+    cwd,
     commandInput,
     setCommandInput,
     selectedFile,
+    selectFile,
     setCurrentJob,
     updateJobProgress,
     completeJob,
@@ -306,8 +308,14 @@ export function Prompt({ focused = true }: PromptProps) {
           return
         }
 
-        const start = args[0] || "0"
-        const duration = args[1] || "10"
+        // Require start time argument
+        if (!args[0]) {
+          toast.warning("Usage: /trim <start> [duration]  e.g., /trim 00:30 10")
+          return
+        }
+
+        const start = args[0]
+        const duration = args[1] || "10"  // Default to 10 seconds if not provided
         const outputPath = path.join(
           path.dirname(selectedFile.path),
           path.basename(selectedFile.path, path.extname(selectedFile.path)) + "_trimmed" + path.extname(selectedFile.path)
@@ -410,16 +418,22 @@ export function Prompt({ focused = true }: PromptProps) {
           return
         }
 
+        // Require time or grid argument
+        if (!args[0]) {
+          toast.warning("Usage: /thumbnail <time|grid>  e.g., /thumbnail 00:30 or /thumbnail grid")
+          return
+        }
+
         const arg = args[0]?.toLowerCase()
         const isGrid = arg === "grid"
-        const time = !isGrid && arg ? arg : undefined
+        const time = !isGrid ? arg : undefined
         const suffix = isGrid ? "_grid.png" : "_thumb.png"
         const outputPath = path.join(
           path.dirname(selectedFile.path),
           path.basename(selectedFile.path, path.extname(selectedFile.path)) + suffix
         )
 
-        const modeLabel = isGrid ? "3x3 grid" : time ? `at ${time}` : "at 50%"
+        const modeLabel = isGrid ? "3x3 grid" : `at ${time}`
         await executeMediaCommand(
           trimmed,
           () => thumbnail({ input: selectedFile.path, output: outputPath, grid: isGrid ? "3x3" : undefined, time, overwrite: true }),
@@ -516,6 +530,29 @@ export function Prompt({ focused = true }: PromptProps) {
   // Handle autocomplete selection
   const handleAutocompleteSelect = useCallback(
     (option: AutocompleteOption) => {
+      // Handle file selection from @ autocomplete
+      if (option.type === "file" && option.fileNode) {
+        // Select the file in app state
+        selectFile(option.fileNode)
+        setStatusMessage(`Selected: ${option.fileNode.name}`)
+        toast.info(`Selected: ${option.fileNode.name}`)
+
+        // Replace @query with the full file path
+        // Find the @ trigger position in the current input
+        const atIndex = commandInput.lastIndexOf("@")
+        if (atIndex !== -1) {
+          const newInput = commandInput.slice(0, atIndex) + option.value
+          setCommandInput(newInput)
+          setCursorPos(newInput.length)
+        } else {
+          // Fallback: just set the path
+          setCommandInput(option.value)
+          setCursorPos(option.value.length)
+        }
+        return
+      }
+
+      // Handle command selection
       setCommandInput(option.value)
       setCursorPos(option.value.length)
 
@@ -524,7 +561,7 @@ export function Prompt({ focused = true }: PromptProps) {
         executeCommand(option.value)
       }
     },
-    [setCommandInput, executeCommand]
+    [setCommandInput, executeCommand, selectFile, setStatusMessage, toast, commandInput]
   )
 
   // Keyboard handling
@@ -609,8 +646,14 @@ export function Prompt({ focused = true }: PromptProps) {
           setCommandInput(newValue)
           setCursorPos(cursorPos + 1)
 
+          // Trigger / autocomplete at start of input
           if (inputChar === "/" && cursorPos === 0) {
             autocompleteRef.current?.show("/")
+          }
+
+          // Trigger @ autocomplete for file selection
+          if (inputChar === "@") {
+            autocompleteRef.current?.show("@")
           }
 
           autocompleteRef.current?.onInput(newValue)
@@ -642,33 +685,23 @@ export function Prompt({ focused = true }: PromptProps) {
         anchorY={anchorY}
         anchorX={anchorX}
         anchorWidth={anchorWidth}
+        cwd={cwd}
         onSelect={handleAutocompleteSelect}
       />
 
-      {/* Input area with vertical bar */}
-      <box flexDirection="row" minHeight={displayLines + 1}>
-        {/* Vertical bar column */}
-        <box flexDirection="column">
-          <text fg={focused ? theme.primary : theme.border}>│</text>
-          <text fg={focused ? theme.primary : theme.border}>│</text>
-        </box>
-
-        {/* Spacing */}
-        <text> </text>
-
-        {/* Input content */}
-        <box flexDirection="column" flexGrow={1}>
+      {/* Input area */}
+      <box flexDirection="column" flexGrow={1} minHeight={displayLines + 1}>
           {/* Input line */}
           <box flexDirection="row">
             {commandInput ? (
               <>
                 <text fg={theme.text}>{commandInput.slice(0, cursorPos)}</text>
-                {focused && <text fg={theme.primary} attributes={TextAttributes.BOLD}>│</text>}
+                {focused && <text fg={theme.primary} attributes={TextAttributes.BOLD}>█</text>}
                 <text fg={theme.text}>{commandInput.slice(cursorPos)}</text>
               </>
             ) : (
               <>
-                {focused && <text fg={theme.primary} attributes={TextAttributes.BOLD}>│</text>}
+                {focused && <text fg={theme.primary} attributes={TextAttributes.BOLD}>█</text>}
                 <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
                   Type a command... "/convert mp4"
                 </text>
@@ -679,8 +712,7 @@ export function Prompt({ focused = true }: PromptProps) {
           {/* Selected file line */}
           <box flexDirection="row" marginTop={1}>
             <text fg={theme.info}>File  </text>
-            <text fg={theme.textMuted}>{selectedFileDisplay}</text>
-          </box>
+          <text fg={theme.textMuted}>{selectedFileDisplay}</text>
         </box>
       </box>
 
