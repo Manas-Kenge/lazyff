@@ -17,11 +17,13 @@ import {
   gif,
   thumbnail,
   info,
+  merge,
   FORMAT_PRESETS,
   QUALITY_PRESETS,
 } from "@ffwrap/cli"
 import { THEME_NAMES, type ThemeName } from "../../context/theme.tsx"
 import { exit } from "../../index.tsx"
+import { getAllMediaFiles } from "../../utils/fs.ts"
 import path from "path"
 import fs from "fs"
 
@@ -444,7 +446,150 @@ export function Prompt({ focused = true }: PromptProps) {
 
       // Handle merge command
       if (cmd === "/merge") {
-        toast.info("Use CLI for merge: ffwrap merge file1.mp4 file2.mp4 -o output.mp4")
+        // Require a file to be selected first (becomes first file in merge)
+        if (!selectedFile || selectedFile.type === "directory") {
+          toast.error("Select a media file first (this will be the first file to merge)")
+          return
+        }
+
+        // Check if selected file is mergeable (video or audio)
+        if (selectedFile.mediaType !== "video" && selectedFile.mediaType !== "audio") {
+          toast.error("Selected file must be a video or audio file")
+          return
+        }
+
+        // Get media files from selected file's directory (2 levels deep)
+        const selectedDir = path.dirname(selectedFile.path)
+        const mediaFiles = getAllMediaFiles(selectedDir, 2)
+        
+        // Filter to only video/audio files, excluding the already-selected file
+        const otherFiles = mediaFiles.filter(
+          (f) => (f.mediaType === "video" || f.mediaType === "audio") && f.path !== selectedFile.path
+        )
+
+        if (otherFiles.length === 0) {
+          toast.error("No other video/audio files found to merge with")
+          return
+        }
+
+        // Build list of files to merge, starting with selected file
+        const filesToMerge: string[] = [selectedFile.path]
+        const fileNames: string[] = [selectedFile.name]
+
+        // Loop to add more files
+        let addMore = true
+        while (addMore) {
+          // Filter out already selected files
+          const availableFiles = otherFiles.filter((f) => !filesToMerge.includes(f.path))
+          
+          if (availableFiles.length === 0) {
+            toast.info("No more files available to add")
+            break
+          }
+
+          // Create options for single-select dialog
+          const options: DialogSelectOption<string>[] = availableFiles.map((file) => {
+            const relativePath = file.path.startsWith(selectedDir)
+              ? file.path.slice(selectedDir.length + 1)
+              : file.path
+            return {
+              title: file.name,
+              value: file.path,
+              description: relativePath !== file.name ? relativePath : undefined,
+              category: file.mediaType === "video" ? "Video" : "Audio",
+            }
+          })
+
+          // Show dialog to select next file
+          const fileCount = filesToMerge.length
+          const dialogTitle = fileCount === 1 
+            ? `Select file to merge with "${selectedFile.name}"`
+            : `Select file #${fileCount + 1} (${fileCount} selected)`
+          
+          const selected = await DialogSelect.show(dialog, dialogTitle, options)
+          
+          if (!selected) {
+            // User cancelled - if we have at least 2 files, proceed; otherwise abort
+            if (filesToMerge.length < 2) {
+              return
+            }
+            break
+          }
+
+          // Add selected file
+          filesToMerge.push(selected.value)
+          const fileName = availableFiles.find((f) => f.path === selected.value)?.name || path.basename(selected.value)
+          fileNames.push(fileName)
+
+          // Ask if user wants to add more files
+          if (availableFiles.length > 1) {
+            const addMoreOptions: DialogSelectOption<boolean>[] = [
+              { title: "Done - merge these files", value: false },
+              { title: "Add another file", value: true },
+            ]
+            
+            const addMoreResult = await DialogSelect.show(
+              dialog,
+              `${filesToMerge.length} files selected: ${fileNames.join(", ")}`,
+              addMoreOptions,
+              false
+            )
+            
+            if (addMoreResult === null || !addMoreResult.value) {
+              addMore = false
+            }
+          } else {
+            // No more files available
+            addMore = false
+          }
+        }
+
+        // Need at least 2 files to merge
+        if (filesToMerge.length < 2) {
+          return
+        }
+
+        // Ask for re-encode option if files have different extensions
+        const extensions = new Set(filesToMerge.map((f) => path.extname(f).toLowerCase()))
+        let reencode = false
+        
+        if (extensions.size > 1) {
+          const reencodeOptions: DialogSelectOption<boolean>[] = [
+            { 
+              title: "Re-encode (slower, handles different codecs)", 
+              value: true,
+              description: "recommended for mixed formats"
+            },
+            { 
+              title: "Copy (fast, same codec required)", 
+              value: false,
+              description: "may fail if codecs differ"
+            },
+          ]
+          
+          const reencodeResult = await DialogSelect.show(
+            dialog,
+            "Files have different formats",
+            reencodeOptions,
+            true
+          )
+          
+          if (reencodeResult === null) return
+          reencode = reencodeResult.value
+        }
+
+        // Determine output path
+        const outputExt = reencode ? ".mp4" : path.extname(selectedFile.path)
+        const outputPath = path.join(
+          selectedDir,
+          "merged_" + Date.now() + outputExt
+        )
+
+        await executeMediaCommand(
+          trimmed,
+          () => merge({ inputs: filesToMerge, output: outputPath, reencode, overwrite: true }),
+          `Merging ${filesToMerge.length} files: ${fileNames.join(", ")}...`
+        )
         return
       }
 
@@ -582,7 +727,24 @@ export function Prompt({ focused = true }: PromptProps) {
         break
 
       case "backspace":
-        if (cursorPos > 0) {
+        if (ctrl) {
+          // ctrl+backspace: delete word backward
+          if (cursorPos > 0) {
+            const beforeCursor = commandInput.slice(0, cursorPos)
+            // Find the start of the previous word (skip trailing spaces, then skip word chars)
+            let wordStart = cursorPos
+            // Skip any spaces before cursor
+            while (wordStart > 0 && beforeCursor[wordStart - 1] === " ") {
+              wordStart--
+            }
+            // Skip word characters
+            while (wordStart > 0 && beforeCursor[wordStart - 1] !== " ") {
+              wordStart--
+            }
+            setCommandInput(commandInput.slice(0, wordStart) + commandInput.slice(cursorPos))
+            setCursorPos(wordStart)
+          }
+        } else if (cursorPos > 0) {
           setCommandInput(commandInput.slice(0, cursorPos - 1) + commandInput.slice(cursorPos))
           setCursorPos(cursorPos - 1)
         }
@@ -639,6 +801,13 @@ export function Prompt({ focused = true }: PromptProps) {
         break
 
       default:
+        // ctrl+u: clear entire line
+        if (ctrl && name === "u") {
+          setCommandInput("")
+          setCursorPos(0)
+          break
+        }
+
         const inputChar = char || (name.length === 1 ? name : undefined)
         if (inputChar && inputChar.length === 1 && !ctrl) {
           const newValue =

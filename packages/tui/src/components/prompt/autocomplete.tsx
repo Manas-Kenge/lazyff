@@ -81,7 +81,7 @@ function getCommands(): AutocompleteOption[] {
     {
       display: "/merge",
       value: "/merge",
-      description: "concatenate files",
+      description: "concatenate multiple files",
     },
     {
       display: "/gif",
