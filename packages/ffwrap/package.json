@@ -1,0 +1,58 @@
+{
+  "name": "@manaskng/ffwrap",
+  "version": "0.1.0",
+  "description": "A simple, powerful wrapper around ffmpeg for the terminal",
+  "author": "Manas Kenge",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.ts",
+  "bin": {
+    "ffwrap": "./bin/ffwrap"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Manas-Kenge/ffwrap.git"
+  },
+  "homepage": "https://github.com/Manas-Kenge/ffwrap",
+  "bugs": {
+    "url": "https://github.com/Manas-Kenge/ffwrap/issues"
+  },
+  "keywords": [
+    "ffmpeg",
+    "video",
+    "audio",
+    "media",
+    "cli",
+    "tui",
+    "converter",
+    "compression",
+    "terminal"
+  ],
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "scripts": {
+    "dev": "bun run src/cli.ts",
+    "dev:tui": "bun run src/tui/index.tsx",
+    "build": "bun build src/cli.ts --outdir dist --target bun"
+  },
+  "dependencies": {
+    "@opentui/core": "^0.1.59",
+    "@opentui/react": "^0.1.59",
+    "fuzzysort": "^3.1.0",
+    "react": "^19.1.1",
+    "yargs": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^19.1.0",
+    "@types/yargs": "^17.0.33"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
