@@ -11,6 +11,7 @@ import {
   gifCommand,
   thumbnailCommand,
 } from "./commands/index.ts"
+import { VERSION, GITHUB_REPO, checkForUpdate } from "./version.ts"
 
 async function launchTui() {
   try {
@@ -58,8 +59,64 @@ async function main() {
       () => {},
       async () => {
         const ffmpegVersion = await getFfmpegVersion()
-        console.log(`ffwrap: 0.0.1`)
+        console.log(`ffwrap: ${VERSION}`)
         console.log(`ffmpeg: ${ffmpegVersion}`)
+      }
+    )
+    .command(
+      "update",
+      "Update ffwrap to the latest version",
+      (yargs) => {
+        return yargs.option("check", {
+          alias: "c",
+          type: "boolean",
+          description: "Only check for updates without installing",
+        })
+      },
+      async (argv) => {
+        const { hasUpdate, currentVersion, latestVersion } =
+          await checkForUpdate()
+
+        if (argv.check) {
+          if (hasUpdate) {
+            console.log(`Update available: ${currentVersion} → ${latestVersion}`)
+            console.log(`\nRun 'ffwrap update' to install the latest version`)
+          } else {
+            console.log(`ffwrap ${currentVersion} is up to date`)
+          }
+          return
+        }
+
+        if (!hasUpdate) {
+          console.log(`ffwrap ${currentVersion} is already the latest version`)
+          return
+        }
+
+        console.log(`Updating ffwrap: ${currentVersion} → ${latestVersion}`)
+        console.log(`\nTo update, run:`)
+        console.log(
+          `  curl -fsSL https://raw.githubusercontent.com/${GITHUB_REPO}/main/install.sh | bash`
+        )
+      }
+    )
+    .command(
+      "uninstall",
+      "Uninstall ffwrap from your system",
+      () => {},
+      async () => {
+        const homeDir = process.env.HOME || process.env.USERPROFILE || "~"
+        const installDir = `${homeDir}/.ffwrap`
+
+        console.log("To uninstall ffwrap, run the following commands:\n")
+        console.log(`  rm -rf ${installDir}`)
+        console.log(
+          `\nThen remove the PATH entry from your shell config (~/.bashrc, ~/.zshrc, etc.):`
+        )
+        console.log(`  export PATH=${installDir}/bin:$PATH`)
+        console.log(`\nIf installed via npm/bun, run:`)
+        console.log(`  npm uninstall -g @ffwrap/cli`)
+        console.log(`  # or`)
+        console.log(`  bun remove -g @ffwrap/cli`)
       }
     )
     .help()

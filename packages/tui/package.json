@@ -1,9 +1,9 @@
 {
   "name": "@ffwrap/tui",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "module": "src/index.tsx",
   "type": "module",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "bun run src/index.tsx"
   },

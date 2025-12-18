@@ -1,0 +1,239 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g., 0.1.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          # Linux x64
+          - os: ubuntu-latest
+            target: linux-x64
+            archive: tar.gz
+          - os: ubuntu-latest
+            target: linux-x64-baseline
+            archive: tar.gz
+          - os: ubuntu-latest
+            target: linux-x64-musl
+            archive: tar.gz
+          # Linux arm64
+          - os: ubuntu-latest
+            target: linux-arm64
+            archive: tar.gz
+          # macOS
+          - os: macos-latest
+            target: darwin-x64
+            archive: zip
+          - os: macos-latest
+            target: darwin-arm64
+            archive: zip
+          # Windows
+          - os: windows-latest
+            target: windows-x64
+            archive: zip
+
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Get version
+        id: version
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update version in source
+        shell: bash
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          # Update version in version.ts
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            sed -i "s/export const VERSION = \".*\"/export const VERSION = \"$VERSION\"/" packages/cli/src/version.ts
+          else
+            sed -i '' "s/export const VERSION = \".*\"/export const VERSION = \"$VERSION\"/" packages/cli/src/version.ts 2>/dev/null || \
+            sed -i "s/export const VERSION = \".*\"/export const VERSION = \"$VERSION\"/" packages/cli/src/version.ts
+          fi
+
+      - name: Build binary (Linux x64)
+        if: matrix.target == 'linux-x64'
+        run: |
+          bun build packages/cli/src/cli.ts --compile --outfile ffwrap --target bun-linux-x64
+
+      - name: Build binary (Linux x64 baseline)
+        if: matrix.target == 'linux-x64-baseline'
+        run: |
+          bun build packages/cli/src/cli.ts --compile --outfile ffwrap --target bun-linux-x64-baseline
+
+      - name: Build binary (Linux x64 musl)
+        if: matrix.target == 'linux-x64-musl'
+        run: |
+          bun build packages/cli/src/cli.ts --compile --outfile ffwrap --target bun-linux-x64-musl
+
+      - name: Build binary (Linux arm64)
+        if: matrix.target == 'linux-arm64'
+        run: |
+          bun build packages/cli/src/cli.ts --compile --outfile ffwrap --target bun-linux-arm64
+
+      - name: Build binary (macOS x64)
+        if: matrix.target == 'darwin-x64'
+        run: |
+          bun build packages/cli/src/cli.ts --compile --outfile ffwrap --target bun-darwin-x64
+
+      - name: Build binary (macOS arm64)
+        if: matrix.target == 'darwin-arm64'
+        run: |
+          bun build packages/cli/src/cli.ts --compile --outfile ffwrap --target bun-darwin-arm64
+
+      - name: Build binary (Windows x64)
+        if: matrix.target == 'windows-x64'
+        run: |
+          bun build packages/cli/src/cli.ts --compile --outfile ffwrap.exe --target bun-windows-x64
+
+      - name: Create archive (tar.gz)
+        if: matrix.archive == 'tar.gz'
+        run: |
+          tar -czvf ffwrap-${{ matrix.target }}.tar.gz ffwrap
+
+      - name: Create archive (zip - Unix)
+        if: matrix.archive == 'zip' && matrix.os != 'windows-latest'
+        run: |
+          zip ffwrap-${{ matrix.target }}.zip ffwrap
+
+      - name: Create archive (zip - Windows)
+        if: matrix.archive == 'zip' && matrix.os == 'windows-latest'
+        run: |
+          Compress-Archive -Path ffwrap.exe -DestinationPath ffwrap-${{ matrix.target }}.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffwrap-${{ matrix.target }}
+          path: ffwrap-${{ matrix.target }}.${{ matrix.archive }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+            echo "tag=v${{ inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List artifacts
+        run: |
+          ls -la artifacts/
+          ls -la artifacts/*/
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ffwrap v${{ steps.version.outputs.version }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            artifacts/ffwrap-linux-x64/ffwrap-linux-x64.tar.gz
+            artifacts/ffwrap-linux-x64-baseline/ffwrap-linux-x64-baseline.tar.gz
+            artifacts/ffwrap-linux-x64-musl/ffwrap-linux-x64-musl.tar.gz
+            artifacts/ffwrap-linux-arm64/ffwrap-linux-arm64.tar.gz
+            artifacts/ffwrap-darwin-x64/ffwrap-darwin-x64.zip
+            artifacts/ffwrap-darwin-arm64/ffwrap-darwin-arm64.zip
+            artifacts/ffwrap-windows-x64/ffwrap-windows-x64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Optional: Publish to npm after release
+  publish-npm:
+    needs: release
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Update package versions
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          # Update CLI package.json
+          cd packages/cli
+          npm version $VERSION --no-git-tag-version --allow-same-version
+          cd ../..
+          # Update TUI package.json  
+          cd packages/tui
+          npm version $VERSION --no-git-tag-version --allow-same-version
+          cd ../..
+
+      - name: Build packages
+        run: bun run build
+
+      - name: Publish CLI to npm
+        working-directory: packages/cli
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
