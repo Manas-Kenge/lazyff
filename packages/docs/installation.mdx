@@ -3,57 +3,28 @@ title: "Installation"
 description: "Detailed installation guide for all platforms"
 ---
 
-## System Requirements
+## Prerequisites
 
-- **Operating System**: macOS, Linux, or Windows
-- **Runtime**: Bun (recommended) or Node.js 18+
-- **ffmpeg**: Version 4.0 or higher
+### Modern Terminal (for TUI)
 
-## Step 1: Install Runtime
+ffwrap includes an interactive TUI that works best with modern terminal emulators:
 
-ffwrap runs on Bun (recommended for speed) or Node.js.
+- [WezTerm](https://wezfurlong.org/wezterm/) (cross-platform)
+- [Alacritty](https://alacritty.org/) (cross-platform)
+- [Ghostty](https://ghostty.org/) (Linux, macOS)
+- [Kitty](https://sw.kovidgoyal.net/kitty/) (Linux, macOS)
+- [Windows Terminal](https://aka.ms/terminal) (Windows)
+- iTerm2 (macOS)
+- GNOME Terminal (Linux)
+- Terminal.app (macOS)
 
-<Tabs>
-  <Tab title="Bun (Recommended)">
-    Bun is a fast JavaScript runtime that makes ffwrap snappy.
+<Note>
+  CLI commands work in any terminal. The modern terminal recommendation is specifically for the interactive TUI mode with proper rendering and keyboard support.
+</Note>
 
-    **macOS / Linux:**
-    ```bash
-    curl -fsSL https://bun.sh/install | bash
-    ```
+### ffmpeg
 
-    **Windows (PowerShell):**
-    ```powershell
-    powershell -c "irm bun.sh/install.ps1 | iex"
-    ```
-
-    Verify installation:
-    ```bash
-    bun --version
-    ```
-  </Tab>
-  <Tab title="Node.js">
-    If you prefer Node.js, version 18 or higher is required.
-
-    **Using nvm (recommended):**
-    ```bash
-    nvm install 20
-    nvm use 20
-    ```
-
-    **Direct download:**
-    Visit [nodejs.org](https://nodejs.org) and download the LTS version.
-
-    Verify installation:
-    ```bash
-    node --version  # Should be 18.x or higher
-    ```
-  </Tab>
-</Tabs>
-
-## Step 2: Install ffmpeg
-
-ffwrap requires ffmpeg to be installed and available in your PATH.
+ffwrap requires ffmpeg (version 4.0 or higher) to be installed and available in your PATH.
 
 <Tabs>
   <Tab title="macOS">
@@ -65,11 +36,6 @@ ffwrap requires ffmpeg to be installed and available in your PATH.
     **Using MacPorts:**
     ```bash
     sudo port install ffmpeg
-    ```
-
-    For full codec support:
-    ```bash
-    brew install ffmpeg --with-libvpx --with-libvorbis --with-libopus
     ```
   </Tab>
   <Tab title="Ubuntu/Debian">
@@ -124,17 +90,17 @@ Verify ffmpeg installation:
 ffmpeg -version
 ```
 
-## Step 3: Install ffwrap
+## Install ffwrap
 
 <Tabs>
-  <Tab title="Bun">
-    ```bash
-    bun install -g @ffwrap/cli
-    ```
-  </Tab>
   <Tab title="npm">
     ```bash
     npm install -g @ffwrap/cli
+    ```
+  </Tab>
+  <Tab title="bun">
+    ```bash
+    bun install -g @ffwrap/cli
     ```
   </Tab>
   <Tab title="pnpm">
@@ -168,14 +134,24 @@ ffmpeg: 6.1.1 (or your version)
 To update to the latest version:
 
 <Tabs>
-  <Tab title="Bun">
+  <Tab title="npm">
+    ```bash
+    npm update -g @ffwrap/cli
+    ```
+  </Tab>
+  <Tab title="bun">
     ```bash
     bun update -g @ffwrap/cli
     ```
   </Tab>
-  <Tab title="npm">
+  <Tab title="pnpm">
     ```bash
-    npm update -g @ffwrap/cli
+    pnpm update -g @ffwrap/cli
+    ```
+  </Tab>
+  <Tab title="yarn">
+    ```bash
+    yarn global upgrade @ffwrap/cli
     ```
   </Tab>
 </Tabs>
@@ -185,14 +161,24 @@ To update to the latest version:
 To remove ffwrap:
 
 <Tabs>
-  <Tab title="Bun">
+  <Tab title="npm">
+    ```bash
+    npm uninstall -g @ffwrap/cli
+    ```
+  </Tab>
+  <Tab title="bun">
     ```bash
     bun remove -g @ffwrap/cli
     ```
   </Tab>
-  <Tab title="npm">
+  <Tab title="pnpm">
     ```bash
-    npm uninstall -g @ffwrap/cli
+    pnpm remove -g @ffwrap/cli
+    ```
+  </Tab>
+  <Tab title="yarn">
+    ```bash
+    yarn global remove @ffwrap/cli
     ```
   </Tab>
 </Tabs>
@@ -203,19 +189,19 @@ To remove ffwrap:
   <Accordion title="Command not found: ffwrap">
     This usually means the global bin directory isn't in your PATH.
 
-    **For Bun:**
-    ```bash
-    # Add to your shell profile (.bashrc, .zshrc, etc.)
-    export PATH="$HOME/.bun/bin:$PATH"
-    ```
-
     **For npm:**
     ```bash
     # Find npm's global bin directory
     npm bin -g
 
-    # Add it to your PATH
+    # Add it to your PATH in your shell profile (.bashrc, .zshrc, etc.)
     export PATH="$(npm bin -g):$PATH"
+    ```
+
+    **For Bun:**
+    ```bash
+    # Add to your shell profile (.bashrc, .zshrc, etc.)
+    export PATH="$HOME/.bun/bin:$PATH"
     ```
   </Accordion>
   <Accordion title="Command not found: ffmpeg">
@@ -253,6 +239,14 @@ To remove ffwrap:
     sudo dnf install ffmpeg-libs
     ```
   </Accordion>
+  <Accordion title="TUI not rendering correctly">
+    If the TUI looks broken or has rendering issues:
+
+    1. **Use a modern terminal** - See the terminal recommendations above
+    2. **Check terminal encoding** - Ensure UTF-8 is enabled
+    3. **Try a different terminal** - Some terminals have better support than others
+    4. **Resize your terminal** - Make sure it's at least 80 columns wide
+  </Accordion>
 </AccordionGroup>
 
 ## Next Steps
@@ -261,7 +255,7 @@ To remove ffwrap:
   <Card title="Quickstart" icon="rocket" href="/quickstart">
     Try your first commands
   </Card>
-  <Card title="Usage Guide" icon="book" href="/commands/index">
-    Learn all available commands
+  <Card title="TUI Mode" icon="window" href="/tui">
+    Learn the interactive interface
   </Card>
 </CardGroup>

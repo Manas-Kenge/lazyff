@@ -32,10 +32,15 @@ ffmpeg is powerful but complex. ffwrap makes common operations simple:
 
 ### Prerequisites
 
-- [Bun](https://bun.sh) or Node.js 18+
-- [ffmpeg](https://ffmpeg.org/download.html)
+- [ffmpeg](https://ffmpeg.org/download.html) - Required for all media operations
 
-### Install ffwrap
+### Quick Install (Recommended)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Manas-Kenge/ffwrap/main/install.sh | bash
+```
+
+### Package Managers
 
 ```bash
 # Using Bun (recommended)
@@ -43,12 +48,31 @@ bun install -g @ffwrap/cli
 
 # Using npm
 npm install -g @ffwrap/cli
+
+# Using pnpm
+pnpm add -g @ffwrap/cli
+
+# Using yarn
+yarn global add @ffwrap/cli
 ```
 
 ### Verify installation
 
 ```bash
 ffwrap version
+```
+
+### Update & Uninstall
+
+```bash
+# Check for updates
+ffwrap update --check
+
+# Update to latest version
+ffwrap update
+
+# Uninstall
+ffwrap uninstall
 ```
 
 ## Quick Start

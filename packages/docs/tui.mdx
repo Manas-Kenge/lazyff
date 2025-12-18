@@ -13,248 +13,81 @@ Simply run ffwrap without any command:
 ffwrap
 ```
 
-<Frame caption="ffwrap TUI main interface">
-  <img src="/images/placeholder-tui-main.png" alt="ffwrap TUI main interface" />
-</Frame>
+## Basic Usage
 
-## Interface Overview
+### Commands
 
-The TUI consists of several components:
+Type `/` to see available commands:
 
-### Main Screen
+| Command | Description |
+|---------|-------------|
+| `/convert` | Convert to different format |
+| `/compress` | Reduce file size |
+| `/trim` | Cut portion of video |
+| `/merge` | Concatenate multiple files |
+| `/extract` | Extract audio/video/frames |
+| `/gif` | Convert to animated GIF |
+| `/thumbnail` | Generate thumbnail |
+| `/info` | Show file information |
+| `/theme` | Change color theme |
+| `/help` | Show help |
+| `/quit` | Exit ffwrap |
 
-<Frame caption="TUI main screen layout">
-  <img src="/images/placeholder-tui-layout.png" alt="TUI layout diagram" />
-</Frame>
+### File Selection
 
-| Component | Description |
-|-----------|-------------|
-| Logo | ffwrap branding |
-| Prompt | Command input with autocomplete |
-| History | Previous commands |
-| Status | Current operation status |
+There are two ways to select files:
 
-### Prompt
+1. **File Browser**: Press `Ctrl+B` to toggle the sidebar, navigate with arrow keys, and press `Enter` to select.
 
-The prompt supports:
-
-- **Autocomplete** - Type to see suggestions
-- **History** - Navigate previous commands
-- **Fuzzy search** - Find commands quickly
-
-<Frame caption="TUI autocomplete in action">
-  <img src="/images/placeholder-tui-autocomplete.png" alt="Autocomplete suggestions" />
-</Frame>
-
-## Navigation
+2. **@ Autocomplete**: Type `@` followed by a filename to search and select files.
 
 ### Keyboard Controls
 
 | Key | Action |
 |-----|--------|
 | `Enter` | Execute command / Select item |
-| `Tab` | Accept autocomplete suggestion |
 | `↑` / `↓` | Navigate history / suggestions |
+| `Ctrl+P` | Open help dialog |
+| `Ctrl+B` | Toggle file browser |
+| `Ctrl+U` | Clear input line |
+| `Ctrl+Backspace` | Delete word |
+| `Esc` | Close dialog / Clear input |
 | `Ctrl+C` | Exit ffwrap |
-| `?` | Open help dialog |
-| `Esc` | Close dialog / Cancel |
 
-See the full [Shortcuts](/shortcuts) reference for all keyboard controls.
-
-## Dialogs
-
-The TUI uses dialogs for various interactions:
-
-### Help Dialog
-
-Press `?` to open the help dialog:
-
-<Frame caption="Help dialog">
-  <img src="/images/placeholder-tui-help.png" alt="Help dialog showing available commands" />
-</Frame>
-
-### Confirmation Dialog
-
-Appears when actions need confirmation:
-
-<Frame caption="Confirmation dialog">
-  <img src="/images/placeholder-tui-confirm.png" alt="Confirmation dialog example" />
-</Frame>
-
-### Selection Dialog
-
-Choose from multiple options:
-
-<Frame caption="Selection dialog">
-  <img src="/images/placeholder-tui-select.png" alt="Selection dialog for choosing format" />
-</Frame>
-
-## Using the TUI
-
-### Basic Workflow
-
-1. Launch ffwrap: `ffwrap`
-2. Start typing a command (e.g., "convert")
-3. Select from autocomplete suggestions
-4. Enter file paths when prompted
-5. Choose options from dialogs
-6. Confirm and execute
-
-### Example: Converting a Video
-
-<Steps>
-  <Step title="Launch ffwrap">
-    ```bash
-    ffwrap
-    ```
-  </Step>
-  <Step title="Type 'convert'">
-    Start typing and select from autocomplete
-  </Step>
-  <Step title="Enter input file">
-    Type or browse to your input file
-  </Step>
-  <Step title="Select format">
-    Choose output format from the selection dialog
-  </Step>
-  <Step title="Choose quality">
-    Select quality preset
-  </Step>
-  <Step title="Confirm">
-    Review settings and confirm to start conversion
-  </Step>
-</Steps>
-
-### Example: Compressing a Video
-
-<Steps>
-  <Step title="Select compress command">
-    Type "compress" and press Enter
-  </Step>
-  <Step title="Enter input file">
-    Provide the path to your video
-  </Step>
-  <Step title="Choose compression method">
-    Select target size, bitrate, or percentage
-  </Step>
-  <Step title="Enter target">
-    Input your target (e.g., "25MB")
-  </Step>
-  <Step title="Execute">
-    Confirm to start compression
-  </Step>
-</Steps>
-
-## Progress Display
-
-During operations, the TUI shows progress:
-
-<Frame caption="Progress display during conversion">
-  <img src="/images/placeholder-tui-progress.png" alt="Progress bar during conversion" />
-</Frame>
-
-| Element | Description |
-|---------|-------------|
-| Progress bar | Visual progress indicator |
-| Percentage | Current completion |
-| Time | Elapsed / estimated time |
-| Speed | Processing speed |
-
-## Toasts & Notifications
-
-The TUI displays notifications for:
-
-- **Success** - Operation completed
-- **Error** - Something went wrong
-- **Warning** - Important notices
-- **Info** - General information
-
-<Frame caption="Toast notification examples">
-  <img src="/images/placeholder-tui-toast.png" alt="Toast notification examples" />
-</Frame>
-
-## File Browser
-
-The TUI includes a file browser for selecting files:
-
-<Frame caption="File browser interface">
-  <img src="/images/placeholder-tui-filebrowser.png" alt="File browser showing directory contents" />
-</Frame>
-
-### File Browser Controls
-
-| Key | Action |
-|-----|--------|
-| `↑` / `↓` | Navigate files |
-| `Enter` | Select file / Enter directory |
-| `Backspace` | Go to parent directory |
-| `Esc` | Cancel selection |
-
-## Media Info Display
-
-View detailed file information in the TUI:
-
-<Frame caption="Media info display">
-  <img src="/images/placeholder-tui-mediainfo.png" alt="Media information panel" />
-</Frame>
-
-Shows:
-- File format and size
-- Video codec, resolution, frame rate
-- Audio codec, sample rate, channels
-- Duration and bitrate
+See the full [Shortcuts](/reference/shortcuts) reference for all keyboard controls.
 
 ## Themes
 
-The TUI supports multiple color themes. Current themes include:
+The TUI supports multiple color themes. Type `/theme` to browse and preview themes with live updates.
 
+Available themes include:
 - Catppuccin
-- Dracula
+- Dracula  
 - Nord
 - Tokyo Night
 - Gruvbox
+- GitHub
 - And many more...
-
-<Frame caption="Theme examples">
-  <img src="/images/placeholder-tui-themes.png" alt="Different TUI themes" />
-</Frame>
 
 ## Tips
 
 <Tip>
-  Use `Tab` to quickly accept autocomplete suggestions without typing the full command.
+  Type `/` at the start of the prompt to see all available commands with fuzzy search.
 </Tip>
 
 <Tip>
-  Press `?` at any time to see available commands and shortcuts.
+  Press `Ctrl+P` at any time to see available commands and shortcuts.
 </Tip>
 
 <Tip>
   The TUI remembers your command history. Use `↑` to quickly repeat previous commands.
 </Tip>
 
-## CLI vs TUI
-
-| Feature | CLI | TUI |
-|---------|-----|-----|
-| Speed | Faster for known commands | Better for exploration |
-| Scripting | Yes | No |
-| Guidance | Help flags only | Interactive prompts |
-| Learning | Steeper | Gentler |
-
-**Use CLI when:**
-- You know exactly what you want
-- Scripting or automation
-- Quick one-off commands
-
-**Use TUI when:**
-- Exploring features
-- Learning ffwrap
-- Need guided workflow
-- Prefer visual interface
+<Tip>
+  Use `Ctrl+U` to quickly clear the prompt and start over, or `Ctrl+Backspace` to delete word by word.
+</Tip>
 
 ## See Also
 
-- [Shortcuts](/shortcuts) - Complete keyboard shortcuts
-- [Usage Guide](/commands/index) - All commands
-- [Quickstart](/quickstart) - Getting started
+- [Shortcuts](/reference/shortcuts) - Complete keyboard shortcuts
+- [Commands](/commands/index) - All available commands

@@ -5,19 +5,73 @@ description: "Concatenate multiple media files into one"
 
 The `merge` command joins multiple video or audio files into a single file.
 
-## Syntax
+## TUI Mode
+
+In the TUI, merging files is a guided, dialog-based experience.
+
+### Workflow
+
+<Steps>
+  <Step title="Select the first file">
+    Use the file tree (`Ctrl+B` to toggle) or type `@` to search and select your first video/audio file.
+  </Step>
+  <Step title="Run /merge">
+    Type `/merge` and press Enter.
+  </Step>
+  <Step title="Select additional files">
+    A dialog appears showing video/audio files from the same directory. Select the next file to merge.
+  </Step>
+  <Step title="Add more or proceed">
+    After each selection, choose "Add another file" to continue adding, or "Done - merge these files" to proceed.
+  </Step>
+  <Step title="Handle different formats">
+    If your files have different formats (e.g., `.mp4` and `.webm`), you'll be prompted to choose:
+    - **Re-encode**: Slower but handles different codecs (recommended for mixed formats)
+    - **Copy**: Fast but requires same codec
+  </Step>
+  <Step title="Done">
+    The merged file is created in the same directory as the first file.
+  </Step>
+</Steps>
+
+### Example
+
+```
+# Select video1.mp4 from file tree, then:
+/merge
+
+# Dialog: "Select file to merge with video1.mp4"
+# → Select video2.mp4
+
+# Dialog: "2 files selected: video1.mp4, video2.mp4"
+# → Choose "Add another file" or "Done - merge these files"
+
+# Output: merged_1234567890.mp4
+```
+
+<Note>
+  Files are scanned from the selected file's directory (up to 2 levels deep). Only video and audio files are shown.
+</Note>
+
+<Tip>
+  The order you select files is the order they'll be merged. The first file (selected before `/merge`) is always first in the output.
+</Tip>
+
+## CLI Mode
+
+### Syntax
 
 ```bash
 ffwrap merge <inputs...> --output <output> [options]
 ```
 
-## Arguments
+### Arguments
 
 | Argument | Required | Description |
 |----------|----------|-------------|
 | `inputs` | Yes | Two or more input files to concatenate |
 
-## Options
+### Options
 
 | Option | Alias | Type | Default | Description |
 |--------|-------|------|---------|-------------|
@@ -25,9 +79,9 @@ ffwrap merge <inputs...> --output <output> [options]
 | `--reencode` | `-r` | boolean | false | Re-encode files (for different codecs) |
 | `--overwrite` | `-y` | boolean | false | Overwrite output if exists |
 
-## Examples
+### Examples
 
-### Basic Merge
+#### Basic Merge
 
 ```bash
 # Merge two videos
@@ -37,7 +91,7 @@ ffwrap merge part1.mp4 part2.mp4 -o full.mp4
 ffwrap merge clip1.mp4 clip2.mp4 clip3.mp4 -o final.mp4
 ```
 
-### Merge Different Formats
+#### Merge Different Formats
 
 When merging files with different codecs, use `--reencode`:
 
@@ -49,7 +103,7 @@ ffwrap merge video1.mp4 video2.webm -o combined.mp4 --reencode
 ffwrap merge hd.mp4 sd.mp4 -o mixed.mp4 --reencode
 ```
 
-### Merge Audio Files
+#### Merge Audio Files
 
 ```bash
 # Merge MP3 files
@@ -69,11 +123,6 @@ Fast concatenation by copying streams directly:
 - **Cons**: All files must have same codec, resolution, and frame rate
 - **Best for**: Files from the same source or same recording session
 
-```bash
-# Fast merge (same codec required)
-ffwrap merge part1.mp4 part2.mp4 -o full.mp4
-```
-
 ### Re-encode Mode
 
 Decodes and re-encodes all inputs:
@@ -82,14 +131,9 @@ Decodes and re-encodes all inputs:
 - **Cons**: Slower, slight quality reduction
 - **Best for**: Mixing different sources, codecs, or resolutions
 
-```bash
-# Re-encode merge (handles different codecs)
-ffwrap merge clip1.mp4 clip2.webm -o combined.mp4 --reencode
-```
-
 ## Re-encode Settings
 
-When using `--reencode`, ffwrap uses:
+When using re-encode mode, ffwrap uses:
 
 | Setting | Value |
 |---------|-------|
@@ -108,12 +152,12 @@ For copy mode to work, all input files must have:
 - Same resolution (e.g., all 1920x1080)
 - Same frame rate (e.g., all 30fps)
 
-If any of these differ, use `--reencode`.
+If any of these differ, use re-encode mode.
 
 ## Tips
 
 <Tip>
-  If copy mode fails with a codec error, add `--reencode`:
+  If copy mode fails with a codec error, the TUI will prompt you to re-encode. In CLI, add `--reencode`:
   ```bash
   ffwrap merge a.mp4 b.mp4 -o out.mp4 --reencode
   ```
@@ -129,7 +173,7 @@ If any of these differ, use `--reencode`.
 </Tip>
 
 <Warning>
-  File order matters! Files are concatenated in the order you list them.
+  File order matters! Files are concatenated in the order you select/list them.
 </Warning>
 
 ## Common Use Cases
@@ -155,30 +199,19 @@ ffwrap merge intro.mp4 main.mp4 outro.mp4 -o youtube_video.mp4 --reencode
 ffwrap merge intro.mp3 episode.mp3 outro.mp3 -o full_episode.mp3
 ```
 
-### Combine Screen Recording with Webcam
-
-```bash
-# Different sources, need re-encode
-ffwrap merge screen.mp4 webcam.mp4 -o presentation.mp4 --reencode
-```
-
 ## Troubleshooting
 
 ### "Discarding invalid channel/sample rate"
 
-Files have different audio settings. Use `--reencode`.
+Files have different audio settings. Use re-encode mode.
 
 ### "Non-monotonic DTS"
 
-Files have timestamp issues. Use `--reencode`.
-
-### "Discarding unused streams"
-
-Some files have extra streams (subtitles, etc.). This is usually fine - the output will have the common streams.
+Files have timestamp issues. Use re-encode mode.
 
 ### Output is garbled or glitchy
 
-Files have incompatible codecs. Use `--reencode`.
+Files have incompatible codecs. Use re-encode mode.
 
 ## See Also
 

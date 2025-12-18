@@ -25,6 +25,7 @@
             "group": "Usage",
             "pages": [
               "commands/index",
+              "tui",
               "commands/convert",
               "commands/compress",
               "commands/trim",
@@ -40,14 +41,13 @@
             "pages": [
               "reference/formats",
               "reference/codecs",
-              "reference/presets"
+              "reference/presets",
+              "reference/shortcuts"
             ]
           },
           {
             "group": "Resources",
             "pages": [
-              "tui",
-              "shortcuts",
               "troubleshooting",
               "faq",
               "contributing",
