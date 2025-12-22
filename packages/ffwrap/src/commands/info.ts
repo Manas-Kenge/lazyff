@@ -7,7 +7,7 @@ import { formatTime, formatSize } from "../ffmpeg/builder.ts"
 /**
  * Detailed media information from ffprobe
  */
-interface DetailedMediaInfo {
+export interface DetailedMediaInfo {
   format: {
     name: string
     longName: string
@@ -44,7 +44,7 @@ interface DetailedMediaInfo {
 /**
  * Get detailed media information using ffprobe
  */
-async function getDetailedMediaInfo(filePath: string): Promise<DetailedMediaInfo | null> {
+export async function getDetailedMediaInfo(filePath: string): Promise<DetailedMediaInfo | null> {
   const result = await runFfprobe([
     "-v", "quiet",
     "-print_format", "json",
@@ -217,7 +217,7 @@ export const infoCommand: CommandModule = {
     if (info.video) {
       console.log("")
       console.log("Video:")
-      const codecInfo = info.video.profile 
+      const codecInfo = info.video.profile
         ? `${info.video.codec.toUpperCase()} (${info.video.profile})`
         : info.video.codec.toUpperCase()
       console.log(`  Codec:      ${codecInfo}`)

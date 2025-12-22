@@ -10,6 +10,8 @@ export interface FileNode {
   type: "file" | "directory"
   extension?: string
   mediaType?: "video" | "audio" | "image" | null
+  /** File size in bytes (only for files, not directories) */
+  size?: number
   children?: FileNode[]
   expanded?: boolean
 }
@@ -42,6 +44,15 @@ export interface ChatMessage {
     sizeChange?: string
     resolution?: string
   }
+}
+
+/**
+ * Log entry for operation history
+ */
+export interface LogEntry {
+  timestamp: string
+  message: string
+  type: "info" | "success" | "warning" | "error"
 }
 
 /**
@@ -89,6 +100,8 @@ interface AppState {
   // Terminal dimensions
   terminalWidth: number
   terminalHeight: number
+  // Logs for operation history
+  logs: LogEntry[]
 }
 
 /**
@@ -115,6 +128,9 @@ interface AppContextValue extends AppState {
   toggleSidebar: () => void
   setSidebarVisible: (visible: boolean) => void
   setTerminalDimensions: (width: number, height: number) => void
+  // Log actions
+  addLog: (message: string, type?: LogEntry["type"]) => void
+  clearLogs: () => void
   // Computed helpers
   isSmallScreen: () => boolean
 }
@@ -148,6 +164,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     viewMode: "initial",
     messages: [],
     // Sidebar is visible by default only on larger screens
+    logs: [],
     sidebarVisible: initialWidth >= BREAKPOINTS.MD,
     terminalWidth: initialWidth,
     terminalHeight: initialHeight,
@@ -259,8 +276,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setState((s: AppState) => {
       const newVisible = !s.sidebarVisible
       // If hiding sidebar and it was focused, move focus to input
-      const newFocusedPanel = !newVisible && s.focusedPanel === "sidebar" 
-        ? "input" 
+      const newFocusedPanel = !newVisible && s.focusedPanel === "sidebar"
+        ? "input"
         : s.focusedPanel
       return { ...s, sidebarVisible: newVisible, focusedPanel: newFocusedPanel }
     })
@@ -269,8 +286,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const setSidebarVisible = useCallback((visible: boolean) => {
     setState((s: AppState) => {
       // If hiding sidebar and it was focused, move focus to input
-      const newFocusedPanel = !visible && s.focusedPanel === "sidebar" 
-        ? "input" 
+      const newFocusedPanel = !visible && s.focusedPanel === "sidebar"
+        ? "input"
         : s.focusedPanel
       return { ...s, sidebarVisible: visible, focusedPanel: newFocusedPanel }
     })
@@ -282,21 +299,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
       // But only auto-change if crossing the breakpoint threshold
       const wasSmall = s.terminalWidth < BREAKPOINTS.MD
       const isSmall = width < BREAKPOINTS.MD
-      
+
       let newSidebarVisible = s.sidebarVisible
       if (wasSmall !== isSmall) {
         // Crossed breakpoint - auto adjust
         newSidebarVisible = !isSmall
       }
-      
+
       // If sidebar becomes hidden and was focused, move focus to input
       const newFocusedPanel = !newSidebarVisible && s.focusedPanel === "sidebar"
         ? "input"
         : s.focusedPanel
 
-      return { 
-        ...s, 
-        terminalWidth: width, 
+      return {
+        ...s,
+        terminalWidth: width,
         terminalHeight: height,
         sidebarVisible: newSidebarVisible,
         focusedPanel: newFocusedPanel,
@@ -307,6 +324,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const isSmallScreen = useCallback(() => {
     return state.terminalWidth < BREAKPOINTS.MD
   }, [state.terminalWidth])
+
+  const addLog = useCallback((message: string, type: LogEntry["type"] = "info") => {
+    const timestamp = new Date().toLocaleTimeString()
+    const newLog: LogEntry = { timestamp, message, type }
+    setState((s: AppState) => ({
+      ...s,
+      logs: [...s.logs, newLog],
+    }))
+  }, [])
+
+  const clearLogs = useCallback(() => {
+    setState((s: AppState) => ({ ...s, logs: [] }))
+  }, [])
 
   const value: AppContextValue = {
     ...state,
@@ -328,6 +358,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     toggleSidebar,
     setSidebarVisible,
     setTerminalDimensions,
+    addLog,
+    clearLogs,
     isSmallScreen,
   }
 

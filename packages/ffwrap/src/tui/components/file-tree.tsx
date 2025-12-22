@@ -3,6 +3,7 @@ import { useKeyboard, useTerminalDimensions } from "@opentui/react"
 import { TextAttributes, type ScrollBoxRenderable } from "@opentui/core"
 import { useApp, type FileNode } from "../context/app"
 import { useTheme } from "../context/theme"
+import { useDialog } from "./ui/dialog"
 import {
   readDirectory,
   getFileIcon,
@@ -34,6 +35,7 @@ interface FlatNode {
 export function FileTree({ focused, width = 40 }: FileTreeProps) {
   const { cwd, setCwd, selectFile, selectedFile, setStatusMessage, setFocusedPanel } = useApp()
   const { theme } = useTheme()
+  const dialog = useDialog()
   const { height: termHeight } = useTerminalDimensions()
   const [files, setFiles] = useState<FileNode[]>([])
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -159,7 +161,8 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
 
   // Keyboard navigation
   useKeyboard((event) => {
-    if (!focused) return
+    // Don't handle keyboard when dialog is open or not focused
+    if (!focused || dialog.isOpen) return
 
     const { name } = event
     const currentNode = visibleNodes[selectedIndex]
@@ -235,12 +238,12 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
         }
         break
 
-      case "g":
+      case "home":
         // Go to first
         setSelectedIndex(0)
         break
 
-      case "G":
+      case "end":
         // Go to last
         setSelectedIndex(Math.max(0, visibleNodes.length - 1))
         break
@@ -255,21 +258,51 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
     }
   })
 
-  // Update selected file when navigating to a file
+  // Update selected file when navigating - also clear when on directory
   useEffect(() => {
     const currentNode = visibleNodes[selectedIndex]
-    if (currentNode && currentNode.node.type === "file") {
-      selectFile(currentNode.node)
+    if (currentNode) {
+      if (currentNode.node.type === "file") {
+        selectFile(currentNode.node)
+      } else {
+        // Clear selection when on directory
+        selectFile(currentNode.node)
+      }
     }
   }, [selectedIndex, visibleNodes, selectFile])
 
-  // Keep the selected item in view when navigating
+  // Track current scroll offset using ref to avoid state issues
+  const scrollOffsetRef = useRef(0)
+
+  // Keep the highlight in a fixed "safe zone" - scroll content instead of moving highlight
+  // Highlight stays between row 4 and (visibleItemCount - 4)
   useEffect(() => {
-    if (scrollRef.current && visibleNodes.length > 0) {
-      // Center the selected item in the visible area
-      const half = Math.max(0, Math.floor(visibleItemCount / 2))
-      const target = Math.max(0, selectedIndex - half)
-      scrollRef.current.scrollTo(target)
+    if (scrollRef.current && visibleNodes.length > 0 && visibleItemCount > 0) {
+      const total = visibleNodes.length
+      const limit = visibleItemCount
+      const margin = 4 // Keep highlight at least 4 rows from top and bottom
+
+      // Calculate where the highlight would appear relative to the viewport
+      const relativePosition = selectedIndex - scrollOffsetRef.current
+
+      let newOffset = scrollOffsetRef.current
+
+      // If highlight would be above the safe zone (within 4 rows of top)
+      if (relativePosition < margin) {
+        // Scroll up: move content down so highlight is at row 4
+        newOffset = Math.max(0, selectedIndex - margin)
+      }
+      // If highlight would be below the safe zone (within 4 rows of bottom)
+      else if (relativePosition > limit - margin - 1) {
+        // Scroll down: move content up so highlight is at row (limit - 4 - 1)
+        newOffset = selectedIndex - (limit - margin - 1)
+      }
+
+      // Clamp to valid range
+      newOffset = Math.max(0, Math.min(newOffset, Math.max(0, total - limit)))
+
+      scrollOffsetRef.current = newOffset
+      scrollRef.current.scrollTo(newOffset)
     }
   }, [selectedIndex, visibleItemCount, visibleNodes.length])
 
@@ -281,7 +314,7 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
       flexDirection="column"
       borderStyle="rounded"
       borderColor={focused ? theme.primary : theme.border}
-      backgroundColor={theme.backgroundElement}
+      backgroundColor={theme.background}
       width={width}
     >
       {/* Header */}
@@ -345,84 +378,59 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
             const availableWidth = width - 4 - prefixLen // -4 for padding/border
             const availableWidthWithSize = availableWidth - sizeLen
 
-            // Wrap long file names into multiple lines
-            const wrapText = (text: string, maxWidth: number): string[] => {
-              if (text.length <= maxWidth) return [text]
-              const lines: string[] = []
-              let remaining = text
-              while (remaining.length > 0) {
-                lines.push(remaining.slice(0, maxWidth))
-                remaining = remaining.slice(maxWidth)
-              }
-              return lines
+            // Truncate long file names instead of wrapping (ensures 1 item = 1 row for scroll)
+            const truncateName = (text: string, maxWidth: number): string => {
+              if (text.length <= maxWidth) return text
+              if (maxWidth <= 3) return text.slice(0, maxWidth)
+              return text.slice(0, maxWidth - 3) + "..."
             }
 
-            const wrappedName = wrapText(node.name, availableWidthWithSize)
-            const isMultiLine = wrappedName.length > 1
+            const displayName = truncateName(node.name, availableWidthWithSize)
 
-            // For single line, pad name to align file sizes
-            const namePadding = !isMultiLine 
-              ? Math.max(0, availableWidthWithSize - node.name.length)
-              : 0
+            // Pad name to align file sizes
+            const namePadding = Math.max(0, availableWidthWithSize - displayName.length)
 
             return (
               <box
                 key={node.path}
-                flexDirection="column"
+                flexDirection="row"
                 backgroundColor={isSelected && focused ? theme.primary : undefined}
               >
-                {wrappedName.map((line, lineIndex) => (
-                  <box key={lineIndex} flexDirection="row">
-                    {/* Indent guides - only on first line */}
-                    {lineIndex === 0 && depth > 0 && (
-                      <text fg={theme.border}>{indentGuides}</text>
-                    )}
-                    {/* Continuation indent for wrapped lines */}
-                    {lineIndex > 0 && (
-                      <text fg={theme.border}>{" ".repeat(prefixLen)}</text>
-                    )}
+                {/* Indent guides */}
+                {depth > 0 && (
+                  <text fg={theme.border}>{indentGuides}</text>
+                )}
 
-                    {/* Expander - only on first line */}
-                    {lineIndex === 0 && (
-                      <text fg={isSelected && focused ? textColor : theme.textMuted}>
-                        {expander}
-                      </text>
-                    )}
+                {/* Expander */}
+                <text fg={isSelected && focused ? textColor : theme.textMuted}>
+                  {expander}
+                </text>
 
-                    {/* Icon - only on first line */}
-                    {lineIndex === 0 && <text fg={textColor}>{icon} </text>}
+                {/* Icon */}
+                <text fg={textColor}>{icon} </text>
 
-                    {/* Filename line */}
-                    <text
-                      fg={textColor}
-                      attributes={isSelected && focused ? TextAttributes.BOLD : undefined}
-                    >
-                      {line}
+                {/* Filename */}
+                <text
+                  fg={textColor}
+                  attributes={isSelected && focused ? TextAttributes.BOLD : undefined}
+                >
+                  {displayName}
+                </text>
+
+                {/* Padding + File size */}
+                {fileSize && (
+                  <>
+                    <text fg={theme.textMuted}>{" ".repeat(namePadding)} </text>
+                    <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
+                      {fileSize}
                     </text>
-
-                    {/* Padding + File size - only on last line */}
-                    {lineIndex === wrappedName.length - 1 && fileSize && (
-                      <>
-                        <text fg={theme.textMuted}>{" ".repeat(namePadding)} </text>
-                        <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
-                          {fileSize}
-                        </text>
-                      </>
-                    )}
-                  </box>
-                ))}
+                  </>
+                )}
               </box>
             )
           })
         )}
       </scrollbox>
-
-      {/* Footer with hints */}
-      <box paddingLeft={1} paddingRight={1} marginTop={1}>
-        <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
-          j/k nav  l/h open
-        </text>
-      </box>
     </box>
   )
 }

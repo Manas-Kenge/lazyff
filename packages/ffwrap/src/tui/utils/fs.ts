@@ -106,12 +106,24 @@ export function readDirectory(dirPath: string): FileNode[] {
       const extension = isDirectory ? undefined : path.extname(entry.name).slice(1).toLowerCase()
       const mediaType = extension ? getMediaType(extension) : null
 
+      // Get file size for files
+      let size: number | undefined
+      if (!isDirectory) {
+        try {
+          const stats = fs.statSync(fullPath)
+          size = stats.size
+        } catch {
+          // Ignore errors getting file size
+        }
+      }
+
       nodes.push({
         name: entry.name,
         path: fullPath,
         type: isDirectory ? "directory" : "file",
         extension,
         mediaType,
+        size,
         expanded: false,
       })
     }

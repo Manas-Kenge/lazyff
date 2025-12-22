@@ -7,10 +7,22 @@ import { DialogProvider, useDialog } from "./components/ui/dialog"
 import { ToastProvider } from "./components/ui/toast"
 import { HistoryProvider } from "./components/prompt/history"
 import { FileTree } from "./components/file-tree"
-import { Prompt } from "./components/prompt"
-import { Logo } from "./components/logo"
-import { ChatView } from "./components/chat"
+import { Logs } from "./components/logs"
+import { MediaInfo } from "./components/media-info"
 import { DialogHelp } from "./components/ui/dialog-help"
+import { useCommands } from "./hooks/use-commands"
+import {
+  ConvertDialog,
+  CompressDialog,
+  ExtractDialog,
+  GifDialog,
+  TrimDialog,
+  ThumbnailDialog,
+  MergeDialog,
+  getAvailableCommands,
+} from "./components/command-dialogs.tsx"
+import { readDirectory, filterMediaFiles } from "./utils/fs.ts"
+import path from "path"
 
 const VERSION = "0.0.1"
 
@@ -31,59 +43,48 @@ export function exit(): void {
 }
 
 /**
- * Initial view - Logo centered with prompt below
+ * Main three-column layout view
  */
-function InitialView() {
-  const { focusedPanel } = useApp()
+function MainView() {
+  const { terminalWidth } = useApp()
   const { theme } = useTheme()
 
+  // Hide media info column on small screens
+  const showMediaInfo = terminalWidth >= BREAKPOINTS.MD
+
   return (
-    <box
-      flexDirection="column"
-      flexGrow={1}
-      justifyContent="center"
-      alignItems="center"
-    >
-      {/* Logo */}
-      <Logo />
-
-      {/* Command Input - with background and padding */}
-      <box
-        marginTop={2}
-        width={80}
-        backgroundColor={theme.backgroundPanel}
-        paddingLeft={2}
-        paddingRight={2}
-        paddingTop={1}
-        paddingBottom={1}
-        borderStyle="rounded"
-        borderColor={focusedPanel === "input" ? theme.primary : theme.border}
-      >
-        <Prompt focused={focusedPanel === "input"} />
+    <box flexDirection="row" flexGrow={1} gap={1} padding={1}>
+      {/* Left column: File Tree */}
+      <box flexDirection="column" width={40}>
+          <FileTree focused={true} width={40} />
       </box>
 
-      {/* Keyboard hints - outside the border */}
-      <box flexDirection="row" justifyContent="flex-end" width={80}>
-        <text attributes={TextAttributes.BOLD} fg={theme.text}>ctrl+p</text>
-        <text attributes={TextAttributes.DIM} fg={theme.textMuted}> help  </text>
+      {/* Middle column: Activity/Logs */}
+      <box flexDirection="column" flexGrow={1}>
+        <Logs />
       </box>
+
+      {/* Right column: Media Info/Preview (hidden on small screens) */}
+      {showMediaInfo && (
+        <box flexDirection="column" width={40}>
+          <MediaInfo width={40} />
+        </box>
+      )}
     </box>
   )
 }
 
 function MainApp() {
-  const { cwd, focusedPanel, cycleFocus, viewMode, sidebarVisible, toggleSidebar, setTerminalDimensions, terminalWidth } = useApp()
+  const { setTerminalDimensions, terminalWidth, cwd } = useApp()
   const { theme } = useTheme()
   const dialog = useDialog()
   const { width, height } = useTerminalDimensions()
+  const { executeInfo, executeCompress, executeConvert, executeExtract, executeGif, executeTrim, executeThumbnail, executeMerge, selectedFile } = useCommands()
 
   // Update terminal dimensions in app state when they change
   useEffect(() => {
     setTerminalDimensions(width, height)
   }, [width, height, setTerminalDimensions])
-
-  // Check if we're on a small screen
-  const isSmallScreen = terminalWidth < BREAKPOINTS.MD
 
   // Global keyboard shortcuts
   // Note: Ctrl+C is handled by the renderer's built-in exitOnCtrlC (default: true)
@@ -93,64 +94,153 @@ function MainApp() {
     // Don't handle shortcuts when dialog is open
     if (dialog.isOpen) return
 
-    // Ctrl+B to toggle sidebar
-    if (ctrl && name === "b") {
-      toggleSidebar()
-      return
-    }
-
     // Ctrl+P to toggle help
     if (ctrl && name === "p") {
       dialog.replace(() => <DialogHelp />)
       return
     }
 
-    // Tab to cycle focus (only if sidebar is visible)
-    if (name === "tab") {
-      cycleFocus()
+    // Command keybindings (only when file is selected)
+    if (!selectedFile || selectedFile.type === "directory") {
       return
+    }
+
+    // Get available commands for this file type
+    const available = getAvailableCommands(selectedFile)
+
+    switch (name) {
+      case "i":
+        // Info command - runs directly, no options needed
+        if (available.info) {
+          executeInfo()
+        }
+        break
+
+      case "c":
+        // Compress command - open dialog to select compression target
+        if (available.compress) {
+          dialog.replace(() => <CompressDialog file={selectedFile} onSelect={(options) => executeCompress(options)} />)
+        }
+        break
+
+      case "v":
+        // Convert command - open dialog to select output format
+        if (available.convert) {
+          dialog.replace(() => <ConvertDialog file={selectedFile} onSelect={(options) => executeConvert(options)} />)
+        }
+        break
+
+      case "e":
+        // Extract command - open dialog to select what to extract
+        if (available.extract) {
+          dialog.replace(() => <ExtractDialog file={selectedFile} onSelect={(options) => executeExtract(options)} />)
+        }
+        break
+
+      case "g":
+        // GIF command - open dialog to select GIF settings
+        if (available.gif) {
+          dialog.replace(() => <GifDialog file={selectedFile} onSelect={(options) => executeGif(options)} />)
+        }
+        break
+
+      case "r":
+        // tRim command - open dialog to select trim options
+        if (available.trim) {
+          dialog.replace(() => <TrimDialog file={selectedFile} onSelect={(options) => executeTrim(options)} />)
+        }
+        break
+
+      case "t":
+        // Thumbnail command - open dialog to select thumbnail settings
+        if (available.thumbnail) {
+          dialog.replace(() => <ThumbnailDialog file={selectedFile} onSelect={(options) => executeThumbnail(options)} />)
+        }
+        break
+
+      case "m":
+        // Merge command - open dialog to select files to merge
+        if (available.merge) {
+          // Get sibling files from the same directory
+          const fileDir = path.dirname(selectedFile.path)
+          const siblingFiles = filterMediaFiles(readDirectory(fileDir))
+          dialog.replace(() => (
+            <MergeDialog
+              file={selectedFile}
+              siblingFiles={siblingFiles}
+              onSelect={(options) => executeMerge(options)}
+            />
+          ))
+        }
+        break
     }
   })
 
   return (
-    <box flexDirection="column" flexGrow={1} padding={0}>
+    <box flexDirection="column" height={height} padding={0}>
       {/* Main container with background */}
       <box
         flexDirection="column"
         flexGrow={1}
         backgroundColor={theme.background}
-        // borderStyle="rounded"
-        // borderColor={theme.border}
       >
-        {/* Main content row */}
-        <box flexDirection="row" flexGrow={1}>
-          {/* Sidebar - File Tree (conditionally rendered) */}
-          {sidebarVisible && (
-            <FileTree focused={focusedPanel === "sidebar"} width={40} />
-          )}
+        {/* Main three-column layout */}
+        <MainView />
 
-          {/* Main Panel - Initial or Chat view */}
-          {viewMode === "initial" ? (
-            <InitialView />
-          ) : (
-            <ChatView />
-          )}
-        </box>
-
-        {/* Footer */}
-        <box flexDirection="row" justifyContent="space-between" paddingLeft={1} paddingRight={1} marginTop={1}>
-          <box flexDirection="row">
-            <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
-              {cwd}
-            </text>
-            {/* Show toggle hint when sidebar is hidden */}
-            {!sidebarVisible && (
-              <>
-                <text attributes={TextAttributes.DIM} fg={theme.textMuted}>  </text>
-                <text attributes={TextAttributes.DIM} fg={theme.text}>ctrl+b</text>
-                <text attributes={TextAttributes.DIM} fg={theme.textMuted}> files</text>
-              </>
-            )}
+        {/* Footer with shortcuts - show contextually based on file type */}
+        <box flexDirection="row" justifyContent="space-between" paddingLeft={1} paddingRight={1} paddingBottom={1}>
+          <box flexDirection="row" gap={1}>
+            <text attributes={TextAttributes.BOLD} fg={theme.text}>ctrl+p</text>
+            <text attributes={TextAttributes.DIM} fg={theme.textMuted}>help</text>
+            {selectedFile && selectedFile.type === "file" && (() => {
+              const available = getAvailableCommands(selectedFile)
+              return (
+                <>
+                  {available.compress && (
+                    <>
+                      <text attributes={TextAttributes.BOLD} fg={theme.text}>c</text>
+                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>compress</text>
+                    </>
+                  )}
+                  {available.convert && (
+                    <>
+                      <text attributes={TextAttributes.BOLD} fg={theme.text}>v</text>
+                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>convert</text>
+                    </>
+                  )}
+                  {available.extract && (
+                    <>
+                      <text attributes={TextAttributes.BOLD} fg={theme.text}>e</text>
+                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>extract</text>
+                    </>
+                  )}
+                  {available.gif && (
+                    <>
+                      <text attributes={TextAttributes.BOLD} fg={theme.text}>g</text>
+                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>gif</text>
+                    </>
+                  )}
+                  {available.trim && (
+                    <>
+                      <text attributes={TextAttributes.BOLD} fg={theme.text}>r</text>
+                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>trim</text>
+                    </>
+                  )}
+                  {available.thumbnail && (
+                    <>
+                      <text attributes={TextAttributes.BOLD} fg={theme.text}>t</text>
+                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>thumbnail</text>
+                    </>
+                  )}
+                  {available.merge && (
+                    <>
+                      <text attributes={TextAttributes.BOLD} fg={theme.text}>m</text>
+                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>merge</text>
+                    </>
+                  )}
+                </>
+              )
+            })()}
           </box>
           <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
             {VERSION}

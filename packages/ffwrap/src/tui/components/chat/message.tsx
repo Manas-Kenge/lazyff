@@ -20,8 +20,6 @@ export function ChatMessageItem({ message }: ChatMessageProps) {
 
   // User messages: lighter background, Assistant: darker
   const bgColor = isUser ? theme.backgroundPanel : theme.background
-  const labelColor = isUser ? theme.primary : theme.accent
-  const label = isUser ? "You" : "ffwrap"
 
   return (
     <box
@@ -33,13 +31,6 @@ export function ChatMessageItem({ message }: ChatMessageProps) {
       paddingBottom={1}
       marginBottom={1}
     >
-      {/* Label */}
-      <box marginBottom={1}>
-        <text fg={labelColor} attributes={TextAttributes.BOLD} wrapMode="word">
-          {label}
-        </text>
-      </box>
-
       {/* Content */}
       <box paddingLeft={2}>
         {message.status === "running" ? (
