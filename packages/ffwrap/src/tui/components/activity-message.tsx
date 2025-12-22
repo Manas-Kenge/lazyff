@@ -1,19 +1,19 @@
 import React from "react"
 import { TextAttributes } from "@opentui/core"
-import { useTheme } from "../../context/theme.tsx"
-import type { ChatMessage } from "../../context/app.tsx"
-import { Spinner } from "../ui/spinner-component.tsx"
+import { useTheme } from "../context/theme.tsx"
+import type { ChatMessage } from "../context/app.tsx"
+import { Spinner } from "./ui/spinner-component.tsx"
 
-export interface ChatMessageProps {
+export interface ActivityMessageProps {
   message: ChatMessage
 }
 
 /**
- * Individual chat message component
+ * Individual activity message component
  * User messages have lighter background (backgroundPanel)
  * Assistant messages have darker background (background)
  */
-export function ChatMessageItem({ message }: ChatMessageProps) {
+export function ActivityMessage({ message }: ActivityMessageProps) {
   const { theme } = useTheme()
 
   const isUser = message.type === "user"
@@ -35,16 +35,22 @@ export function ChatMessageItem({ message }: ChatMessageProps) {
       <box paddingLeft={2}>
         {message.status === "running" ? (
           <box flexDirection="column">
-            <text fg={theme.textMuted} wrapMode="word">{message.content}</text>
+            <text fg={theme.textMuted} wrapMode="word">
+              {message.content}
+            </text>
             <box marginTop={1}>
               <Spinner width={8} interval={80} />
             </box>
           </box>
         ) : message.status === "error" ? (
-          <text fg={theme.error} wrapMode="word">✗ {message.content}</text>
+          <text fg={theme.error} wrapMode="word">
+            ✗ {message.content}
+          </text>
         ) : message.status === "success" ? (
           <box flexDirection="column">
-            <text fg={theme.success} wrapMode="word">✓ {message.content}</text>
+            <text fg={theme.success} wrapMode="word">
+              ✓ {message.content}
+            </text>
             {message.metadata && (
               <box marginTop={1}>
                 {message.metadata.duration && (
@@ -58,9 +64,13 @@ export function ChatMessageItem({ message }: ChatMessageProps) {
             )}
           </box>
         ) : (
-          <text fg={theme.text} wrapMode="word">{message.content}</text>
+          <text fg={theme.text} wrapMode="word">
+            {message.content}
+          </text>
         )}
       </box>
     </box>
   )
 }
+
+

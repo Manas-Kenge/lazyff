@@ -5,9 +5,8 @@ import { AppProvider, useApp, BREAKPOINTS } from "./context/app"
 import { ThemeProvider, useTheme, resetTerminalBackground } from "./context/theme"
 import { DialogProvider, useDialog } from "./components/ui/dialog"
 import { ToastProvider } from "./components/ui/toast"
-import { HistoryProvider } from "./components/prompt/history"
 import { FileTree } from "./components/file-tree"
-import { Logs } from "./components/logs"
+import { Activity } from "./components/activity"
 import { MediaInfo } from "./components/media-info"
 import { DialogHelp } from "./components/ui/dialog-help"
 import { useCommands } from "./hooks/use-commands"
@@ -61,7 +60,7 @@ function MainView() {
 
       {/* Middle column: Activity/Logs */}
       <box flexDirection="column" flexGrow={1}>
-        <Logs />
+        <Activity />
       </box>
 
       {/* Right column: Media Info/Preview (hidden on small screens) */}
@@ -256,11 +255,9 @@ function App() {
     <ThemeProvider>
       <ToastProvider>
         <DialogProvider>
-          <HistoryProvider>
-            <AppProvider>
-              <MainApp />
-            </AppProvider>
-          </HistoryProvider>
+          <AppProvider>
+            <MainApp />
+          </AppProvider>
         </DialogProvider>
       </ToastProvider>
     </ThemeProvider>

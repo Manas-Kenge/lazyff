@@ -83,16 +83,8 @@ interface AppState {
   mediaInfo: MediaInfo | null
   // Currently focused panel
   focusedPanel: "sidebar" | "input"
-  // Command input value
-  commandInput: string
   // Current conversion job
   currentJob: ConversionJob | null
-  // Show help overlay
-  showHelp: boolean
-  // Status message
-  statusMessage: string
-  // View mode
-  viewMode: ViewMode
   // Chat messages
   messages: ChatMessage[]
   // Sidebar visibility
@@ -113,17 +105,11 @@ interface AppContextValue extends AppState {
   setMediaInfo: (info: MediaInfo | null) => void
   setFocusedPanel: (panel: "sidebar" | "input") => void
   cycleFocus: () => void
-  setCommandInput: (input: string) => void
   setCurrentJob: (job: ConversionJob | null) => void
   updateJobProgress: (progress: number) => void
   completeJob: (error?: string) => void
-  toggleHelp: () => void
-  setStatusMessage: (message: string) => void
-  // New actions for chat
-  setViewMode: (mode: ViewMode) => void
   addMessage: (message: Omit<ChatMessage, "id" | "timestamp"> & { id?: string }) => string
   updateMessage: (id: string, updates: Partial<ChatMessage>) => void
-  clearMessages: () => void
   // Sidebar visibility actions
   toggleSidebar: () => void
   setSidebarVisible: (visible: boolean) => void
@@ -157,11 +143,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     selectedFile: null,
     mediaInfo: null,
     focusedPanel: "input",
-    commandInput: "",
     currentJob: null,
-    showHelp: false,
-    statusMessage: "",
-    viewMode: "initial",
     messages: [],
     // Sidebar is visible by default only on larger screens
     logs: [],
@@ -199,10 +181,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     })
   }, [])
 
-  const setCommandInput = useCallback((input: string) => {
-    setState((s: AppState) => ({ ...s, commandInput: input }))
-  }, [])
-
   const setCurrentJob = useCallback((job: ConversionJob | null) => {
     setState((s: AppState) => ({ ...s, currentJob: job }))
   }, [])
@@ -232,19 +210,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     })
   }, [])
 
-  const toggleHelp = useCallback(() => {
-    setState((s: AppState) => ({ ...s, showHelp: !s.showHelp }))
-  }, [])
-
-  const setStatusMessage = useCallback((message: string) => {
-    setState((s: AppState) => ({ ...s, statusMessage: message }))
-  }, [])
-
-  // New chat-related actions
-  const setViewMode = useCallback((mode: ViewMode) => {
-    setState((s: AppState) => ({ ...s, viewMode: mode }))
-  }, [])
-
   const addMessage = useCallback((message: Omit<ChatMessage, "id" | "timestamp"> & { id?: string }) => {
     const newMessage: ChatMessage = {
       ...message,
@@ -265,10 +230,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
         msg.id === id ? { ...msg, ...updates } : msg
       ),
     }))
-  }, [])
-
-  const clearMessages = useCallback(() => {
-    setState((s: AppState) => ({ ...s, messages: [], viewMode: "initial" }))
   }, [])
 
   // Sidebar visibility actions
@@ -345,16 +306,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setMediaInfo,
     setFocusedPanel,
     cycleFocus,
-    setCommandInput,
     setCurrentJob,
     updateJobProgress,
     completeJob,
-    toggleHelp,
-    setStatusMessage,
-    setViewMode,
     addMessage,
     updateMessage,
-    clearMessages,
     toggleSidebar,
     setSidebarVisible,
     setTerminalDimensions,
