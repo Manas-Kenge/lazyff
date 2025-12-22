@@ -2,7 +2,7 @@
 
 A simple, powerful wrapper around ffmpeg for the terminal.
 
-[![npm version](https://img.shields.io/npm/v/@ffwrap/cli.svg)](https://www.npmjs.com/package/@ffwrap/cli)
+[![npm version](https://img.shields.io/npm/v/@manaskng/ffwrap.svg)](https://www.npmjs.com/package/@manaskng/ffwrap)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![GitHub stars](https://img.shields.io/github/stars/Manas-Kenge/ffwrap.svg)](https://github.com/Manas-Kenge/ffwrap/stargazers)
 
@@ -14,12 +14,12 @@ A simple, powerful wrapper around ffmpeg for the terminal.
 
 ffmpeg is powerful but complex. ffwrap makes common operations simple:
 
-| Task | ffmpeg | ffwrap |
-|------|--------|--------|
-| Convert to MP4 | `ffmpeg -i input.mov -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k output.mp4` | `ffwrap convert input.mov output.mp4` |
-| Compress to 25MB | `ffmpeg -i input.mp4 -c:v libx264 -b:v 1.5M -maxrate 2M -bufsize 3M -c:a aac -b:a 128k output.mp4` | `ffwrap compress input.mp4 -s 25MB` |
-| Trim video | `ffmpeg -ss 00:01:00 -i input.mp4 -t 30 -c:v libx264 -c:a aac output.mp4` | `ffwrap trim input.mp4 -s 00:01:00 -t 30` |
-| Create GIF | `ffmpeg -ss 5 -t 3 -i input.mp4 -vf "fps=15,scale=480:-1" -loop 0 output.gif` | `ffwrap gif input.mp4 -s 5 -t 3` |
+| Task             | ffmpeg                                                                                             | ffwrap                                    |
+| ---------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| Convert to MP4   | `ffmpeg -i input.mov -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k output.mp4`            | `ffwrap convert input.mov output.mp4`     |
+| Compress to 25MB | `ffmpeg -i input.mp4 -c:v libx264 -b:v 1.5M -maxrate 2M -bufsize 3M -c:a aac -b:a 128k output.mp4` | `ffwrap compress input.mp4 -s 25MB`       |
+| Trim video       | `ffmpeg -ss 00:01:00 -i input.mp4 -t 30 -c:v libx264 -c:a aac output.mp4`                          | `ffwrap trim input.mp4 -s 00:01:00 -t 30` |
+| Create GIF       | `ffmpeg -ss 5 -t 3 -i input.mp4 -vf "fps=15,scale=480:-1" -loop 0 output.gif`                      | `ffwrap gif input.mp4 -s 5 -t 3`          |
 
 ## Features
 
@@ -44,16 +44,16 @@ curl -fsSL https://raw.githubusercontent.com/Manas-Kenge/ffwrap/main/install.sh 
 
 ```bash
 # Using Bun (recommended)
-bun install -g @ffwrap/cli
+bun install -g @manaskng/ffwrap
 
 # Using npm
-npm install -g @ffwrap/cli
+npm install -g @manaskng/ffwrap
 
 # Using pnpm
-pnpm add -g @ffwrap/cli
+pnpm add -g @manaskng/ffwrap
 
 # Using yarn
-yarn global add @ffwrap/cli
+yarn global add @manaskng/ffwrap
 ```
 
 ### Verify installation
@@ -96,20 +96,20 @@ ffwrap
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `convert` | Convert between formats, codecs, resolutions |
-| `compress` | Reduce file size with target size/bitrate |
-| `trim` | Cut portions of media files |
-| `merge` | Concatenate multiple files |
-| `extract` | Extract audio, video, or frames |
-| `gif` | Create animated GIFs |
-| `thumbnail` | Generate thumbnails or grid previews |
-| `info` | Display media file information |
+| Command     | Description                                  |
+| ----------- | -------------------------------------------- |
+| `convert`   | Convert between formats, codecs, resolutions |
+| `compress`  | Reduce file size with target size/bitrate    |
+| `trim`      | Cut portions of media files                  |
+| `merge`     | Concatenate multiple files                   |
+| `extract`   | Extract audio, video, or frames              |
+| `gif`       | Create animated GIFs                         |
+| `thumbnail` | Generate thumbnails or grid previews         |
+| `info`      | Display media file information               |
 
 ## Documentation
 
-Full documentation available at: **[ffwrap.dev](https://ffwrap.dev)** *(coming soon)*
+Full documentation available at: **[ffwrap.dev](https://ffwrap.dev)** _(coming soon)_
 
 - [Quickstart Guide](./packages/docs/quickstart.mdx)
 - [Installation](./packages/docs/installation.mdx)

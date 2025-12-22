@@ -16,7 +16,7 @@ The ffwrap binary is not in your PATH.
     ```bash
     # Add Bun's bin directory to PATH
     export PATH="$HOME/.bun/bin:$PATH"
-    
+
     # Add to your shell profile for persistence
     echo 'export PATH="$HOME/.bun/bin:$PATH"' >> ~/.bashrc
     # or ~/.zshrc for zsh
@@ -26,7 +26,7 @@ The ffwrap binary is not in your PATH.
     ```bash
     # Find npm's global bin directory
     npm bin -g
-    
+
     # Add it to PATH
     export PATH="$(npm bin -g):$PATH"
     ```
@@ -69,7 +69,7 @@ echo 'export PATH="$HOME/.npm-global/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 
 # Then reinstall
-npm install -g @ffwrap/cli
+npm install -g @manaskng/ffwrap
 ```
 
 **Better solution:** Use a Node version manager like nvm.
@@ -217,7 +217,7 @@ Error: Incomplete MP4 file
 This can happen when:
 
 1. **Upscaling resolution** - Higher resolution = more data
-2. **Higher quality preset** - Using `high` or `lossless` 
+2. **Higher quality preset** - Using `high` or `lossless`
 3. **Different codec** - Some codecs compress differently
 4. **Short duration** - Overhead is proportionally larger
 

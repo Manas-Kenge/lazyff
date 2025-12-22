@@ -15,76 +15,74 @@ ffwrap
 
 ## Basic Usage
 
-### Commands
+### Layout and Workflow
 
-Type `/` to see available commands:
+The TUI is organized into three main areas:
 
-| Command | Description |
-|---------|-------------|
-| `/convert` | Convert to different format |
-| `/compress` | Reduce file size |
-| `/trim` | Cut portion of video |
-| `/merge` | Concatenate multiple files |
-| `/extract` | Extract audio/video/frames |
-| `/gif` | Convert to animated GIF |
-| `/thumbnail` | Generate thumbnail |
-| `/info` | Show file information |
-| `/theme` | Change color theme |
-| `/help` | Show help |
-| `/quit` | Exit ffwrap |
+- **Left panel**: File tree for browsing and selecting media files.
+- **Middle panel**: **Activity** stream showing operations, progress, and results.
+- **Right panel**: Media info/preview (hidden automatically on narrow terminals).
+
+Most operations are started from the **file tree** using **single-key shortcuts** once a file is selected.
 
 ### File Selection
 
-There are two ways to select files:
+- Use the arrow keys (or your terminal’s navigation keys) to move through the file tree.
+- Press `Enter` on a directory to expand/enter it.
+- Press `Enter` on a file to select it; available operations for that file will be shown in the footer.
 
-1. **File Browser**: Press `Ctrl+B` to toggle the sidebar, navigate with arrow keys, and press `Enter` to select.
+### Command Shortcuts
 
-2. **@ Autocomplete**: Type `@` followed by a filename to search and select files.
-
-### Keyboard Controls
+When a file is selected, you can trigger operations directly with single-key shortcuts:
 
 | Key | Action |
 |-----|--------|
-| `Enter` | Execute command / Select item |
-| `↑` / `↓` | Navigate history / suggestions |
+| `i` | Show media info for selected file |
+| `c` | Open **Compress** dialog |
+| `v` | Open **Convert** dialog |
+| `e` | Open **Extract** dialog |
+| `g` | Open **GIF** dialog |
+| `r` | Open **Trim** dialog |
+| `t` | Open **Thumbnail** dialog |
+| `m` | Open **Merge** dialog (pick additional files to merge) |
+
+Each action opens a small dialog to choose options; progress and results are streamed into the **Activity** panel.
+
+### Global Keyboard Controls
+
+| Key | Action |
+|-----|--------|
 | `Ctrl+P` | Open help dialog |
-| `Ctrl+B` | Toggle file browser |
-| `Ctrl+U` | Clear input line |
-| `Ctrl+Backspace` | Delete word |
-| `Esc` | Close dialog / Clear input |
+| `Esc` | Close current dialog / cancel operation |
 | `Ctrl+C` | Exit ffwrap |
 
 See the full [Shortcuts](/reference/shortcuts) reference for all keyboard controls.
 
 ## Themes
 
-The TUI supports multiple color themes. Type `/theme` to browse and preview themes with live updates.
+The TUI supports multiple color themes. Theme selection is **config-based**:
 
-Available themes include:
-- Catppuccin
-- Dracula  
-- Nord
-- Tokyo Night
-- Gruvbox
-- GitHub
-- And many more...
+- Edit your config file at `~/.config/ffwrap/config.json`.
+- Set the `theme` field to one of the built-in theme names.
+- Optionally set `mode` to `"dark"` or `"light"`.
+
+Example:
+
+```json
+{
+  "theme": "tokyonight",
+  "mode": "dark"
+}
+```
 
 ## Tips
 
 <Tip>
-  Type `/` at the start of the prompt to see all available commands with fuzzy search.
+  Select a file first to see all available shortcuts for that file type in the footer.
 </Tip>
 
 <Tip>
-  Press `Ctrl+P` at any time to see available commands and shortcuts.
-</Tip>
-
-<Tip>
-  The TUI remembers your command history. Use `↑` to quickly repeat previous commands.
-</Tip>
-
-<Tip>
-  Use `Ctrl+U` to quickly clear the prompt and start over, or `Ctrl+Backspace` to delete word by word.
+  Keep an eye on the **Activity** panel to track progress and see results of operations.
 </Tip>
 
 ## See Also

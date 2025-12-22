@@ -17,8 +17,8 @@
             "group": "Getting Started",
             "pages": [
               "index",
-              "quickstart",
-              "installation"
+              "installation",
+              "quickstart"
             ]
           },
           {

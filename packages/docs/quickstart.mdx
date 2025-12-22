@@ -3,91 +3,16 @@ title: "Quickstart"
 description: "Get started with ffwrap in under 2 minutes"
 ---
 
-## Prerequisites
+## Requirements
 
-To use ffwrap, you'll need:
+To use ffwrap, you will need to:
 
-### A Modern Terminal (for TUI)
+- Install **ffmpeg** (media processing engine)
+- Install **ffwrap** - see the [Installation Guide](/installation)
 
-For the best experience with ffwrap's interactive TUI, use a modern terminal emulator:
+## Usage
 
-- [WezTerm](https://wezfurlong.org/wezterm/) (cross-platform)
-- [Alacritty](https://alacritty.org/) (cross-platform)
-- [Ghostty](https://ghostty.org/) (Linux, macOS)
-- [Kitty](https://sw.kovidgoyal.net/kitty/) (Linux, macOS)
-- [Windows Terminal](https://aka.ms/terminal) (Windows)
-- iTerm2 (macOS)
-
-<Note>
-  CLI commands work in any terminal. The modern terminal recommendation is specifically for the interactive TUI mode.
-</Note>
-
-### ffmpeg
-
-ffwrap requires ffmpeg for media processing.
-
-<Tabs>
-  <Tab title="macOS">
-    ```bash
-    brew install ffmpeg
-    ```
-  </Tab>
-  <Tab title="Linux">
-    ```bash
-    # Ubuntu/Debian
-    sudo apt update && sudo apt install ffmpeg
-
-    # Fedora
-    sudo dnf install ffmpeg
-    ```
-  </Tab>
-  <Tab title="Windows">
-    ```powershell
-    # Using Chocolatey
-    choco install ffmpeg
-
-    # Or using Scoop
-    scoop install ffmpeg
-    ```
-  </Tab>
-</Tabs>
-
-## Install ffwrap
-
-<Tabs>
-  <Tab title="npm">
-    ```bash
-    npm install -g @ffwrap/cli
-    ```
-  </Tab>
-  <Tab title="bun">
-    ```bash
-    bun install -g @ffwrap/cli
-    ```
-  </Tab>
-  <Tab title="pnpm">
-    ```bash
-    pnpm add -g @ffwrap/cli
-    ```
-  </Tab>
-  <Tab title="yarn">
-    ```bash
-    yarn global add @ffwrap/cli
-    ```
-  </Tab>
-</Tabs>
-
-## Verify Installation
-
-```bash
-ffwrap version
-
-# Should output:
-# ffwrap: 0.0.1
-# ffmpeg: 6.x.x (your version)
-```
-
-## Launch the TUI
+### Launch the TUI
 
 Run ffwrap without any arguments to open the interactive interface:
 
@@ -95,9 +20,9 @@ Run ffwrap without any arguments to open the interactive interface:
 ffwrap
 ```
 
-Use `/` to see available commands, `@` to select files, and `Ctrl+P` for help.
+Select a file in the left panel, then use single-key shortcuts (`i`, `c`, `v`, `e`, `g`, `r`, `t`, `m`) to run operations. Press `Ctrl+P` for help.
 
-## Quick CLI Examples
+### CLI Examples
 
 <AccordionGroup>
   <Accordion title="Convert video format">
@@ -141,14 +66,14 @@ Use `/` to see available commands, `@` to select files, and `Ctrl+P` for help.
 ## Next Steps
 
 <CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Detailed installation for all platforms
+  </Card>
   <Card title="TUI Mode" icon="window" href="/tui">
     Learn the interactive interface
   </Card>
   <Card title="All Commands" icon="terminal" href="/commands/index">
     Complete command reference
-  </Card>
-  <Card title="Installation" icon="download" href="/installation">
-    Detailed installation for all platforms
   </Card>
   <Card title="Shortcuts" icon="keyboard" href="/reference/shortcuts">
     Keyboard shortcuts reference

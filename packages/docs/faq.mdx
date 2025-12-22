@@ -46,10 +46,10 @@ Yes, ffwrap is a wrapper around ffmpeg. You must have ffmpeg installed and avail
 
 ```bash
 # Using Bun (recommended)
-bun install -g @ffwrap/cli
+bun install -g @manaskng/ffwrap
 
 # Using npm
-npm install -g @ffwrap/cli
+npm install -g @manaskng/ffwrap
 ```
 
 See the [Installation](/installation) guide for detailed instructions.
@@ -58,20 +58,20 @@ See the [Installation](/installation) guide for detailed instructions.
 
 ```bash
 # Using Bun
-bun update -g @ffwrap/cli
+bun update -g @manaskng/ffwrap
 
 # Using npm
-npm update -g @ffwrap/cli
+npm update -g @manaskng/ffwrap
 ```
 
 ### How do I uninstall ffwrap?
 
 ```bash
 # Using Bun
-bun remove -g @ffwrap/cli
+bun remove -g @manaskng/ffwrap
 
 # Using npm
-npm uninstall -g @ffwrap/cli
+npm uninstall -g @manaskng/ffwrap
 ```
 
 ## Usage
@@ -136,12 +136,12 @@ See the [Codecs reference](/reference/codecs) for details.
 
 ### What quality preset should I use?
 
-| Preset | When to use |
-|--------|------------|
-| `low` | Previews, drafts, when size is critical |
-| `medium` | General use, social media (default) |
-| `high` | Final delivery, archiving |
-| `lossless` | Professional work, source for editing |
+| Preset     | When to use                             |
+| ---------- | --------------------------------------- |
+| `low`      | Previews, drafts, when size is critical |
+| `medium`   | General use, social media (default)     |
+| `high`     | Final delivery, archiving               |
+| `lossless` | Professional work, source for editing   |
 
 ### Why is my output larger than input?
 
@@ -236,7 +236,13 @@ Launch it by running `ffwrap` without any arguments.
 
 ### Can I customize the TUI theme?
 
-Theme selection is not currently exposed as a user setting. The TUI includes multiple built-in themes.
+Yes. Theme selection is controlled via a config file:
+
+- Edit `~/.config/ffwrap/config.json`.
+- Set `theme` to one of the built-in theme names (for example `"tokyonight"`, `"dracula"`, `"nord"`).
+- Optionally set `mode` to `"dark"` or `"light"`.
+
+The TUI will load this theme on startup.
 
 ## Troubleshooting
 
