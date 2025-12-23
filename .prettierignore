@@ -5,5 +5,5 @@ build
 bun.lock
 package-lock.json
 *.log
-.ffwrap
+.lazyff
 packages/docs

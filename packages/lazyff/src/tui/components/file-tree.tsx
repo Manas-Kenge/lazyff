@@ -38,6 +38,7 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
   const dialog = useDialog()
   const { height: termHeight } = useTerminalDimensions()
   const [files, setFiles] = useState<FileNode[]>([])
+  const [directoryCache, setDirectoryCache] = useState<Map<string, FileNode[]>>(new Map())
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set())
   const scrollRef = useRef<ScrollBoxRenderable>(null)
@@ -55,8 +56,31 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
     const allFiles = readDirectory(cwd)
     const mediaFiles = filterMediaFiles(allFiles)
     setFiles(mediaFiles)
+    setDirectoryCache(new Map()) // Clear cache when root changes
     setSelectedIndex(0)
   }, [cwd])
+
+  // Cache sub-directories when expanded
+  useEffect(() => {
+    const newCache = new Map(directoryCache)
+    let changed = false
+
+    expandedPaths.forEach((path) => {
+      if (!newCache.has(path)) {
+        try {
+          const subFiles = filterMediaFiles(readDirectory(path))
+          newCache.set(path, subFiles)
+          changed = true
+        } catch (e) {
+          // Ignore read errors
+        }
+      }
+    })
+
+    if (changed) {
+      setDirectoryCache(newCache)
+    }
+  }, [expandedPaths, directoryCache])
 
   /**
    * Flatten tree structure for rendering with indent metadata
@@ -76,7 +100,7 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
         })
 
         if (node.type === "directory" && expandedPaths.has(node.path)) {
-          const children = filterMediaFiles(readDirectory(node.path))
+          const children = directoryCache.get(node.path) || []
           traverse(children, depth + 1, [...ancestorsAreLast, isLast])
         }
       })
@@ -84,7 +108,7 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
 
     traverse(files, 0, [])
     return result
-  }, [files, expandedPaths])
+  }, [files, expandedPaths, directoryCache])
 
   const visibleNodes = flattenTree()
 

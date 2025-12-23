@@ -50,6 +50,7 @@ export function MediaInfo({ width = 40 }: MediaInfoProps) {
   const { theme } = useTheme()
   const [detailedInfo, setDetailedInfo] = useState<DetailedMediaInfo | null>(null)
   const [loading, setLoading] = useState(false)
+  const [fileSize, setFileSize] = useState(0)
 
   // Load detailed media info when file is selected
   useEffect(() => {
@@ -63,6 +64,14 @@ export function MediaInfo({ width = 40 }: MediaInfoProps) {
     setLoading(true)
 
     const loadInfo = async () => {
+      // Get file stats
+      try {
+        const stats = fs.statSync(selectedFile.path)
+        if (!cancelled) setFileSize(stats.size)
+      } catch {
+        // Ignore errors
+      }
+
       const info = await getDetailedMediaInfo(selectedFile.path)
       if (!cancelled) {
         setDetailedInfo(info)
@@ -128,15 +137,6 @@ export function MediaInfo({ width = 40 }: MediaInfoProps) {
         </box>
       </box>
     )
-  }
-
-  // Get file stats
-  let fileSize = 0
-  try {
-    const stats = fs.statSync(selectedFile.path)
-    fileSize = stats.size
-  } catch {
-    // Ignore errors
   }
 
   const icon = getFileIcon(selectedFile)

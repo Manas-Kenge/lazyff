@@ -1,24 +1,36 @@
 import { TextAttributes } from "@opentui/core"
 import { useTheme } from "../context/theme"
 
-const LOGO_LEFT = [`█▀▀▀ █▀▀▀ █░░░█ `, `█▀▀░ █▀▀░ █▄█▄█ `, `▀░░░ ▀░░░ ▀▀░▀▀ `]
+// const LOGO = [
+//   " ████                                     ██████     ██████ ",
+//   "░░███                                    ███░░███   ███░░███",
+//   " ░███   ██████    █████████ █████ ████  ░███ ░░░   ░███ ░░░ ",
+//   " ░███  ░░░░░███  ░█░░░░███ ░░███ ░███  ███████    ███████  ",
+//   " ░███   ███████  ░   ███░   ░███ ░███ ░░░███░    ░░░███░   ",
+//   " ░███  ███░░███    ███░   █ ░███ ░███   ░███       ░███    ",
+//   " █████░░████████  █████████ ░░███████   █████      █████   ",
+//   "░░░░░  ░░░░░░░░  ░░░░░░░░░   ░░░░░███  ░░░░░      ░░░░░    ",
+//   "                             ███ ░███                      ",
+//   "                            ░░██████                       ",
+// ]
 
-const LOGO_RIGHT = ["█▀▀█░█▀▀█░█▀▀█", "█▄▄▀░█▄▄█░█▄▄█", "▀░▀▀░▀░░▀░▀░░░"]
+const LOGO = [
+  "██╗      █████╗ ███████╗██╗   ██╗███████╗███████╗",
+  "██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██╔════╝██╔════╝",
+  "██║     ███████║  ███╔╝  ╚████╔╝ █████╗  █████╗  ",
+  "██║     ██╔══██║ ███╔╝    ╚██╔╝  ██╔══╝  ██╔══╝  ",
+  "███████╗██║  ██║███████╗   ██║   ██║     ██║     ",
+  "╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝     ╚═╝     ",
+]
 
 export function Logo() {
   const { theme } = useTheme()
-
   return (
     <box flexDirection="column" alignItems="center">
-      {LOGO_LEFT.map((line, index) => (
-        <box key={index} flexDirection="row">
-          <text fg={theme.textMuted} selectable={false}>
-            {line}
-          </text>
-          <text fg={theme.text} attributes={TextAttributes.BOLD} selectable={false}>
-            {LOGO_RIGHT[index]}
-          </text>
-        </box>
+      {LOGO.map((line, index) => (
+        <text key={index} fg={theme.primary} attributes={TextAttributes.BOLD} selectable={false}>
+          {line}
+        </text>
       ))}
     </box>
   )

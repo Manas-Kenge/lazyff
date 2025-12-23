@@ -332,7 +332,7 @@ function App() {
 }
 
 /**
- * Launch the ffwrap TUI
+ * Launch the lazyff TUI
  */
 export async function launch(): Promise<void> {
   try {

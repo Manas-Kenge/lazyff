@@ -1,5 +1,5 @@
 /**
- * Version management for ffwrap CLI
+ * Version management for lazyff CLI
  * Reads version from package.json at runtime for development
  * and uses embedded version for compiled binaries
  */
@@ -7,7 +7,7 @@
 import { resolve, dirname } from "path"
 import { fileURLToPath } from "url"
 
-/** Current ffwrap version */
+/** Current lazyff version */
 export const VERSION = "0.1.0"
 
 /** GitHub repository for releases */

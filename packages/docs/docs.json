@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "linden",
-  "name": "ffwrap",
+  "name": "lazyff",
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
@@ -61,7 +61,7 @@
       "anchors": [
         {
           "anchor": "GitHub",
-          "href": "https://github.com/Manas-Kenge/ffwrap",
+          "href": "https://github.com/Manas-Kenge/lazyff",
           "icon": "github"
         },
         {
@@ -85,13 +85,13 @@
     ],
     "primary": {
       "type": "github",
-      "href": "https://github.com/Manas-Kenge/ffwrap"
+      "href": "https://github.com/Manas-Kenge/lazyff"
     }
   },
   "footer": {
     "socials": {
       "x": "https://x.com/manas_kng",
-      "github": "https://github.com/Manas-Kenge/ffwrap"
+      "github": "https://github.com/Manas-Kenge/lazyff"
     }
   }
 }

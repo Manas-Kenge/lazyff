@@ -89,7 +89,7 @@ function createFileList(inputs: string[]): string {
   const lines = inputs.map((f) => `file '${path.resolve(f)}'`)
   const content = lines.join("\n")
 
-  const tempFile = path.join(os.tmpdir(), `ffwrap_concat_${Date.now()}.txt`)
+  const tempFile = path.join(os.tmpdir(), `lazyff_concat_${Date.now()}.txt`)
   fs.writeFileSync(tempFile, content)
 
   return tempFile

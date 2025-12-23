@@ -36,12 +36,12 @@ INSTALL_DIR=${INSTALL_DIR:-$HOME/.lazyff/bin}
 
 print_banner() {
     echo -e ""
-    echo -e "${CYAN}  __  __                      ${NC}"
-    echo -e "${CYAN} / _|/ _|_      ___ __ __ _ _ __ ${NC}"
-    echo -e "${CYAN}| |_| |_\\ \\ /\\ / / '__/ _\` | '_ \\\\${NC}"
-    echo -e "${CYAN}|  _|  _|\\ V  V /| | | (_| | |_) |${NC}"
-    echo -e "${CYAN}|_| |_|   \\_/\\_/ |_|  \\__,_| .__/${NC}"
-    echo -e "${CYAN}                           |_|${NC}"
+    echo -e "${CYAN} _                       __  __ ${NC}"
+    echo -e "${CYAN}| | __ _  ____ _   _    / _|/ _|${NC}"
+    echo -e "${CYAN}| |/ _\` ||_  /| | | |  | |_| |_ ${NC}"
+    echo -e "${CYAN}| | (_| | / / | |_| |  |  _|  _|${NC}"
+    echo -e "${CYAN}|_|\\__,_|/___| \\__, |  |_| |_|  ${NC}"
+    echo -e "${CYAN}               |___/            ${NC}"
     echo -e ""
 }
 
@@ -72,7 +72,7 @@ print_step() {
 detect_platform() {
     local raw_os=$(uname -s)
     os=$(echo "$raw_os" | tr '[:upper:]' '[:lower:]')
-    
+
     case "$raw_os" in
         Darwin*) os="darwin" ;;
         Linux*) os="linux" ;;
@@ -116,7 +116,7 @@ detect_platform() {
 
 detect_musl() {
     is_musl=false
-    
+
     if [ "$os" != "linux" ]; then
         return
     fi
@@ -160,11 +160,11 @@ detect_baseline() {
 
 build_target() {
     target="$os-$arch"
-    
+
     if [ "$needs_baseline" = "true" ]; then
         target="$target-baseline"
     fi
-    
+
     if [ "$is_musl" = "true" ]; then
         target="$target-musl"
     fi
@@ -200,7 +200,7 @@ check_commands() {
 
 check_ffmpeg() {
     print_step "Checking for ffmpeg..."
-    
+
     if command -v ffmpeg >/dev/null 2>&1; then
         local version=$(ffmpeg -version 2>&1 | head -n1 | sed 's/ffmpeg version \([^ ]*\).*/\1/')
         print_message success "  Found ffmpeg $version"
@@ -211,7 +211,7 @@ check_ffmpeg() {
     echo ""
     print_message info "lazyff requires ffmpeg to function. Install it using:"
     echo ""
-    
+
     case "$os" in
         darwin)
             echo "  ${BOLD}macOS (Homebrew):${NC}"
@@ -241,13 +241,13 @@ check_ffmpeg() {
             echo "    scoop install ffmpeg"
             ;;
     esac
-    
+
     echo ""
     print_message muted "For more information: https://ffmpeg.org/download.html"
     echo ""
     print_message info "Continuing with lazyff installation..."
     echo ""
-    
+
     return 1
 }
 
@@ -259,12 +259,12 @@ get_latest_version() {
     local version
     version=$(curl -s "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | \
         sed -n 's/.*"tag_name": *"v\([^"]*\)".*/\1/p')
-    
+
     if [ -z "$version" ]; then
         print_message error "Failed to fetch latest version from GitHub"
         exit 1
     fi
-    
+
     echo "$version"
 }
 
@@ -273,10 +273,10 @@ check_installed_version() {
         local lazyff_path=$(which lazyff)
         # Parse version from "lazyff: X.X.X" format
         local installed_version=$(lazyff version 2>/dev/null | head -n1 | sed 's/lazyff: *//')
-        
+
         if [ -n "$installed_version" ]; then
             print_message muted "Installed version: $installed_version"
-            
+
             if [ "$installed_version" = "$specific_version" ]; then
                 print_message success "Version $specific_version is already installed"
                 exit 0
@@ -354,11 +354,11 @@ download_with_progress() {
     {
         local length=0
         local bytes=0
-        
+
         while IFS=" " read -r -a line; do
             [ "${#line[@]}" -lt 2 ] && continue
             local tag="${line[0]} ${line[1]}"
-            
+
             if [ "$tag" = "0000: content-length:" ]; then
                 length="${line[2]}"
                 length=$(echo "$length" | tr -d '\r')
@@ -395,10 +395,10 @@ download_and_install() {
     fi
 
     print_step "Downloading lazyff ${specific_version} for ${target}..."
-    
+
     local tmp_dir="${TMPDIR:-/tmp}/${APP}_install_$$"
     mkdir -p "$tmp_dir"
-    
+
     # Try progress download, fall back to standard curl
     if [[ "$os" == "windows" ]] || ! [ -t 2 ] || ! download_with_progress "$url" "$tmp_dir/$filename"; then
         curl -# -L -o "$tmp_dir/$filename" "$url" || {
@@ -410,7 +410,7 @@ download_and_install() {
     fi
 
     print_step "Installing to ${INSTALL_DIR}..."
-    
+
     mkdir -p "$INSTALL_DIR"
 
     if [ "$os" = "linux" ]; then
@@ -432,7 +432,7 @@ download_and_install() {
 
     chmod 755 "${INSTALL_DIR}/lazyff"
     rm -rf "$tmp_dir"
-    
+
     print_message success "  Installed to ${INSTALL_DIR}/lazyff"
 }
 
@@ -535,7 +535,7 @@ print_success() {
     print_banner
     print_message success "lazyff ${specific_version} installed successfully!"
     echo ""
-    
+
     local ffmpeg_missing=false
     if ! command -v ffmpeg >/dev/null 2>&1; then
         ffmpeg_missing=true
@@ -545,10 +545,10 @@ print_success() {
         print_message warning "Remember to install ffmpeg before using lazyff"
         echo ""
     fi
-    
+
     echo -e "${MUTED}To get started:${NC}"
     echo ""
-    
+
     # Check if we need to reload shell
     if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
         local current_shell=$(basename "$SHELL")
@@ -564,7 +564,7 @@ print_success() {
                 ;;
         esac
     fi
-    
+
     echo -e "  cd <project>     ${MUTED}# Navigate to your project${NC}"
     echo -e "  lazyff           ${MUTED}# Launch interactive TUI${NC}"
     echo ""
@@ -584,7 +584,7 @@ print_success() {
 
 main() {
     print_banner
-    
+
     # Detect platform
     print_step "Detecting platform..."
     detect_platform
@@ -592,13 +592,13 @@ main() {
     detect_baseline
     build_target
     print_message success "  Detected: ${target}"
-    
+
     # Check dependencies
     check_commands
-    
+
     # Check ffmpeg (warn but don't fail)
     check_ffmpeg || true
-    
+
     # Determine version
     print_step "Fetching version info..."
     if [ -z "$requested_version" ]; then
@@ -608,16 +608,16 @@ main() {
         specific_version=$requested_version
         print_message success "  Requested version: ${specific_version}"
     fi
-    
+
     # Check if already installed
     check_installed_version
-    
+
     # Download and install
     download_and_install
-    
+
     # Configure PATH
     configure_path
-    
+
     # Done!
     print_success
 }

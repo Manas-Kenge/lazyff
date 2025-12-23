@@ -60,7 +60,7 @@ export interface AutocompleteProps {
 }
 
 /**
- * Available slash commands for ffwrap
+ * Available slash commands for lazyff
  */
 function getCommands(): AutocompleteOption[] {
   const commands: AutocompleteOption[] = [
@@ -129,7 +129,7 @@ function getCommands(): AutocompleteOption[] {
     {
       display: "/quit",
       value: "/quit",
-      description: "exit ffwrap",
+      description: "exit lazyff",
       aliases: ["/exit", "/q"],
     },
   ]
