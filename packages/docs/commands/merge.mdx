@@ -62,7 +62,7 @@ In the TUI, merging files is a guided, dialog-based experience.
 ### Syntax
 
 ```bash
-ffwrap merge <inputs...> --output <output> [options]
+lazyff merge <inputs...> --output <output> [options]
 ```
 
 ### Arguments
@@ -85,10 +85,10 @@ ffwrap merge <inputs...> --output <output> [options]
 
 ```bash
 # Merge two videos
-ffwrap merge part1.mp4 part2.mp4 -o full.mp4
+lazyff merge part1.mp4 part2.mp4 -o full.mp4
 
 # Merge multiple videos
-ffwrap merge clip1.mp4 clip2.mp4 clip3.mp4 -o final.mp4
+lazyff merge clip1.mp4 clip2.mp4 clip3.mp4 -o final.mp4
 ```
 
 #### Merge Different Formats
@@ -97,20 +97,20 @@ When merging files with different codecs, use `--reencode`:
 
 ```bash
 # Merge MP4 and WebM (re-encode required)
-ffwrap merge video1.mp4 video2.webm -o combined.mp4 --reencode
+lazyff merge video1.mp4 video2.webm -o combined.mp4 --reencode
 
 # Merge videos with different resolutions
-ffwrap merge hd.mp4 sd.mp4 -o mixed.mp4 --reencode
+lazyff merge hd.mp4 sd.mp4 -o mixed.mp4 --reencode
 ```
 
 #### Merge Audio Files
 
 ```bash
 # Merge MP3 files
-ffwrap merge song1.mp3 song2.mp3 song3.mp3 -o album.mp3
+lazyff merge song1.mp3 song2.mp3 song3.mp3 -o album.mp3
 
 # Merge WAV files
-ffwrap merge track1.wav track2.wav -o combined.wav
+lazyff merge track1.wav track2.wav -o combined.wav
 ```
 
 ## Modes
@@ -133,7 +133,7 @@ Decodes and re-encodes all inputs:
 
 ## Re-encode Settings
 
-When using re-encode mode, ffwrap uses:
+When using re-encode mode, lazyff uses:
 
 | Setting | Value |
 |---------|-------|
@@ -159,16 +159,16 @@ If any of these differ, use re-encode mode.
 <Tip>
   If copy mode fails with a codec error, the TUI will prompt you to re-encode. In CLI, add `--reencode`:
   ```bash
-  ffwrap merge a.mp4 b.mp4 -o out.mp4 --reencode
+  lazyff merge a.mp4 b.mp4 -o out.mp4 --reencode
   ```
 </Tip>
 
 <Tip>
   For best quality when merging clips from different sources, first convert them to the same format:
   ```bash
-  ffwrap convert clip1.mov -f mp4 -r 1080p
-  ffwrap convert clip2.avi -f mp4 -r 1080p
-  ffwrap merge clip1.mp4 clip2.mp4 -o final.mp4
+  lazyff convert clip1.mov -f mp4 -r 1080p
+  lazyff convert clip2.avi -f mp4 -r 1080p
+  lazyff merge clip1.mp4 clip2.mp4 -o final.mp4
   ```
 </Tip>
 
@@ -182,21 +182,21 @@ If any of these differ, use re-encode mode.
 
 ```bash
 # Recorded video split into parts
-ffwrap merge recording_001.mp4 recording_002.mp4 recording_003.mp4 -o full_recording.mp4
+lazyff merge recording_001.mp4 recording_002.mp4 recording_003.mp4 -o full_recording.mp4
 ```
 
 ### Combine Clips for YouTube
 
 ```bash
 # Intro + main content + outro
-ffwrap merge intro.mp4 main.mp4 outro.mp4 -o youtube_video.mp4 --reencode
+lazyff merge intro.mp4 main.mp4 outro.mp4 -o youtube_video.mp4 --reencode
 ```
 
 ### Merge Audio Tracks
 
 ```bash
 # Combine podcast segments
-ffwrap merge intro.mp3 episode.mp3 outro.mp3 -o full_episode.mp3
+lazyff merge intro.mp3 episode.mp3 outro.mp3 -o full_episode.mp3
 ```
 
 ## Troubleshooting

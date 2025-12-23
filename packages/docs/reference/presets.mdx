@@ -3,14 +3,14 @@ title: "Presets"
 description: "Quality and resolution presets"
 ---
 
-ffwrap provides presets for common quality levels and resolutions, making it easy to get good results without memorizing technical settings.
+lazyff provides presets for common quality levels and resolutions, making it easy to get good results without memorizing technical settings.
 
 ## Quality Presets
 
 Use with the `--quality` or `-q` option:
 
 ```bash
-ffwrap convert input.mov output.mp4 --quality high
+lazyff convert input.mov output.mp4 --quality high
 ```
 
 ### Overview
@@ -25,7 +25,7 @@ ffwrap convert input.mov output.mp4 --quality high
 ### Low Quality
 
 ```bash
-ffwrap convert input.mov output.mp4 -q low
+lazyff convert input.mov output.mp4 -q low
 ```
 
 | Setting | Value |
@@ -47,9 +47,9 @@ ffwrap convert input.mov output.mp4 -q low
 ### Medium Quality (Default)
 
 ```bash
-ffwrap convert input.mov output.mp4 -q medium
+lazyff convert input.mov output.mp4 -q medium
 # or simply
-ffwrap convert input.mov output.mp4
+lazyff convert input.mov output.mp4
 ```
 
 | Setting | Value |
@@ -71,7 +71,7 @@ ffwrap convert input.mov output.mp4
 ### High Quality
 
 ```bash
-ffwrap convert input.mov output.mp4 -q high
+lazyff convert input.mov output.mp4 -q high
 ```
 
 | Setting | Value |
@@ -93,7 +93,7 @@ ffwrap convert input.mov output.mp4 -q high
 ### Lossless Quality
 
 ```bash
-ffwrap convert input.mov output.mp4 -q lossless
+lazyff convert input.mov output.mp4 -q lossless
 ```
 
 | Setting | Value |
@@ -121,7 +121,7 @@ ffwrap convert input.mov output.mp4 -q lossless
 Use with the `--resolution` or `-r` option:
 
 ```bash
-ffwrap convert input.mov output.mp4 --resolution 720p
+lazyff convert input.mov output.mp4 --resolution 720p
 ```
 
 ### Overview
@@ -141,10 +141,10 @@ You can also specify exact dimensions:
 
 ```bash
 # Specific width x height
-ffwrap convert input.mov output.mp4 -r 1280x720
+lazyff convert input.mov output.mp4 -r 1280x720
 
 # Width only (height auto-calculated)
-ffwrap convert input.mov output.mp4 -r 1280
+lazyff convert input.mov output.mp4 -r 1280
 ```
 
 <Note>
@@ -156,7 +156,7 @@ ffwrap convert input.mov output.mp4 -r 1280
 #### 360p
 
 ```bash
-ffwrap convert input.mov output.mp4 -r 360p
+lazyff convert input.mov output.mp4 -r 360p
 ```
 
 | Property | Value |
@@ -168,7 +168,7 @@ ffwrap convert input.mov output.mp4 -r 360p
 #### 480p (SD)
 
 ```bash
-ffwrap convert input.mov output.mp4 -r 480p
+lazyff convert input.mov output.mp4 -r 480p
 ```
 
 | Property | Value |
@@ -180,7 +180,7 @@ ffwrap convert input.mov output.mp4 -r 480p
 #### 720p (HD)
 
 ```bash
-ffwrap convert input.mov output.mp4 -r 720p
+lazyff convert input.mov output.mp4 -r 720p
 ```
 
 | Property | Value |
@@ -192,7 +192,7 @@ ffwrap convert input.mov output.mp4 -r 720p
 #### 1080p (Full HD)
 
 ```bash
-ffwrap convert input.mov output.mp4 -r 1080p
+lazyff convert input.mov output.mp4 -r 1080p
 ```
 
 | Property | Value |
@@ -204,7 +204,7 @@ ffwrap convert input.mov output.mp4 -r 1080p
 #### 1440p (2K/QHD)
 
 ```bash
-ffwrap convert input.mov output.mp4 -r 1440p
+lazyff convert input.mov output.mp4 -r 1440p
 ```
 
 | Property | Value |
@@ -216,7 +216,7 @@ ffwrap convert input.mov output.mp4 -r 1440p
 #### 4K (UHD)
 
 ```bash
-ffwrap convert input.mov output.mp4 -r 4k
+lazyff convert input.mov output.mp4 -r 4k
 ```
 
 | Property | Value |
@@ -231,13 +231,13 @@ Use quality and resolution together:
 
 ```bash
 # 720p at high quality
-ffwrap convert input.mov output.mp4 -r 720p -q high
+lazyff convert input.mov output.mp4 -r 720p -q high
 
 # 1080p at low quality (smaller file)
-ffwrap convert input.mov output.mp4 -r 1080p -q low
+lazyff convert input.mov output.mp4 -r 1080p -q low
 
 # 4K at medium quality
-ffwrap convert input.mov output.mp4 -r 4k -q medium
+lazyff convert input.mov output.mp4 -r 4k -q medium
 ```
 
 ## Preset Recommendations

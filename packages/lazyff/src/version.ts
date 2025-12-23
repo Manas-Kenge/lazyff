@@ -11,10 +11,10 @@ import { fileURLToPath } from "url"
 export const VERSION = "0.1.0"
 
 /** GitHub repository for releases */
-export const GITHUB_REPO = "Manas-Kenge/ffwrap"
+export const GITHUB_REPO = "Manas-Kenge/lazyff"
 
 /** Install directory for curl-based installation */
-export const INSTALL_DIR = ".ffwrap/bin"
+export const INSTALL_DIR = ".lazyff/bin"
 
 /**
  * Get version information for display

@@ -1,25 +1,25 @@
-# ffwrap
+# lazyff
 
 A simple, powerful wrapper around ffmpeg for the terminal.
 
-[![npm version](https://img.shields.io/npm/v/@manaskng/ffwrap.svg)](https://www.npmjs.com/package/@manaskng/ffwrap)
+[![npm version](https://img.shields.io/npm/v/@manaskng/lazyff.svg)](https://www.npmjs.com/package/@manaskng/lazyff)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![GitHub stars](https://img.shields.io/github/stars/Manas-Kenge/ffwrap.svg)](https://github.com/Manas-Kenge/ffwrap/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/Manas-Kenge/lazyff.svg)](https://github.com/Manas-Kenge/lazyff/stargazers)
 
 <p align="center">
-  <img src="docs/images/demo.gif" alt="ffwrap demo" width="600">
+  <img src="docs/images/demo.gif" alt="lazyff demo" width="600">
 </p>
 
-## Why ffwrap?
+## Why lazyff?
 
-ffmpeg is powerful but complex. ffwrap makes common operations simple:
+ffmpeg is powerful but complex. lazyff makes common operations simple:
 
-| Task             | ffmpeg                                                                                             | ffwrap                                    |
+| Task             | ffmpeg                                                                                             | lazyff                                    |
 | ---------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| Convert to MP4   | `ffmpeg -i input.mov -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k output.mp4`            | `ffwrap convert input.mov output.mp4`     |
-| Compress to 25MB | `ffmpeg -i input.mp4 -c:v libx264 -b:v 1.5M -maxrate 2M -bufsize 3M -c:a aac -b:a 128k output.mp4` | `ffwrap compress input.mp4 -s 25MB`       |
-| Trim video       | `ffmpeg -ss 00:01:00 -i input.mp4 -t 30 -c:v libx264 -c:a aac output.mp4`                          | `ffwrap trim input.mp4 -s 00:01:00 -t 30` |
-| Create GIF       | `ffmpeg -ss 5 -t 3 -i input.mp4 -vf "fps=15,scale=480:-1" -loop 0 output.gif`                      | `ffwrap gif input.mp4 -s 5 -t 3`          |
+| Convert to MP4   | `ffmpeg -i input.mov -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k output.mp4`            | `lazyff convert input.mov output.mp4`     |
+| Compress to 25MB | `ffmpeg -i input.mp4 -c:v libx264 -b:v 1.5M -maxrate 2M -bufsize 3M -c:a aac -b:a 128k output.mp4` | `lazyff compress input.mp4 -s 25MB`       |
+| Trim video       | `ffmpeg -ss 00:01:00 -i input.mp4 -t 30 -c:v libx264 -c:a aac output.mp4`                          | `lazyff trim input.mp4 -s 00:01:00 -t 30` |
+| Create GIF       | `ffmpeg -ss 5 -t 3 -i input.mp4 -vf "fps=15,scale=480:-1" -loop 0 output.gif`                      | `lazyff gif input.mp4 -s 5 -t 3`          |
 
 ## Features
 
@@ -37,61 +37,61 @@ ffmpeg is powerful but complex. ffwrap makes common operations simple:
 ### Quick Install (Recommended)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Manas-Kenge/ffwrap/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Manas-Kenge/lazyff/main/install.sh | bash
 ```
 
 ### Package Managers
 
 ```bash
 # Using Bun (recommended)
-bun install -g @manaskng/ffwrap
+bun install -g @manaskng/lazyff
 
 # Using npm
-npm install -g @manaskng/ffwrap
+npm install -g @manaskng/lazyff
 
 # Using pnpm
-pnpm add -g @manaskng/ffwrap
+pnpm add -g @manaskng/lazyff
 
 # Using yarn
-yarn global add @manaskng/ffwrap
+yarn global add @manaskng/lazyff
 ```
 
 ### Verify installation
 
 ```bash
-ffwrap version
+lazyff version
 ```
 
 ### Update & Uninstall
 
 ```bash
 # Check for updates
-ffwrap update --check
+lazyff update --check
 
 # Update to latest version
-ffwrap update
+lazyff update
 
 # Uninstall
-ffwrap uninstall
+lazyff uninstall
 ```
 
 ## Quick Start
 
 ```bash
 # Convert video
-ffwrap convert video.mov video.mp4
+lazyff convert video.mov video.mp4
 
 # Compress to target size
-ffwrap compress video.mp4 --target-size 25MB
+lazyff compress video.mp4 --target-size 25MB
 
 # Trim video
-ffwrap trim video.mp4 --start 00:01:00 --duration 30
+lazyff trim video.mp4 --start 00:01:00 --duration 30
 
 # Create GIF
-ffwrap gif video.mp4 --start 5 --duration 3
+lazyff gif video.mp4 --start 5 --duration 3
 
 # Launch interactive TUI
-ffwrap
+lazyff
 ```
 
 ## Commands
@@ -109,7 +109,7 @@ ffwrap
 
 ## Documentation
 
-Full documentation available at: **[ffwrap.dev](https://ffwrap.dev)** _(coming soon)_
+Full documentation available at: **[lazyff.dev](https://lazyff.dev)** _(coming soon)_
 
 - [Quickstart Guide](./packages/docs/quickstart.mdx)
 - [Installation](./packages/docs/installation.mdx)
@@ -120,8 +120,8 @@ Full documentation available at: **[ffwrap.dev](https://ffwrap.dev)** _(coming s
 
 ```bash
 # Clone the repository
-git clone https://github.com/Manas-Kenge/ffwrap.git
-cd ffwrap
+git clone https://github.com/Manas-Kenge/lazyff.git
+cd lazyff
 
 # Install dependencies
 bun install

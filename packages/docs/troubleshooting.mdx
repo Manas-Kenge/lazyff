@@ -3,13 +3,13 @@ title: "Troubleshooting"
 description: "Common issues and solutions"
 ---
 
-Solutions for common issues when using ffwrap.
+Solutions for common issues when using lazyff.
 
 ## Installation Issues
 
-### "Command not found: ffwrap"
+### "Command not found: lazyff"
 
-The ffwrap binary is not in your PATH.
+The lazyff binary is not in your PATH.
 
 <Tabs>
   <Tab title="Bun">
@@ -69,7 +69,7 @@ echo 'export PATH="$HOME/.npm-global/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 
 # Then reinstall
-npm install -g @manaskng/ffwrap
+npm install -g @manaskng/lazyff
 ```
 
 **Better solution:** Use a Node version manager like nvm.
@@ -141,9 +141,9 @@ Error: Output file already exists
 
 **Solution:**
 ```bash
-ffwrap convert input.mp4 output.mp4 --overwrite
+lazyff convert input.mp4 output.mp4 --overwrite
 # or
-ffwrap convert input.mp4 output.mp4 -y
+lazyff convert input.mp4 output.mp4 -y
 ```
 
 ### "Permission denied"
@@ -172,14 +172,14 @@ Error: Invalid resolution
 
 **Solution:** Use a standard resolution preset:
 ```bash
-ffwrap convert input.mp4 -r 720p
-ffwrap convert input.mp4 -r 1080p
+lazyff convert input.mp4 -r 720p
+lazyff convert input.mp4 -r 1080p
 ```
 
 Or specify even dimensions:
 ```bash
-ffwrap convert input.mp4 -r 1280x720  # Good
-ffwrap convert input.mp4 -r 1281x721  # Bad - odd numbers
+lazyff convert input.mp4 -r 1280x720  # Good
+lazyff convert input.mp4 -r 1281x721  # Bad - odd numbers
 ```
 
 ### "No space left on device"
@@ -224,10 +224,10 @@ This can happen when:
 **Solutions:**
 ```bash
 # Use lower quality
-ffwrap convert input.mp4 output.mp4 -q low
+lazyff convert input.mp4 output.mp4 -q low
 
 # Use compress instead for size control
-ffwrap compress input.mp4 --target-size 50MB
+lazyff compress input.mp4 --target-size 50MB
 ```
 
 ### Output quality is poor
@@ -235,7 +235,7 @@ ffwrap compress input.mp4 --target-size 50MB
 **Solutions:**
 ```bash
 # Use higher quality preset
-ffwrap convert input.mp4 output.mp4 -q high
+lazyff convert input.mp4 output.mp4 -q high
 
 # Avoid multiple re-encodes - always work from original source
 ```
@@ -251,13 +251,13 @@ ffwrap convert input.mp4 output.mp4 -q high
 **Solutions:**
 ```bash
 # Use faster preset
-ffwrap convert input.mp4 output.mp4 -q low
+lazyff convert input.mp4 output.mp4 -q low
 
 # Use H.264 instead of H.265
-ffwrap convert input.mp4 output.mp4 --video-codec h264
+lazyff convert input.mp4 output.mp4 --video-codec h264
 
 # Copy instead of re-encode (if just changing container)
-ffwrap convert input.mkv output.mp4 --video-codec copy --audio-codec copy
+lazyff convert input.mkv output.mp4 --video-codec copy --audio-codec copy
 ```
 
 ### Audio/video out of sync
@@ -275,7 +275,7 @@ Files have incompatible timestamps.
 
 **Solution:** Use re-encode mode:
 ```bash
-ffwrap merge file1.mp4 file2.mp4 -o output.mp4 --reencode
+lazyff merge file1.mp4 file2.mp4 -o output.mp4 --reencode
 ```
 
 ### Output is garbled or glitchy
@@ -285,11 +285,11 @@ Files have different codecs or settings.
 **Solution:** Use re-encode mode or convert to same format first:
 ```bash
 # Option 1: Re-encode during merge
-ffwrap merge file1.mp4 file2.webm -o output.mp4 --reencode
+lazyff merge file1.mp4 file2.webm -o output.mp4 --reencode
 
 # Option 2: Convert first
-ffwrap convert file2.webm file2.mp4
-ffwrap merge file1.mp4 file2.mp4 -o output.mp4
+lazyff convert file2.webm file2.mp4
+lazyff merge file1.mp4 file2.mp4 -o output.mp4
 ```
 
 ## GIF Issues
@@ -299,20 +299,20 @@ ffwrap merge file1.mp4 file2.mp4 -o output.mp4
 **Solutions:**
 ```bash
 # Reduce width
-ffwrap gif video.mp4 --width 320
+lazyff gif video.mp4 --width 320
 
 # Reduce frame rate
-ffwrap gif video.mp4 --fps 10
+lazyff gif video.mp4 --fps 10
 
 # Shorter duration
-ffwrap gif video.mp4 --duration 3
+lazyff gif video.mp4 --duration 3
 ```
 
 ### GIF colors look wrong
 
 **Solution:** Enable high quality mode:
 ```bash
-ffwrap gif video.mp4 --high-quality
+lazyff gif video.mp4 --high-quality
 ```
 
 ## TUI Issues
@@ -340,12 +340,12 @@ ffwrap gif video.mp4 --high-quality
 If you're still stuck:
 
 1. Check the [FAQ](/faq) for common questions
-2. Run `ffwrap info input.mp4` to check your file
+2. Run `lazyff info input.mp4` to check your file
 3. Try the same operation with plain ffmpeg to see detailed errors
-4. Open an issue on [GitHub](https://github.com/Manas-Kenge/ffwrap/issues)
+4. Open an issue on [GitHub](https://github.com/Manas-Kenge/lazyff/issues)
 
 When reporting issues, include:
-- ffwrap version (`ffwrap version`)
+- lazyff version (`lazyff version`)
 - ffmpeg version (`ffmpeg -version`)
 - Operating system
 - Command you ran

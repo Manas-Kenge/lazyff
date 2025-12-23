@@ -4,14 +4,14 @@ description: "A simple, powerful wrapper around ffmpeg for the terminal"
 ---
 
 <Frame>
-  <img src="/images/hero-dark.png" alt="ffwrap terminal interface" />
+  <img src="/images/hero-dark.png" alt="lazyff terminal interface" />
 </Frame>
 
-## What is ffwrap?
+## What is lazyff?
 
-ffwrap is a command-line tool that makes working with ffmpeg simple and intuitive. Instead of memorizing complex ffmpeg commands, you can use straightforward commands with sensible defaults.
+lazyff is a command-line tool that makes working with ffmpeg simple and intuitive. Instead of memorizing complex ffmpeg commands, you can use straightforward commands with sensible defaults.
 
-**ffwrap provides:**
+**lazyff provides:**
 
 - **Simple CLI commands** - Convert, compress, trim, merge, and more with easy-to-remember syntax
 - **Interactive TUI** - A beautiful terminal interface for guided media operations
@@ -22,16 +22,16 @@ ffwrap is a command-line tool that makes working with ffmpeg simple and intuitiv
 
 ```bash
 # Convert a video to MP4
-ffwrap convert video.mov video.mp4
+lazyff convert video.mov video.mp4
 
 # Compress to a target file size
-ffwrap compress video.mp4 --target-size 25MB
+lazyff compress video.mp4 --target-size 25MB
 
 # Trim a clip
-ffwrap trim video.mp4 --start 00:01:00 --duration 30
+lazyff trim video.mp4 --start 00:01:00 --duration 30
 
 # Create a GIF
-ffwrap gif video.mp4 --start 5 --duration 3 --width 480
+lazyff gif video.mp4 --start 5 --duration 3 --width 480
 ```
 
 ## Features
@@ -70,7 +70,7 @@ ffwrap gif video.mp4 --start 5 --duration 3 --width 480
 Run commands directly from your terminal:
 
 ```bash
-ffwrap convert input.mov output.mp4 --quality high
+lazyff convert input.mov output.mp4 --quality high
 ```
 
 ### TUI Mode
@@ -78,11 +78,11 @@ ffwrap convert input.mov output.mp4 --quality high
 Launch the interactive terminal interface:
 
 ```bash
-ffwrap
+lazyff
 ```
 
 <Frame>
-  <img src="/images/placeholder-tui-main.png" alt="ffwrap TUI interface" />
+  <img src="/images/placeholder-tui-main.png" alt="lazyff TUI interface" />
 </Frame>
 
 ## Get Started
@@ -108,5 +108,5 @@ ffwrap
 - **ffmpeg** - Must be installed and available in your PATH
 
 <Note>
-  ffwrap is a wrapper around ffmpeg. All the heavy lifting is done by ffmpeg - ffwrap just makes it easier to use.
+  lazyff is a wrapper around ffmpeg. All the heavy lifting is done by ffmpeg - lazyff just makes it easier to use.
 </Note>

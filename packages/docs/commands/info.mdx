@@ -8,7 +8,7 @@ The `info` command displays detailed information about media files including for
 ## Syntax
 
 ```bash
-ffwrap info <input> [options]
+lazyff info <input> [options]
 ```
 
 ## Arguments
@@ -28,7 +28,7 @@ ffwrap info <input> [options]
 ### Basic Info
 
 ```bash
-ffwrap info video.mp4
+lazyff info video.mp4
 ```
 
 Output:
@@ -58,7 +58,7 @@ Audio:
 ### Audio File Info
 
 ```bash
-ffwrap info song.mp3
+lazyff info song.mp3
 ```
 
 Output:
@@ -80,7 +80,7 @@ Audio:
 ### JSON Output
 
 ```bash
-ffwrap info video.mp4 --json
+lazyff info video.mp4 --json
 ```
 
 Output:
@@ -119,7 +119,7 @@ Output:
 ### File with Subtitles
 
 ```bash
-ffwrap info movie.mkv
+lazyff info movie.mkv
 ```
 
 Output:
@@ -195,22 +195,22 @@ Subtitles:
 <Tip>
   Use JSON output to pipe info to other tools:
   ```bash
-  ffwrap info video.mp4 --json | jq '.video.resolution'
+  lazyff info video.mp4 --json | jq '.video.resolution'
   ```
 </Tip>
 
 <Tip>
   Check video duration before trimming:
   ```bash
-  ffwrap info video.mp4  # Note the duration
-  ffwrap trim video.mp4 --start 00:01:00 --end 00:02:00
+  lazyff info video.mp4  # Note the duration
+  lazyff trim video.mp4 --start 00:01:00 --end 00:02:00
   ```
 </Tip>
 
 <Tip>
   Verify video specs before uploading to platforms:
   ```bash
-  ffwrap info youtube_ready.mp4
+  lazyff info youtube_ready.mp4
   # Check: H.264, AAC, reasonable bitrate
   ```
 </Tip>
@@ -221,22 +221,22 @@ Subtitles:
 
 ```bash
 # See current format/codec
-ffwrap info input.mov
+lazyff info input.mov
 # Then convert as needed
-ffwrap convert input.mov output.mp4
+lazyff convert input.mov output.mp4
 ```
 
 ### Verify Compression Results
 
 ```bash
 # Before
-ffwrap info original.mp4
+lazyff info original.mp4
 # Size: 500 MB, Bitrate: 15 Mbps
 
-ffwrap compress original.mp4 --target-size 100MB
+lazyff compress original.mp4 --target-size 100MB
 
 # After
-ffwrap info original_compressed.mp4
+lazyff info original_compressed.mp4
 # Size: 98 MB, Bitrate: 3 Mbps
 ```
 
@@ -244,8 +244,8 @@ ffwrap info original_compressed.mp4
 
 ```bash
 # Check if files are compatible
-ffwrap info part1.mp4
-ffwrap info part2.mp4
+lazyff info part1.mp4
+lazyff info part2.mp4
 # Compare codecs, resolution, fps
 ```
 
@@ -253,7 +253,7 @@ ffwrap info part2.mp4
 
 ```bash
 # Get info for all MP4 files
-for f in *.mp4; do echo "=== $f ==="; ffwrap info "$f"; done
+for f in *.mp4; do echo "=== $f ==="; lazyff info "$f"; done
 ```
 
 ## See Also

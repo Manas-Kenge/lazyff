@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "ffwrap - FFmpeg made simple",
+  title: "lazyff - FFmpeg made simple",
   description:
     "Stop Googling ffmpeg commands. Convert, compress, trim, and merge videos with simple commands that just work. 100% local, free forever.",
   icons: {

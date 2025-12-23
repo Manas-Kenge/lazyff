@@ -8,7 +8,7 @@ The `gif` command creates animated GIFs from video files with options for qualit
 ## Syntax
 
 ```bash
-ffwrap gif <input> [output] [options]
+lazyff gif <input> [output] [options]
 ```
 
 ## Arguments
@@ -35,64 +35,64 @@ ffwrap gif <input> [output] [options]
 
 ```bash
 # Convert entire video to GIF
-ffwrap gif video.mp4
+lazyff gif video.mp4
 # Output: video.gif (480px wide, 15fps)
 
 # Custom output name
-ffwrap gif video.mp4 animation.gif
+lazyff gif video.mp4 animation.gif
 ```
 
 ### Time Range
 
 ```bash
 # Create GIF from seconds 5-8
-ffwrap gif video.mp4 --start 5 --duration 3
+lazyff gif video.mp4 --start 5 --duration 3
 
 # Using timestamp format
-ffwrap gif video.mp4 --start 00:01:30 --duration 5
+lazyff gif video.mp4 --start 00:01:30 --duration 5
 ```
 
 ### Size Control
 
 ```bash
 # Smaller GIF (320px wide)
-ffwrap gif video.mp4 --width 320
+lazyff gif video.mp4 --width 320
 
 # Larger GIF (640px wide)
-ffwrap gif video.mp4 --width 640
+lazyff gif video.mp4 --width 640
 ```
 
 ### Frame Rate
 
 ```bash
 # Smoother (more frames, larger file)
-ffwrap gif video.mp4 --fps 24
+lazyff gif video.mp4 --fps 24
 
 # Smaller file (fewer frames)
-ffwrap gif video.mp4 --fps 10
+lazyff gif video.mp4 --fps 10
 
 # Very small file
-ffwrap gif video.mp4 --fps 5
+lazyff gif video.mp4 --fps 5
 ```
 
 ### High Quality Mode
 
 ```bash
 # Enable palette optimization
-ffwrap gif video.mp4 --high-quality
+lazyff gif video.mp4 --high-quality
 
 # Short form
-ffwrap gif video.mp4 -hq
+lazyff gif video.mp4 -hq
 ```
 
 ### Combined Options
 
 ```bash
 # Optimized for Discord/Slack (under 8MB)
-ffwrap gif video.mp4 --start 5 --duration 3 --width 320 --fps 10
+lazyff gif video.mp4 --start 5 --duration 3 --width 320 --fps 10
 
 # High quality reaction GIF
-ffwrap gif video.mp4 -s 10 -t 2 -w 480 --fps 15 -hq
+lazyff gif video.mp4 -s 10 -t 2 -w 480 --fps 15 -hq
 ```
 
 ## Quality Modes
@@ -149,7 +149,7 @@ GIF file size depends on:
 <Tip>
   Start with these settings and adjust:
   ```bash
-  ffwrap gif video.mp4 --width 480 --fps 12 --duration 5
+  lazyff gif video.mp4 --width 480 --fps 12 --duration 5
   ```
 </Tip>
 
@@ -163,7 +163,7 @@ GIF file size depends on:
 <Tip>
   For smooth loops, find a good loop point in your video and trim precisely:
   ```bash
-  ffwrap gif video.mp4 --start 5.2 --duration 2.0 --width 480 --fps 15
+  lazyff gif video.mp4 --start 5.2 --duration 2.0 --width 480 --fps 15
   ```
 </Tip>
 
@@ -173,35 +173,35 @@ GIF file size depends on:
 
 ```bash
 # Short, high quality
-ffwrap gif video.mp4 -s 12 -t 2 -w 400 --fps 15 -hq -o reaction.gif
+lazyff gif video.mp4 -s 12 -t 2 -w 400 --fps 15 -hq -o reaction.gif
 ```
 
 ### Demo/Tutorial GIF
 
 ```bash
 # Longer, smaller file
-ffwrap gif screencast.mp4 --width 640 --fps 10
+lazyff gif screencast.mp4 --width 640 --fps 10
 ```
 
 ### Social Media
 
 ```bash
 # Under 8MB for Discord
-ffwrap gif clip.mp4 -s 0 -t 5 -w 320 --fps 10 -o discord.gif
+lazyff gif clip.mp4 -s 0 -t 5 -w 320 --fps 10 -o discord.gif
 ```
 
 ### Meme GIF
 
 ```bash
 # Quick and dirty
-ffwrap gif video.mp4 -s 30 -t 3 -w 400
+lazyff gif video.mp4 -s 30 -t 3 -w 400
 ```
 
 ### High Quality Loop
 
 ```bash
 # For website backgrounds
-ffwrap gif loop.mp4 --width 800 --fps 24 --high-quality
+lazyff gif loop.mp4 --width 800 --fps 24 --high-quality
 ```
 
 ## Troubleshooting
@@ -210,23 +210,23 @@ ffwrap gif loop.mp4 --width 800 --fps 24 --high-quality
 
 Reduce size with any combination of:
 ```bash
-ffwrap gif video.mp4 --width 320  # Smaller dimensions
-ffwrap gif video.mp4 --fps 8      # Fewer frames
-ffwrap gif video.mp4 --duration 3 # Shorter clip
+lazyff gif video.mp4 --width 320  # Smaller dimensions
+lazyff gif video.mp4 --fps 8      # Fewer frames
+lazyff gif video.mp4 --duration 3 # Shorter clip
 ```
 
 ### Colors look bad
 
 Enable high quality mode:
 ```bash
-ffwrap gif video.mp4 --high-quality
+lazyff gif video.mp4 --high-quality
 ```
 
 ### GIF is choppy
 
 Increase frame rate:
 ```bash
-ffwrap gif video.mp4 --fps 20
+lazyff gif video.mp4 --fps 20
 ```
 
 ## See Also

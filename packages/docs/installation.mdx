@@ -7,7 +7,7 @@ description: "Detailed installation guide for all platforms"
 
 ### Modern Terminal (for TUI)
 
-ffwrap includes an interactive TUI that works best with modern terminal emulators:
+lazyff includes an interactive TUI that works best with modern terminal emulators:
 
 - [WezTerm](https://wezfurlong.org/wezterm/) (cross-platform)
 - [Alacritty](https://alacritty.org/) (cross-platform)
@@ -26,7 +26,7 @@ ffwrap includes an interactive TUI that works best with modern terminal emulator
 
 ### ffmpeg
 
-ffwrap requires ffmpeg (version 4.0 or higher) to be installed and available in your PATH.
+lazyff requires ffmpeg (version 4.0 or higher) to be installed and available in your PATH.
 
 <Tabs>
   <Tab title="macOS">
@@ -92,27 +92,27 @@ Verify ffmpeg installation:
 ffmpeg -version
 ```
 
-## Install ffwrap
+## Install lazyff
 
 <Tabs>
   <Tab title="npm">
     ```bash
-    npm install -g @manaskng/ffwrap
+    npm install -g @manaskng/lazyff
     ```
   </Tab>
   <Tab title="bun">
     ```bash
-    bun install -g @manaskng/ffwrap
+    bun install -g @manaskng/lazyff
     ```
   </Tab>
   <Tab title="pnpm">
     ```bash
-    pnpm add -g @manaskng/ffwrap
+    pnpm add -g @manaskng/lazyff
     ```
   </Tab>
   <Tab title="yarn">
     ```bash
-    yarn global add @manaskng/ffwrap
+    yarn global add @manaskng/lazyff
     ```
   </Tab>
 </Tabs>
@@ -122,65 +122,65 @@ ffmpeg -version
 Run the version command to verify everything is set up:
 
 ```bash
-ffwrap version
+lazyff version
 ```
 
 Expected output:
 ```
-ffwrap: 0.0.1
+lazyff: 0.0.1
 ffmpeg: 6.1.1 (or your version)
 ```
 
-## Updating ffwrap
+## Updating lazyff
 
 To update to the latest version:
 
 <Tabs>
   <Tab title="npm">
     ```bash
-    npm update -g @manaskng/ffwrap
+    npm update -g @manaskng/lazyff
     ```
   </Tab>
   <Tab title="bun">
     ```bash
-    bun update -g @manaskng/ffwrap
+    bun update -g @manaskng/lazyff
     ```
   </Tab>
   <Tab title="pnpm">
     ```bash
-    pnpm update -g @manaskng/ffwrap
+    pnpm update -g @manaskng/lazyff
     ```
   </Tab>
   <Tab title="yarn">
     ```bash
-    yarn global upgrade @manaskng/ffwrap
+    yarn global upgrade @manaskng/lazyff
     ```
   </Tab>
 </Tabs>
 
 ## Uninstalling
 
-To remove ffwrap:
+To remove lazyff:
 
 <Tabs>
   <Tab title="npm">
     ```bash
-    npm uninstall -g @manaskng/ffwrap
+    npm uninstall -g @manaskng/lazyff
     ```
   </Tab>
   <Tab title="bun">
     ```bash
-    bun remove -g @manaskng/ffwrap
+    bun remove -g @manaskng/lazyff
     ```
   </Tab>
   <Tab title="pnpm">
     ```bash
-    pnpm remove -g @manaskng/ffwrap
+    pnpm remove -g @manaskng/lazyff
     ```
   </Tab>
   <Tab title="yarn">
     ```bash
-    yarn global remove @manaskng/ffwrap
+    yarn global remove @manaskng/lazyff
     ```
   </Tab>
 </Tabs>
@@ -188,7 +188,7 @@ To remove ffwrap:
 ## Troubleshooting Installation
 
 <AccordionGroup>
-  <Accordion title="Command not found: ffwrap">
+  <Accordion title="Command not found: lazyff">
     This usually means the global bin directory isn't in your PATH.
 
     **For npm:**

@@ -1,5 +1,5 @@
 {
-  "name": "@manaskng/ffwrap",
+  "name": "lazyff",
   "version": "0.1.0",
   "description": "A simple, powerful wrapper around ffmpeg for the terminal",
   "author": "Manas Kenge",
@@ -7,15 +7,15 @@
   "type": "module",
   "main": "src/index.ts",
   "bin": {
-    "ffwrap": "./bin/ffwrap"
+    "lazyff": "./bin/lazyff"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Manas-Kenge/ffwrap.git"
+    "url": "git+https://github.com/Manas-Kenge/lazyff.git"
   },
-  "homepage": "https://github.com/Manas-Kenge/ffwrap",
+  "homepage": "https://github.com/Manas-Kenge/lazyff",
   "bugs": {
-    "url": "https://github.com/Manas-Kenge/ffwrap/issues"
+    "url": "https://github.com/Manas-Kenge/lazyff/issues"
   },
   "keywords": [
     "ffmpeg",

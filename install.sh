@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 #
-# ffwrap installer script
-# https://github.com/Manas-Kenge/ffwrap
+# lazyff installer script
+# https://github.com/Manas-Kenge/lazyff
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/Manas-Kenge/ffwrap/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/Manas-Kenge/lazyff/main/install.sh | bash
 #
 # Options (via environment variables):
 #   VERSION=x.x.x  - Install a specific version (default: latest)
-#   INSTALL_DIR=   - Custom installation directory (default: ~/.ffwrap/bin)
+#   INSTALL_DIR=   - Custom installation directory (default: ~/.lazyff/bin)
 #
 set -euo pipefail
 
-APP="ffwrap"
-GITHUB_REPO="Manas-Kenge/ffwrap"
+APP="lazyff"
+GITHUB_REPO="Manas-Kenge/lazyff"
 
 # Colors
 BOLD='\033[1m'
@@ -28,7 +28,7 @@ NC='\033[0m' # No Color
 
 # User-configurable options
 requested_version=${VERSION:-}
-INSTALL_DIR=${INSTALL_DIR:-$HOME/.ffwrap/bin}
+INSTALL_DIR=${INSTALL_DIR:-$HOME/.lazyff/bin}
 
 # ============================================================================
 # Helper Functions
@@ -209,7 +209,7 @@ check_ffmpeg() {
 
     print_message warning "  ffmpeg is not installed"
     echo ""
-    print_message info "ffwrap requires ffmpeg to function. Install it using:"
+    print_message info "lazyff requires ffmpeg to function. Install it using:"
     echo ""
     
     case "$os" in
@@ -245,7 +245,7 @@ check_ffmpeg() {
     echo ""
     print_message muted "For more information: https://ffmpeg.org/download.html"
     echo ""
-    print_message info "Continuing with ffwrap installation..."
+    print_message info "Continuing with lazyff installation..."
     echo ""
     
     return 1
@@ -269,10 +269,10 @@ get_latest_version() {
 }
 
 check_installed_version() {
-    if command -v ffwrap >/dev/null 2>&1; then
-        local ffwrap_path=$(which ffwrap)
-        # Parse version from "ffwrap: X.X.X" format
-        local installed_version=$(ffwrap version 2>/dev/null | head -n1 | sed 's/ffwrap: *//')
+    if command -v lazyff >/dev/null 2>&1; then
+        local lazyff_path=$(which lazyff)
+        # Parse version from "lazyff: X.X.X" format
+        local installed_version=$(lazyff version 2>/dev/null | head -n1 | sed 's/lazyff: *//')
         
         if [ -n "$installed_version" ]; then
             print_message muted "Installed version: $installed_version"
@@ -394,7 +394,7 @@ download_and_install() {
         url="https://github.com/${GITHUB_REPO}/releases/download/v${requested_version}/${filename}"
     fi
 
-    print_step "Downloading ffwrap ${specific_version} for ${target}..."
+    print_step "Downloading lazyff ${specific_version} for ${target}..."
     
     local tmp_dir="${TMPDIR:-/tmp}/${APP}_install_$$"
     mkdir -p "$tmp_dir"
@@ -402,7 +402,7 @@ download_and_install() {
     # Try progress download, fall back to standard curl
     if [[ "$os" == "windows" ]] || ! [ -t 2 ] || ! download_with_progress "$url" "$tmp_dir/$filename"; then
         curl -# -L -o "$tmp_dir/$filename" "$url" || {
-            print_message error "Failed to download ffwrap"
+            print_message error "Failed to download lazyff"
             print_message info "URL: $url"
             rm -rf "$tmp_dir"
             exit 1
@@ -420,8 +420,8 @@ download_and_install() {
     fi
 
     # Find and move the binary
-    if [ -f "$tmp_dir/ffwrap" ]; then
-        mv "$tmp_dir/ffwrap" "$INSTALL_DIR/"
+    if [ -f "$tmp_dir/lazyff" ]; then
+        mv "$tmp_dir/lazyff" "$INSTALL_DIR/"
     elif [ -f "$tmp_dir/${APP}" ]; then
         mv "$tmp_dir/${APP}" "$INSTALL_DIR/"
     else
@@ -430,10 +430,10 @@ download_and_install() {
         exit 1
     fi
 
-    chmod 755 "${INSTALL_DIR}/ffwrap"
+    chmod 755 "${INSTALL_DIR}/lazyff"
     rm -rf "$tmp_dir"
     
-    print_message success "  Installed to ${INSTALL_DIR}/ffwrap"
+    print_message success "  Installed to ${INSTALL_DIR}/lazyff"
 }
 
 # ============================================================================
@@ -450,7 +450,7 @@ add_to_path() {
     fi
 
     if [[ -w $config_file ]]; then
-        echo -e "\n# ffwrap" >> "$config_file"
+        echo -e "\n# lazyff" >> "$config_file"
         echo "$command" >> "$config_file"
         print_message success "  Added to PATH in $config_file"
     else
@@ -533,7 +533,7 @@ configure_path() {
 print_success() {
     echo ""
     print_banner
-    print_message success "ffwrap ${specific_version} installed successfully!"
+    print_message success "lazyff ${specific_version} installed successfully!"
     echo ""
     
     local ffmpeg_missing=false
@@ -542,7 +542,7 @@ print_success() {
     fi
 
     if [ "$ffmpeg_missing" = "true" ]; then
-        print_message warning "Remember to install ffmpeg before using ffwrap"
+        print_message warning "Remember to install ffmpeg before using lazyff"
         echo ""
     fi
     
@@ -566,13 +566,13 @@ print_success() {
     fi
     
     echo -e "  cd <project>     ${MUTED}# Navigate to your project${NC}"
-    echo -e "  ffwrap           ${MUTED}# Launch interactive TUI${NC}"
+    echo -e "  lazyff           ${MUTED}# Launch interactive TUI${NC}"
     echo ""
     echo -e "${MUTED}Or use CLI commands directly:${NC}"
     echo ""
-    echo -e "  ffwrap convert video.mov video.mp4"
-    echo -e "  ffwrap compress video.mp4 --target-size 25MB"
-    echo -e "  ffwrap --help"
+    echo -e "  lazyff convert video.mov video.mp4"
+    echo -e "  lazyff compress video.mp4 --target-size 25MB"
+    echo -e "  lazyff --help"
     echo ""
     echo -e "${MUTED}Documentation: https://github.com/${GITHUB_REPO}${NC}"
     echo ""

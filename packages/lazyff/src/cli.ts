@@ -19,7 +19,7 @@ async function launchTui() {
     await launch()
   } catch (error) {
     console.error("Failed to launch TUI:", error)
-    console.log("\nRun 'ffwrap --help' for CLI usage.")
+    console.log("\nRun 'lazyff --help' for CLI usage.")
     process.exit(1)
   }
 }
@@ -32,7 +32,7 @@ async function main() {
   }
 
   const cli = yargs(hideBin(process.argv))
-    .scriptName("ffwrap")
+    .scriptName("lazyff")
     .usage("$0 [command]")
     .usage("\nA simple wrapper around ffmpeg with an interactive TUI")
     .command(
@@ -55,17 +55,17 @@ async function main() {
     .command(infoCommand)
     .command(
       "version",
-      "Show ffwrap and ffmpeg versions",
+      "Show lazyff and ffmpeg versions",
       () => {},
       async () => {
         const ffmpegVersion = await getFfmpegVersion()
-        console.log(`ffwrap: ${VERSION}`)
+        console.log(`lazyff: ${VERSION}`)
         console.log(`ffmpeg: ${ffmpegVersion}`)
       }
     )
     .command(
       "update",
-      "Update ffwrap to the latest version",
+      "Update lazyff to the latest version",
       (yargs) => {
         return yargs.option("check", {
           alias: "c",
@@ -79,19 +79,19 @@ async function main() {
         if (argv.check) {
           if (hasUpdate) {
             console.log(`Update available: ${currentVersion} → ${latestVersion}`)
-            console.log(`\nRun 'ffwrap update' to install the latest version`)
+            console.log(`\nRun 'lazyff update' to install the latest version`)
           } else {
-            console.log(`ffwrap ${currentVersion} is up to date`)
+            console.log(`lazyff ${currentVersion} is up to date`)
           }
           return
         }
 
         if (!hasUpdate) {
-          console.log(`ffwrap ${currentVersion} is already the latest version`)
+          console.log(`lazyff ${currentVersion} is already the latest version`)
           return
         }
 
-        console.log(`Updating ffwrap: ${currentVersion} → ${latestVersion}`)
+        console.log(`Updating lazyff: ${currentVersion} → ${latestVersion}`)
         console.log(`\nTo update, run:`)
         console.log(
           `  curl -fsSL https://raw.githubusercontent.com/${GITHUB_REPO}/main/install.sh | bash`
@@ -100,22 +100,22 @@ async function main() {
     )
     .command(
       "uninstall",
-      "Uninstall ffwrap from your system",
+      "Uninstall lazyff from your system",
       () => {},
       async () => {
         const homeDir = process.env.HOME || process.env.USERPROFILE || "~"
-        const installDir = `${homeDir}/.ffwrap`
+        const installDir = `${homeDir}/.lazyff`
 
-        console.log("To uninstall ffwrap, run the following commands:\n")
+        console.log("To uninstall lazyff, run the following commands:\n")
         console.log(`  rm -rf ${installDir}`)
         console.log(
           `\nThen remove the PATH entry from your shell config (~/.bashrc, ~/.zshrc, etc.):`
         )
         console.log(`  export PATH=${installDir}/bin:$PATH`)
         console.log(`\nIf installed via npm/bun, run:`)
-        console.log(`  npm uninstall -g @manaskng/ffwrap`)
+        console.log(`  npm uninstall -g lazyff`)
         console.log(`  # or`)
-        console.log(`  bun remove -g @manaskng/ffwrap`)
+        console.log(`  bun remove -g lazyff`)
       }
     )
     .help()

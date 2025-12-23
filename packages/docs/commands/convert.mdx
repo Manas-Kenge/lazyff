@@ -8,7 +8,7 @@ The `convert` command transforms media files between different formats, codecs, 
 ## Syntax
 
 ```bash
-ffwrap convert <input> [output] [options]
+lazyff convert <input> [output] [options]
 ```
 
 ## Arguments
@@ -41,10 +41,10 @@ ffwrap convert <input> [output] [options]
 
 ```bash
 # Convert MOV to MP4
-ffwrap convert video.mov video.mp4
+lazyff convert video.mov video.mp4
 
 # Convert to WebM (auto-names output)
-ffwrap convert video.mp4 -f webm
+lazyff convert video.mp4 -f webm
 # Output: video.webm
 ```
 
@@ -52,76 +52,76 @@ ffwrap convert video.mp4 -f webm
 
 ```bash
 # High quality conversion
-ffwrap convert video.mp4 output.mp4 -q high
+lazyff convert video.mp4 output.mp4 -q high
 
 # Low quality (smaller file)
-ffwrap convert video.mp4 output.mp4 -q low
+lazyff convert video.mp4 output.mp4 -q low
 
 # Lossless (largest file)
-ffwrap convert video.mp4 output.mp4 -q lossless
+lazyff convert video.mp4 output.mp4 -q lossless
 ```
 
 ### Resolution Scaling
 
 ```bash
 # Scale to 720p
-ffwrap convert video.mp4 -r 720p
+lazyff convert video.mp4 -r 720p
 
 # Scale to 1080p
-ffwrap convert video.mp4 -r 1080p
+lazyff convert video.mp4 -r 1080p
 
 # Custom resolution
-ffwrap convert video.mp4 -r 1280x720
+lazyff convert video.mp4 -r 1280x720
 ```
 
 ### Codec Selection
 
 ```bash
 # Use H.265 (HEVC) for better compression
-ffwrap convert video.mp4 output.mp4 --video-codec h265
+lazyff convert video.mp4 output.mp4 --video-codec h265
 
 # Use VP9 for web
-ffwrap convert video.mp4 output.webm --video-codec vp9
+lazyff convert video.mp4 output.webm --video-codec vp9
 
 # Copy video stream (no re-encoding)
-ffwrap convert video.mp4 output.mkv --video-codec copy
+lazyff convert video.mp4 output.mkv --video-codec copy
 ```
 
 ### Time Range
 
 ```bash
 # Convert only a portion
-ffwrap convert video.mp4 --start 00:01:00 --duration 30
+lazyff convert video.mp4 --start 00:01:00 --duration 30
 
 # From timestamp to timestamp
-ffwrap convert video.mp4 --start 00:01:00 --end 00:02:00
+lazyff convert video.mp4 --start 00:01:00 --end 00:02:00
 ```
 
 ### Audio Extraction
 
 ```bash
 # Extract audio to MP3
-ffwrap convert video.mp4 audio.mp3 --strip-video
+lazyff convert video.mp4 audio.mp3 --strip-video
 
 # Extract audio to WAV
-ffwrap convert video.mp4 audio.wav --strip-video
+lazyff convert video.mp4 audio.wav --strip-video
 ```
 
 ### Remove Audio
 
 ```bash
 # Create silent video
-ffwrap convert video.mp4 silent.mp4 --strip-audio
+lazyff convert video.mp4 silent.mp4 --strip-audio
 ```
 
 ### Frame Rate
 
 ```bash
 # Change to 30fps
-ffwrap convert video.mp4 output.mp4 --fps 30
+lazyff convert video.mp4 output.mp4 --fps 30
 
 # Slow motion effect (lower fps)
-ffwrap convert video.mp4 output.mp4 --fps 15
+lazyff convert video.mp4 output.mp4 --fps 15
 ```
 
 ## Quality Presets
@@ -139,7 +139,7 @@ ffwrap convert video.mp4 output.mp4 --fps 15
 
 ## Format Presets
 
-When you specify a format, ffwrap automatically selects optimal codecs:
+When you specify a format, lazyff automatically selects optimal codecs:
 
 | Format | Video Codec | Audio Codec | Description |
 |--------|-------------|-------------|-------------|
@@ -158,7 +158,7 @@ When you specify a format, ffwrap automatically selects optimal codecs:
 </Tip>
 
 <Warning>
-  Converting to GIF with the convert command creates a basic GIF. For better quality, use the dedicated `ffwrap gif` command which supports palette optimization.
+  Converting to GIF with the convert command creates a basic GIF. For better quality, use the dedicated `lazyff gif` command which supports palette optimization.
 </Warning>
 
 ## See Also

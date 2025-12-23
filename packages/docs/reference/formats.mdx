@@ -3,7 +3,7 @@ title: "Formats"
 description: "Supported media formats and containers"
 ---
 
-ffwrap supports a wide range of media formats for both input and output.
+lazyff supports a wide range of media formats for both input and output.
 
 ## Video Formats
 
@@ -33,7 +33,7 @@ ffwrap supports a wide range of media formats for both input and output.
 The most widely supported video format.
 
 ```bash
-ffwrap convert input.mov output.mp4
+lazyff convert input.mov output.mp4
 ```
 
 | Property | Default Value |
@@ -57,7 +57,7 @@ ffwrap convert input.mov output.mp4
 Optimized for web delivery.
 
 ```bash
-ffwrap convert input.mp4 output.webm
+lazyff convert input.mp4 output.webm
 ```
 
 | Property | Default Value |
@@ -81,7 +81,7 @@ ffwrap convert input.mp4 output.webm
 Flexible container for any content.
 
 ```bash
-ffwrap convert input.mp4 output.mkv
+lazyff convert input.mp4 output.mkv
 ```
 
 | Property | Default Value |
@@ -106,7 +106,7 @@ ffwrap convert input.mp4 output.mkv
 Apple QuickTime format.
 
 ```bash
-ffwrap convert input.mp4 output.mov
+lazyff convert input.mp4 output.mov
 ```
 
 | Property | Default Value |
@@ -130,7 +130,7 @@ ffwrap convert input.mp4 output.mov
 Universal audio format.
 
 ```bash
-ffwrap extract video.mp4 --audio -f mp3
+lazyff extract video.mp4 --audio -f mp3
 ```
 
 | Property | Default Value |
@@ -154,7 +154,7 @@ ffwrap extract video.mp4 --audio -f mp3
 Uncompressed audio.
 
 ```bash
-ffwrap extract video.mp4 --audio -f wav
+lazyff extract video.mp4 --audio -f wav
 ```
 
 | Property | Default Value |
@@ -178,7 +178,7 @@ ffwrap extract video.mp4 --audio -f wav
 Lossless compressed audio.
 
 ```bash
-ffwrap extract video.mp4 --audio -f flac
+lazyff extract video.mp4 --audio -f flac
 ```
 
 | Property | Default Value |
@@ -223,7 +223,7 @@ ffwrap extract video.mp4 --audio -f flac
 
 ## Input Format Support
 
-ffwrap can read virtually any format that ffmpeg supports, including:
+lazyff can read virtually any format that ffmpeg supports, including:
 
 - All formats listed above
 - Legacy formats (WMV, FLV, 3GP, etc.)
@@ -232,7 +232,7 @@ ffwrap can read virtually any format that ffmpeg supports, including:
 
 ```bash
 # Check if your format is supported
-ffwrap info strange_format.xyz
+lazyff info strange_format.xyz
 ```
 
 ## See Also

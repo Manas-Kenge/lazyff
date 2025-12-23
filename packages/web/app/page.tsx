@@ -160,23 +160,23 @@ const commands = [
   {
     task: "Convert to MP4",
     ffmpeg: "ffmpeg -i input.mov -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k output.mp4",
-    ffwrap: "ffwrap convert input.mov output.mp4",
+    lazyff: "lazyff convert input.mov output.mp4",
   },
   {
     task: "Compress to 25MB",
     ffmpeg:
       "ffmpeg -i input.mp4 -c:v libx264 -b:v 1.5M -maxrate 2M -bufsize 3M -c:a aac output.mp4",
-    ffwrap: "ffwrap compress input.mp4 -s 25MB",
+    lazyff: "lazyff compress input.mp4 -s 25MB",
   },
   {
     task: "Trim 30s clip",
     ffmpeg: "ffmpeg -ss 00:01:00 -i input.mp4 -t 30 -c:v libx264 -c:a aac output.mp4",
-    ffwrap: "ffwrap trim input.mp4 -s 1:00 -d 30",
+    lazyff: "lazyff trim input.mp4 -s 1:00 -d 30",
   },
   {
     task: "Create GIF",
     ffmpeg: 'ffmpeg -ss 5 -t 3 -i input.mp4 -vf "fps=15,scale=480:-1" -loop 0 output.gif',
-    ffwrap: "ffwrap gif input.mp4 -s 5 -d 3",
+    lazyff: "lazyff gif input.mp4 -s 5 -d 3",
   },
 ]
 
@@ -185,10 +185,10 @@ export default function Home() {
   const [copied, setCopied] = useState(false)
 
   const installCommands = {
-    curl: "curl -fsSL https://raw.githubusercontent.com/Manas-Kenge/ffwrap/main/install.sh | bash",
-    npm: "npm install -g @ffwrap/cli",
-    bun: "bun install -g @ffwrap/cli",
-    pnpm: "pnpm add -g @ffwrap/cli",
+    curl: "curl -fsSL https://raw.githubusercontent.com/Manas-Kenge/lazyff/main/install.sh | bash",
+    npm: "npm install -g @lazyff/cli",
+    bun: "bun install -g @lazyff/cli",
+    pnpm: "pnpm add -g @lazyff/cli",
   }
 
   const handleCopy = () => {
@@ -221,7 +221,7 @@ export default function Home() {
             <div className="flex h-16 items-center justify-between px-6">
               <Link href="/" className="flex items-center gap-2.5">
                 <Logo />
-                <span className="text-xl font-bold tracking-tight text-white">FFWRAP</span>
+                <span className="text-xl font-bold tracking-tight text-white">LAZYFF</span>
               </Link>
               <nav className="flex items-center gap-6">
                 <Link
@@ -231,7 +231,7 @@ export default function Home() {
                   Docs
                 </Link>
                 <Link
-                  href="https://github.com/Manas-Kenge/ffwrap"
+                  href="https://github.com/Manas-Kenge/lazyff"
                   className="text-muted-foreground transition-colors hover:text-foreground"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -329,12 +329,12 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Why ffwrap */}
+        {/* Why lazyff */}
         <section className="mx-auto w-full max-w-5xl border-x border-border/100">
           <div className="border-b border-border/100 px-6 pt-12 pb-6">
-            <h2 className="text-2xl font-bold md:text-3xl text-white">Why ffwrap?</h2>
+            <h2 className="text-2xl font-bold md:text-3xl text-white">Why lazyff?</h2>
             <p className="mt-3 text-muted-foreground">
-              Unlike online converters that want your data, ffwrap runs entirely on your machine.
+              Unlike online converters that want your data, lazyff runs entirely on your machine.
             </p>
           </div>
 
@@ -361,7 +361,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* FFmpeg vs ffwrap comparison */}
+        {/* FFmpeg vs lazyff comparison */}
         <section className="mx-auto w-full max-w-5xl border-x border-border/100">
           <div className="border-b border-border/100 px-6 pt-12 pb-6">
             <h2 className="text-2xl font-bold md:text-3xl text-white">
@@ -393,9 +393,9 @@ export default function Home() {
                     </div>
                     <div className="p-4 bg-emerald-500/5">
                       <div className="text-xs text-muted-foreground mb-2 uppercase tracking-wider">
-                        ffwrap
+                        lazyff
                       </div>
-                      <code className="text-sm font-mono text-emerald-500">{cmd.ffwrap}</code>
+                      <code className="text-sm font-mono text-emerald-500">{cmd.lazyff}</code>
                     </div>
                   </div>
                 </div>
@@ -409,14 +409,14 @@ export default function Home() {
           <div className="flex flex-col items-center justify-between gap-6 px-6 py-10 sm:flex-row">
             <div className="flex items-center gap-2.5">
               <Logo />
-              <span className="font-semibold">ffwrap</span>
+              <span className="font-semibold">lazyff</span>
             </div>
             <div className="flex items-center gap-6 text-sm text-muted-foreground">
               <Link href="/docs" className="transition-colors hover:text-foreground">
                 Docs
               </Link>
               <Link
-                href="https://github.com/Manas-Kenge/ffwrap"
+                href="https://github.com/Manas-Kenge/lazyff"
                 className="transition-colors hover:text-foreground"
                 target="_blank"
                 rel="noopener noreferrer"

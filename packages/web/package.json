@@ -1,7 +1,7 @@
 {
-  "name": "@ffwrap/web",
+  "name": "@lazyff/web",
   "version": "0.1.0",
-  "description": "Website for ffwrap - a simple, powerful wrapper around ffmpeg",
+  "description": "Website for lazyff - a simple, powerful wrapper around ffmpeg",
   "private": true,
   "scripts": {
     "dev": "next dev",

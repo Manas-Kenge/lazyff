@@ -1,23 +1,23 @@
 ---
 title: "Quickstart"
-description: "Get started with ffwrap in under 2 minutes"
+description: "Get started with lazyff in under 2 minutes"
 ---
 
 ## Requirements
 
-To use ffwrap, you will need to:
+To use lazyff, you will need to:
 
 - Install **ffmpeg** (media processing engine)
-- Install **ffwrap** - see the [Installation Guide](/installation)
+- Install **lazyff** - see the [Installation Guide](/installation)
 
 ## Usage
 
 ### Launch the TUI
 
-Run ffwrap without any arguments to open the interactive interface:
+Run lazyff without any arguments to open the interactive interface:
 
 ```bash
-ffwrap
+lazyff
 ```
 
 Select a file in the left panel, then use single-key shortcuts (`i`, `c`, `v`, `e`, `g`, `r`, `t`, `m`) to run operations. Press `Ctrl+P` for help.
@@ -28,37 +28,37 @@ Select a file in the left panel, then use single-key shortcuts (`i`, `c`, `v`, `
   <Accordion title="Convert video format">
     ```bash
     # Convert MOV to MP4
-    ffwrap convert video.mov video.mp4
+    lazyff convert video.mov video.mp4
 
     # Convert to WebM for web
-    ffwrap convert video.mp4 -f webm
+    lazyff convert video.mp4 -f webm
     ```
   </Accordion>
   <Accordion title="Compress video">
     ```bash
     # Compress to target file size
-    ffwrap compress video.mp4 --target-size 25MB
+    lazyff compress video.mp4 --target-size 25MB
 
     # Compress to 50% of original
-    ffwrap compress video.mp4 --percent 50
+    lazyff compress video.mp4 --percent 50
     ```
   </Accordion>
   <Accordion title="Trim video">
     ```bash
     # Cut from 1:00 to 2:00
-    ffwrap trim video.mp4 --start 00:01:00 --end 00:02:00
+    lazyff trim video.mp4 --start 00:01:00 --end 00:02:00
 
     # Extract 30 seconds starting at 1 minute
-    ffwrap trim video.mp4 --start 00:01:00 --duration 30
+    lazyff trim video.mp4 --start 00:01:00 --duration 30
     ```
   </Accordion>
   <Accordion title="Create GIF">
     ```bash
     # Create GIF from video
-    ffwrap gif video.mp4
+    lazyff gif video.mp4
 
     # Create 3-second GIF starting at 5s
-    ffwrap gif video.mp4 --start 5 --duration 3
+    lazyff gif video.mp4 --start 5 --duration 3
     ```
   </Accordion>
 </AccordionGroup>

@@ -8,7 +8,7 @@ The `extract` command separates components from media files - audio tracks, vide
 ## Syntax
 
 ```bash
-ffwrap extract <input> [output] [options]
+lazyff extract <input> [output] [options]
 ```
 
 ## Arguments
@@ -40,18 +40,18 @@ Extract the audio track from a video file.
 
 ```bash
 # Extract audio as MP3 (default)
-ffwrap extract video.mp4 --audio
+lazyff extract video.mp4 --audio
 # Output: video.mp3
 
 # Extract as WAV (uncompressed)
-ffwrap extract video.mp4 --audio -f wav
+lazyff extract video.mp4 --audio -f wav
 # Output: video.wav
 
 # Extract as FLAC (lossless)
-ffwrap extract video.mp4 --audio -f flac
+lazyff extract video.mp4 --audio -f flac
 
 # Custom output name
-ffwrap extract video.mp4 soundtrack.mp3 --audio
+lazyff extract video.mp4 soundtrack.mp3 --audio
 ```
 
 ### Supported Audio Formats
@@ -73,11 +73,11 @@ Remove the audio track from a video file.
 
 ```bash
 # Remove audio, keep video
-ffwrap extract video.mp4 --video
+lazyff extract video.mp4 --video
 # Output: video_video.mp4
 
 # Custom output name
-ffwrap extract video.mp4 silent.mp4 --video
+lazyff extract video.mp4 silent.mp4 --video
 ```
 
 <Note>
@@ -92,32 +92,32 @@ Extract frames from video as image files.
 
 ```bash
 # Extract frame at 5 seconds
-ffwrap extract video.mp4 --frames --time 00:00:05
+lazyff extract video.mp4 --frames --time 00:00:05
 # Output: video_frame.png
 
 # Extract frame at 1 minute 30 seconds
-ffwrap extract video.mp4 --frames --time 01:30
+lazyff extract video.mp4 --frames --time 01:30
 ```
 
 ### Multiple Frames
 
 ```bash
 # Extract 1 frame per second (default)
-ffwrap extract video.mp4 --frames
+lazyff extract video.mp4 --frames
 # Output: video_frame_0001.png, video_frame_0002.png, ...
 
 # Extract 1 frame every 2 seconds
-ffwrap extract video.mp4 --frames --fps 0.5
+lazyff extract video.mp4 --frames --fps 0.5
 
 # Extract 5 frames per second
-ffwrap extract video.mp4 --frames --fps 5
+lazyff extract video.mp4 --frames --fps 5
 ```
 
 ### Custom Output Pattern
 
 ```bash
 # Custom filename pattern
-ffwrap extract video.mp4 frame_%03d.png --frames
+lazyff extract video.mp4 frame_%03d.png --frames
 # Output: frame_001.png, frame_002.png, ...
 ```
 
@@ -126,7 +126,7 @@ ffwrap extract video.mp4 frame_%03d.png --frames
 <Tip>
   For a thumbnail, extract a single frame at a specific timestamp:
   ```bash
-  ffwrap extract video.mp4 thumbnail.png --frames --time 30
+  lazyff extract video.mp4 thumbnail.png --frames --time 30
   ```
 </Tip>
 
@@ -134,7 +134,7 @@ ffwrap extract video.mp4 frame_%03d.png --frames
   To extract frames for creating a timelapse or sprite sheet, use a low fps:
   ```bash
   # 1 frame every 10 seconds
-  ffwrap extract video.mp4 --frames --fps 0.1
+  lazyff extract video.mp4 --frames --fps 0.1
   ```
 </Tip>
 
@@ -148,42 +148,42 @@ ffwrap extract video.mp4 frame_%03d.png --frames
 
 ```bash
 # Extract audio for podcast distribution
-ffwrap extract interview.mp4 podcast.mp3 --audio
+lazyff extract interview.mp4 podcast.mp3 --audio
 ```
 
 ### Background Music Track
 
 ```bash
 # Extract music in high quality
-ffwrap extract music_video.mp4 song.flac --audio -f flac
+lazyff extract music_video.mp4 song.flac --audio -f flac
 ```
 
 ### Silent Video for Looping
 
 ```bash
 # Remove audio for seamless video loops
-ffwrap extract background.mp4 loop.mp4 --video
+lazyff extract background.mp4 loop.mp4 --video
 ```
 
 ### Video Thumbnails
 
 ```bash
 # Get a thumbnail at the 30-second mark
-ffwrap extract video.mp4 --frames --time 30
+lazyff extract video.mp4 --frames --time 30
 ```
 
 ### Storyboard Images
 
 ```bash
 # Extract key frames for storyboard
-ffwrap extract movie.mp4 --frames --fps 0.1
+lazyff extract movie.mp4 --frames --fps 0.1
 ```
 
 ### GIF Source Frames
 
 ```bash
 # Extract frames to manually create GIF
-ffwrap extract clip.mp4 --frames --fps 10
+lazyff extract clip.mp4 --frames --fps 10
 ```
 
 ## Output Naming

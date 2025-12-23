@@ -8,7 +8,7 @@ The `trim` command extracts a portion of a media file by specifying start time, 
 ## Syntax
 
 ```bash
-ffwrap trim <input> [output] [options]
+lazyff trim <input> [output] [options]
 ```
 
 ## Arguments
@@ -36,7 +36,7 @@ At least one of `--start`, `--end`, or `--duration` is required.
 
 ## Time Formats
 
-ffwrap accepts times in multiple formats:
+lazyff accepts times in multiple formats:
 
 | Format | Example | Meaning |
 |--------|---------|---------|
@@ -51,26 +51,26 @@ ffwrap accepts times in multiple formats:
 
 ```bash
 # Cut from 1:00 to 2:00
-ffwrap trim video.mp4 --start 00:01:00 --end 00:02:00
+lazyff trim video.mp4 --start 00:01:00 --end 00:02:00
 
 # Extract 30 seconds starting at 1 minute
-ffwrap trim video.mp4 --start 00:01:00 --duration 30
+lazyff trim video.mp4 --start 00:01:00 --duration 30
 
 # Keep first 30 seconds
-ffwrap trim video.mp4 --end 00:00:30
+lazyff trim video.mp4 --end 00:00:30
 
 # Remove first 5 minutes
-ffwrap trim video.mp4 --start 00:05:00
+lazyff trim video.mp4 --start 00:05:00
 ```
 
 ### Using Seconds
 
 ```bash
 # Start at 90 seconds, extract 30 seconds
-ffwrap trim video.mp4 -s 90 -t 30
+lazyff trim video.mp4 -s 90 -t 30
 
 # Cut from 10s to 60s
-ffwrap trim video.mp4 -s 10 -e 60
+lazyff trim video.mp4 -s 10 -e 60
 ```
 
 ### Fast Trim (Copy Mode)
@@ -79,10 +79,10 @@ Use `--copy` for instant trimming without re-encoding:
 
 ```bash
 # Fast trim - copies streams directly
-ffwrap trim video.mp4 --start 10 --duration 5 --copy
+lazyff trim video.mp4 --start 10 --duration 5 --copy
 
 # Much faster than re-encoding
-ffwrap trim video.mp4 -s 00:05:00 -e 00:10:00 -c
+lazyff trim video.mp4 -s 00:05:00 -e 00:10:00 -c
 ```
 
 <Note>
@@ -93,10 +93,10 @@ ffwrap trim video.mp4 -s 00:05:00 -e 00:10:00 -c
 
 ```bash
 # Specify output filename
-ffwrap trim video.mp4 clip.mp4 --start 00:01:00 --duration 30
+lazyff trim video.mp4 clip.mp4 --start 00:01:00 --duration 30
 
 # Overwrite if exists
-ffwrap trim video.mp4 clip.mp4 -s 60 -t 30 -y
+lazyff trim video.mp4 clip.mp4 -s 60 -t 30 -y
 ```
 
 ## Copy vs Re-encode
@@ -122,7 +122,7 @@ ffwrap trim video.mp4 clip.mp4 -s 60 -t 30 -y
 
 ### Without `--copy` (Re-encode)
 
-ffwrap decodes and re-encodes the video:
+lazyff decodes and re-encodes the video:
 - **Video codec**: H.264 (libx264)
 - **CRF**: 18 (high quality)
 - **Preset**: medium
@@ -132,7 +132,7 @@ This ensures frame-accurate cuts.
 
 ### With `--copy`
 
-ffwrap copies the streams directly:
+lazyff copies the streams directly:
 - No decoding/encoding
 - Preserves original quality
 - Cuts only at keyframes (I-frames)
@@ -141,15 +141,15 @@ ffwrap copies the streams directly:
 ## Tips
 
 <Tip>
-  To find the exact timestamp for trimming, use `ffwrap info video.mp4` to see the duration, then play the video to find your desired start/end points.
+  To find the exact timestamp for trimming, use `lazyff info video.mp4` to see the duration, then play the video to find your desired start/end points.
 </Tip>
 
 <Tip>
   For extracting multiple clips from one video, run trim multiple times with different output names:
   ```bash
-  ffwrap trim video.mp4 clip1.mp4 -s 00:00:00 -t 30
-  ffwrap trim video.mp4 clip2.mp4 -s 00:01:00 -t 30
-  ffwrap trim video.mp4 clip3.mp4 -s 00:02:00 -t 30
+  lazyff trim video.mp4 clip1.mp4 -s 00:00:00 -t 30
+  lazyff trim video.mp4 clip2.mp4 -s 00:01:00 -t 30
+  lazyff trim video.mp4 clip3.mp4 -s 00:02:00 -t 30
   ```
 </Tip>
 
@@ -159,33 +159,33 @@ ffwrap copies the streams directly:
 
 ```bash
 # Get the scene from 5:30 to 6:15
-ffwrap trim movie.mp4 scene.mp4 --start 05:30 --end 06:15
+lazyff trim movie.mp4 scene.mp4 --start 05:30 --end 06:15
 ```
 
 ### Create a Preview
 
 ```bash
 # First 15 seconds as preview
-ffwrap trim video.mp4 preview.mp4 --end 15
+lazyff trim video.mp4 preview.mp4 --end 15
 ```
 
 ### Remove Intro/Outro
 
 ```bash
 # Skip first 10 seconds (intro)
-ffwrap trim video.mp4 no_intro.mp4 --start 10
+lazyff trim video.mp4 no_intro.mp4 --start 10
 
 # For removing outro, first check duration with info
-ffwrap info video.mp4
+lazyff info video.mp4
 # Then trim to end before outro
-ffwrap trim video.mp4 no_outro.mp4 --end 02:45:00
+lazyff trim video.mp4 no_outro.mp4 --end 02:45:00
 ```
 
 ### Quick Clip for Social Media
 
 ```bash
 # Fast 15-second clip for TikTok/Reels
-ffwrap trim video.mp4 -s 30 -t 15 --copy
+lazyff trim video.mp4 -s 30 -t 15 --copy
 ```
 
 ## See Also

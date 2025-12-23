@@ -1,22 +1,22 @@
 ---
 title: "Overview"
-description: "All ffwrap commands at a glance"
+description: "All lazyff commands at a glance"
 ---
 
-ffwrap provides 8 commands for common media operations. Each command has sensible defaults so you can get started quickly, with options for fine-tuning when needed.
+lazyff provides 8 commands for common media operations. Each command has sensible defaults so you can get started quickly, with options for fine-tuning when needed.
 
 ## Command Summary
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| [convert](/commands/convert) | Convert between formats | `ffwrap convert video.mov video.mp4` |
-| [compress](/commands/compress) | Reduce file size | `ffwrap compress video.mp4 -s 25MB` |
-| [trim](/commands/trim) | Cut a portion of media | `ffwrap trim video.mp4 -s 00:01:00 -t 30` |
-| [merge](/commands/merge) | Concatenate files | `ffwrap merge part1.mp4 part2.mp4 -o full.mp4` |
-| [extract](/commands/extract) | Extract audio/video/frames | `ffwrap extract video.mp4 --audio` |
-| [gif](/commands/gif) | Create animated GIF | `ffwrap gif video.mp4 -s 5 -t 3` |
-| [thumbnail](/commands/thumbnail) | Generate thumbnails | `ffwrap thumbnail video.mp4 --grid 3x3` |
-| [info](/commands/info) | Show media information | `ffwrap info video.mp4` |
+| [convert](/commands/convert) | Convert between formats | `lazyff convert video.mov video.mp4` |
+| [compress](/commands/compress) | Reduce file size | `lazyff compress video.mp4 -s 25MB` |
+| [trim](/commands/trim) | Cut a portion of media | `lazyff trim video.mp4 -s 00:01:00 -t 30` |
+| [merge](/commands/merge) | Concatenate files | `lazyff merge part1.mp4 part2.mp4 -o full.mp4` |
+| [extract](/commands/extract) | Extract audio/video/frames | `lazyff extract video.mp4 --audio` |
+| [gif](/commands/gif) | Create animated GIF | `lazyff gif video.mp4 -s 5 -t 3` |
+| [thumbnail](/commands/thumbnail) | Generate thumbnails | `lazyff thumbnail video.mp4 --grid 3x3` |
+| [info](/commands/info) | Show media information | `lazyff info video.mp4` |
 
 ## Common Options
 
@@ -29,7 +29,7 @@ These options are available across most commands:
 
 ## Output Naming
 
-When you don't specify an output file, ffwrap automatically generates one:
+When you don't specify an output file, lazyff automatically generates one:
 
 | Command | Input | Auto-generated Output |
 |---------|-------|----------------------|
@@ -78,49 +78,49 @@ When you don't specify an output file, ffwrap automatically generates one:
   <Accordion title="I want to change the video format">
     Use **convert**:
     ```bash
-    ffwrap convert video.mov video.mp4
+    lazyff convert video.mov video.mp4
     ```
   </Accordion>
   <Accordion title="My file is too large">
     Use **compress** with a target size:
     ```bash
-    ffwrap compress video.mp4 --target-size 25MB
+    lazyff compress video.mp4 --target-size 25MB
     ```
   </Accordion>
   <Accordion title="I only need part of the video">
     Use **trim**:
     ```bash
-    ffwrap trim video.mp4 --start 00:01:00 --end 00:02:00
+    lazyff trim video.mp4 --start 00:01:00 --end 00:02:00
     ```
   </Accordion>
   <Accordion title="I have multiple clips to join">
     Use **merge**:
     ```bash
-    ffwrap merge clip1.mp4 clip2.mp4 clip3.mp4 -o final.mp4
+    lazyff merge clip1.mp4 clip2.mp4 clip3.mp4 -o final.mp4
     ```
   </Accordion>
   <Accordion title="I need just the audio track">
     Use **extract** with `--audio`:
     ```bash
-    ffwrap extract video.mp4 --audio
+    lazyff extract video.mp4 --audio
     ```
   </Accordion>
   <Accordion title="I want to make a GIF">
     Use **gif**:
     ```bash
-    ffwrap gif video.mp4 --start 5 --duration 3
+    lazyff gif video.mp4 --start 5 --duration 3
     ```
   </Accordion>
   <Accordion title="I need a preview image">
     Use **thumbnail**:
     ```bash
-    ffwrap thumbnail video.mp4 --time 00:01:00
+    lazyff thumbnail video.mp4 --time 00:01:00
     ```
   </Accordion>
   <Accordion title="I want to see video details">
     Use **info**:
     ```bash
-    ffwrap info video.mp4
+    lazyff info video.mp4
     ```
   </Accordion>
 </AccordionGroup>
@@ -130,13 +130,13 @@ When you don't specify an output file, ffwrap automatically generates one:
 Every command has built-in help:
 
 ```bash
-ffwrap convert --help
-ffwrap compress --help
+lazyff convert --help
+lazyff compress --help
 # etc.
 ```
 
 Or see the general help:
 
 ```bash
-ffwrap --help
+lazyff --help
 ```

@@ -23,7 +23,7 @@ const DEFAULT_CONFIG: Config = {
  */
 function getConfigDir(): string {
   const homeDir = os.homedir()
-  return path.join(homeDir, ".config", "ffwrap")
+  return path.join(homeDir, ".config", "lazyff")
 }
 
 /**

@@ -8,7 +8,7 @@ The `thumbnail` command creates thumbnail images from video files - single frame
 ## Syntax
 
 ```bash
-ffwrap thumbnail <input> [output] [options]
+lazyff thumbnail <input> [output] [options]
 ```
 
 ## Arguments
@@ -41,34 +41,34 @@ Extract a single frame at a specific time.
 
 ```bash
 # Thumbnail at 50% of video (default)
-ffwrap thumbnail video.mp4
+lazyff thumbnail video.mp4
 # Output: video_thumb.png
 
 # Thumbnail at specific time
-ffwrap thumbnail video.mp4 --time 00:01:30
+lazyff thumbnail video.mp4 --time 00:01:30
 
 # Thumbnail at 30 seconds
-ffwrap thumbnail video.mp4 --time 30
+lazyff thumbnail video.mp4 --time 30
 
 # Custom output name
-ffwrap thumbnail video.mp4 preview.png --time 60
+lazyff thumbnail video.mp4 preview.png --time 60
 ```
 
 ### With Custom Width
 
 ```bash
 # 640px wide thumbnail
-ffwrap thumbnail video.mp4 --time 30 --width 640
+lazyff thumbnail video.mp4 --time 30 --width 640
 
 # Smaller thumbnail
-ffwrap thumbnail video.mp4 --time 30 --width 320
+lazyff thumbnail video.mp4 --time 30 --width 320
 ```
 
 ### As JPEG
 
 ```bash
 # Save as JPEG (smaller file)
-ffwrap thumbnail video.mp4 --time 30 --format jpg
+lazyff thumbnail video.mp4 --time 30 --format jpg
 ```
 
 ## Multiple Thumbnails
@@ -79,14 +79,14 @@ Generate several thumbnails evenly distributed throughout the video.
 
 ```bash
 # 5 thumbnails throughout the video
-ffwrap thumbnail video.mp4 --count 5
+lazyff thumbnail video.mp4 --count 5
 # Output: video_thumb_01.png, video_thumb_02.png, ...
 
 # 10 thumbnails
-ffwrap thumbnail video.mp4 --count 10
+lazyff thumbnail video.mp4 --count 10
 
 # With custom width
-ffwrap thumbnail video.mp4 --count 5 --width 320
+lazyff thumbnail video.mp4 --count 5 --width 320
 ```
 
 ### How Spacing Works
@@ -106,25 +106,25 @@ Create a single image with multiple thumbnails arranged in a grid.
 
 ```bash
 # 3x3 grid (9 thumbnails)
-ffwrap thumbnail video.mp4 --grid 3x3
+lazyff thumbnail video.mp4 --grid 3x3
 # Output: video_grid.png
 
 # 4x4 grid (16 thumbnails)
-ffwrap thumbnail video.mp4 --grid 4x4
+lazyff thumbnail video.mp4 --grid 4x4
 
 # 5x2 grid (10 thumbnails)
-ffwrap thumbnail video.mp4 --grid 5x2
+lazyff thumbnail video.mp4 --grid 5x2
 ```
 
 ### With Custom Tile Width
 
 ```bash
 # Each tile is 200px wide
-ffwrap thumbnail video.mp4 --grid 3x3 --width 200
+lazyff thumbnail video.mp4 --grid 3x3 --width 200
 # Total image: 600px wide (3 x 200px)
 
 # Larger tiles
-ffwrap thumbnail video.mp4 --grid 4x4 --width 320
+lazyff thumbnail video.mp4 --grid 4x4 --width 320
 # Total image: 1280px wide (4 x 320px)
 ```
 
@@ -132,7 +132,7 @@ ffwrap thumbnail video.mp4 --grid 4x4 --width 320
 
 ```bash
 # Grid as JPEG
-ffwrap thumbnail video.mp4 --grid 3x3 --format jpg
+lazyff thumbnail video.mp4 --grid 3x3 --format jpg
 ```
 
 ## Output Naming
@@ -155,21 +155,21 @@ ffwrap thumbnail video.mp4 --grid 3x3 --format jpg
 <Tip>
   For video previews (like hover thumbnails on YouTube), use a grid:
   ```bash
-  ffwrap thumbnail video.mp4 --grid 5x5 --width 160
+  lazyff thumbnail video.mp4 --grid 5x5 --width 160
   ```
 </Tip>
 
 <Tip>
   For OpenGraph/social media thumbnails, use a specific time when something interesting is happening:
   ```bash
-  ffwrap thumbnail video.mp4 --time 00:00:15 --width 1280
+  lazyff thumbnail video.mp4 --time 00:00:15 --width 1280
   ```
 </Tip>
 
 <Tip>
   Generate multiple thumbnails and pick the best one:
   ```bash
-  ffwrap thumbnail video.mp4 --count 10
+  lazyff thumbnail video.mp4 --count 10
   # Then review and delete the ones you don't want
   ```
 </Tip>
@@ -180,35 +180,35 @@ ffwrap thumbnail video.mp4 --grid 3x3 --format jpg
 
 ```bash
 # 1280x720 thumbnail (16:9)
-ffwrap thumbnail video.mp4 --time 30 --width 1280 --format jpg
+lazyff thumbnail video.mp4 --time 30 --width 1280 --format jpg
 ```
 
 ### Video Preview Grid
 
 ```bash
 # Preview grid for video galleries
-ffwrap thumbnail video.mp4 --grid 4x3 --width 240 --format jpg
+lazyff thumbnail video.mp4 --grid 4x3 --width 240 --format jpg
 ```
 
 ### Social Media
 
 ```bash
 # Instagram/Twitter preview
-ffwrap thumbnail video.mp4 --time 5 --width 1080 --format jpg
+lazyff thumbnail video.mp4 --time 5 --width 1080 --format jpg
 ```
 
 ### Storyboard
 
 ```bash
 # Create storyboard for review
-ffwrap thumbnail video.mp4 --count 20 --width 320
+lazyff thumbnail video.mp4 --count 20 --width 320
 ```
 
 ### Quick Preview Set
 
 ```bash
 # Generate options to choose from
-ffwrap thumbnail video.mp4 --count 5 --width 640
+lazyff thumbnail video.mp4 --count 5 --width 640
 ```
 
 ## See Also

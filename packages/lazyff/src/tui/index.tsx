@@ -350,7 +350,7 @@ export async function launch(): Promise<void> {
     rendererInstance = renderer
 
     // Set terminal title
-    renderer.setTerminalTitle("ffwrap")
+    renderer.setTerminalTitle("lazyff")
 
     createRoot(renderer).render(<App />)
 

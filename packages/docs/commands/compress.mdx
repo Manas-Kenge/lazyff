@@ -8,7 +8,7 @@ The `compress` command reduces video file size by targeting a specific file size
 ## Syntax
 
 ```bash
-ffwrap compress <input> [output] [options]
+lazyff compress <input> [output] [options]
 ```
 
 ## Arguments
@@ -38,17 +38,17 @@ The most intuitive way to compress - specify the size you want:
 
 ```bash
 # Compress to approximately 25MB
-ffwrap compress video.mp4 --target-size 25MB
+lazyff compress video.mp4 --target-size 25MB
 
 # Compress to 50MB with custom output name
-ffwrap compress video.mp4 small.mp4 --target-size 50MB
+lazyff compress video.mp4 small.mp4 --target-size 50MB
 
 # Short form
-ffwrap compress video.mp4 -s 10MB
+lazyff compress video.mp4 -s 10MB
 ```
 
 <Note>
-  The actual output size may vary slightly from the target. ffwrap calculates the optimal bitrate to hit your target while maintaining quality.
+  The actual output size may vary slightly from the target. lazyff calculates the optimal bitrate to hit your target while maintaining quality.
 </Note>
 
 ### Target Bitrate
@@ -57,13 +57,13 @@ For precise control over video quality:
 
 ```bash
 # 2 Mbps video bitrate
-ffwrap compress video.mp4 --bitrate 2M
+lazyff compress video.mp4 --bitrate 2M
 
 # 500 Kbps (very small file)
-ffwrap compress video.mp4 --bitrate 500k
+lazyff compress video.mp4 --bitrate 500k
 
 # 5 Mbps (higher quality)
-ffwrap compress video.mp4 --bitrate 5M
+lazyff compress video.mp4 --bitrate 5M
 ```
 
 ### Percentage Reduction
@@ -72,10 +72,10 @@ Compress relative to the original size:
 
 ```bash
 # Reduce to 50% of original size
-ffwrap compress video.mp4 --percent 50
+lazyff compress video.mp4 --percent 50
 
 # Reduce to 25% of original size
-ffwrap compress video.mp4 --percent 25
+lazyff compress video.mp4 --percent 25
 ```
 
 ### Audio Bitrate Control
@@ -84,17 +84,17 @@ Lower audio bitrate for additional size savings:
 
 ```bash
 # Lower audio quality for smaller file
-ffwrap compress video.mp4 -s 10MB --audio-bitrate 64k
+lazyff compress video.mp4 -s 10MB --audio-bitrate 64k
 
 # Higher audio quality
-ffwrap compress video.mp4 -s 50MB --audio-bitrate 192k
+lazyff compress video.mp4 -s 50MB --audio-bitrate 192k
 ```
 
 ## How It Works
 
 ### Target Size Calculation
 
-When you specify `--target-size`, ffwrap:
+When you specify `--target-size`, lazyff:
 
 1. Gets the video duration from the input file
 2. Calculates the required total bitrate: `(target_bytes × 8) / duration`
@@ -131,7 +131,7 @@ Compression uses H.264 with constrained quality:
 <Tip>
   For Discord (25MB limit), use:
   ```bash
-  ffwrap compress video.mp4 --target-size 24MB
+  lazyff compress video.mp4 --target-size 24MB
   ```
   Leave 1MB buffer to ensure it fits.
 </Tip>
@@ -139,7 +139,7 @@ Compression uses H.264 with constrained quality:
 <Tip>
   For Twitter/X (512MB video limit, but quality degrades above ~15MB):
   ```bash
-  ffwrap compress video.mp4 --target-size 15MB
+  lazyff compress video.mp4 --target-size 15MB
   ```
 </Tip>
 
@@ -153,28 +153,28 @@ Compression uses H.264 with constrained quality:
 
 ```bash
 # Discord has 25MB limit (50MB with Nitro)
-ffwrap compress video.mp4 -s 24MB -o discord_ready.mp4
+lazyff compress video.mp4 -s 24MB -o discord_ready.mp4
 ```
 
 ### Email Attachment
 
 ```bash
 # Most email services limit to 20-25MB
-ffwrap compress video.mp4 -s 20MB
+lazyff compress video.mp4 -s 20MB
 ```
 
 ### Quick Preview
 
 ```bash
 # Create a small preview file
-ffwrap compress video.mp4 --percent 10
+lazyff compress video.mp4 --percent 10
 ```
 
 ### Archive Compression
 
 ```bash
 # Reduce storage size while maintaining reasonable quality
-ffwrap compress video.mp4 --bitrate 2M
+lazyff compress video.mp4 --bitrate 2M
 ```
 
 ## See Also

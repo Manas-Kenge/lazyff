@@ -1,5 +1,5 @@
 {
-  "name": "ffwrap",
+  "name": "lazyff",
   "version": "0.1.0",
   "description": "A simple, powerful wrapper around ffmpeg for the terminal",
   "private": true,
@@ -7,11 +7,11 @@
   "author": "Manas Kenge",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Manas-Kenge/ffwrap.git"
+    "url": "git+https://github.com/Manas-Kenge/lazyff.git"
   },
-  "homepage": "https://github.com/Manas-Kenge/ffwrap",
+  "homepage": "https://github.com/Manas-Kenge/lazyff",
   "bugs": {
-    "url": "https://github.com/Manas-Kenge/ffwrap/issues"
+    "url": "https://github.com/Manas-Kenge/lazyff/issues"
   },
   "keywords": [
     "ffmpeg",
@@ -27,13 +27,13 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "bun run packages/ffwrap/src/cli.ts",
-    "dev:tui": "bun run packages/ffwrap/src/tui/index.tsx",
-    "dev:web": "bun run --filter @ffwrap/web dev",
-    "build": "bun run --filter '@ffwrap/*' build",
-    "build:ffwrap": "bun run --filter @manaskng/ffwrap build",
-    "build:web": "bun run --filter @ffwrap/web build",
-    "lint": "bun run --filter @ffwrap/web lint",
+    "dev": "bun run packages/lazyff/src/cli.ts",
+    "dev:tui": "bun run packages/lazyff/src/tui/index.tsx",
+    "dev:web": "bun run --filter @lazyff/web dev",
+    "build": "bun run --filter '@lazyff/*' build",
+    "build:lazyff": "bun run --filter lazyff build",
+    "build:web": "bun run --filter @lazyff/web build",
+    "lint": "bun run --filter @lazyff/web lint",
     "format": "prettier --write ."
   },
   "engines": {
