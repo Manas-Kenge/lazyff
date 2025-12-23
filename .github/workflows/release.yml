@@ -46,7 +46,7 @@ jobs:
             archive: zip
 
     runs-on: ${{ matrix.os }}
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -140,7 +140,7 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -189,7 +189,7 @@ jobs:
   publish-npm:
     needs: release
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -18,9 +18,9 @@ export function isEmojiSupported(): boolean {
 
   // Windows: check for modern terminal emulators
   return Boolean(
-    env.WT_SESSION ||                           // Windows Terminal
-    env.TERMINUS_SUBLIME ||                     // Terminus
-    env.ConEmuTask === "{cmd::Cmder}" ||        // ConEmu/Cmder
+    env.WT_SESSION || // Windows Terminal
+    env.TERMINUS_SUBLIME || // Terminus
+    env.ConEmuTask === "{cmd::Cmder}" || // ConEmu/Cmder
     TERM_PROGRAM === "Terminus-Sublime" ||
     TERM_PROGRAM === "vscode" ||
     TERM === "xterm-256color" ||
@@ -83,7 +83,9 @@ export const TREE_ICONS = {
 /**
  * Get file type icon based on terminal emoji support
  */
-export function getFileTypeIcon(type: "folder" | "folder_open" | "video" | "audio" | "image" | "file"): string {
+export function getFileTypeIcon(
+  type: "folder" | "folder_open" | "video" | "audio" | "image" | "file"
+): string {
   const icons = getEmojiSupport() ? EMOJI_FILE_ICONS : UNICODE_FILE_ICONS
   const key = type.toUpperCase() as keyof typeof EMOJI_FILE_ICONS
   return icons[key]

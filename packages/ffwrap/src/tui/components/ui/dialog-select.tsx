@@ -30,6 +30,7 @@ export interface DialogSelectProps<T> {
   onSelect?: (option: DialogSelectOption<T>) => void
   onMove?: (option: DialogSelectOption<T>) => void
   onFilter?: (query: string) => void
+  onCancel?: () => void
   current?: T
 }
 
@@ -44,9 +45,7 @@ export interface DialogSelectRef<T> {
 /**
  * Group options by category
  */
-function groupByCategory<T>(
-  options: DialogSelectOption<T>[]
-): [string, DialogSelectOption<T>[]][] {
+function groupByCategory<T>(options: DialogSelectOption<T>[]): [string, DialogSelectOption<T>[]][] {
   const groups = new Map<string, DialogSelectOption<T>[]>()
 
   for (const option of options) {
@@ -151,6 +150,7 @@ export function DialogSelect<T>({
   onSelect,
   onMove,
   onFilter,
+  onCancel,
   current,
 }: DialogSelectProps<T>) {
   const dialog = useDialog()
@@ -335,6 +335,10 @@ export function DialogSelect<T>({
                   onMouseOver={() => {
                     if (flatIndex >= 0) {
                       setSelected(flatIndex)
+                      const hoveredOption = flat[flatIndex]
+                      if (hoveredOption) {
+                        onMove?.(hoveredOption)
+                      }
                     }
                   }}
                 />

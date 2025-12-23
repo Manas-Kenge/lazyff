@@ -220,9 +220,8 @@ export const trimCommand: CommandModule = {
 
         // Calculate size change
         const sizeChange = ((outputStats.size - inputStats.size) / inputStats.size) * 100
-        const sizeChangeStr = sizeChange >= 0
-          ? `+${sizeChange.toFixed(1)}%`
-          : `${sizeChange.toFixed(1)}%`
+        const sizeChangeStr =
+          sizeChange >= 0 ? `+${sizeChange.toFixed(1)}%` : `${sizeChange.toFixed(1)}%`
         details.push(`(${sizeChangeStr})`)
 
         console.log(`\n✓ Done: ${path.basename(outputPath)}`)

@@ -64,15 +64,11 @@ export function ProgressBar() {
       <box flexDirection="column">
         <box flexDirection="row" gap={1}>
           <text fg={theme.textMuted}>From:</text>
-          <text fg={theme.text}>
-            {input.length > 40 ? "..." + input.slice(-37) : input}
-          </text>
+          <text fg={theme.text}>{input.length > 40 ? "..." + input.slice(-37) : input}</text>
         </box>
         <box flexDirection="row" gap={1}>
           <text fg={theme.textMuted}>To:</text>
-          <text fg={theme.text}>
-            {output.length > 40 ? "..." + output.slice(-37) : output}
-          </text>
+          <text fg={theme.text}>{output.length > 40 ? "..." + output.slice(-37) : output}</text>
         </box>
       </box>
 

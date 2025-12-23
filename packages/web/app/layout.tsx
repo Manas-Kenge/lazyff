@@ -4,19 +4,20 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
-const geistSans = Geist({ 
+const geistSans = Geist({
   subsets: ["latin"],
   variable: "--font-geist-sans",
 })
 
-const geistMono = Geist_Mono({ 
+const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
 })
 
 export const metadata: Metadata = {
   title: "ffwrap - FFmpeg made simple",
-  description: "Stop Googling ffmpeg commands. Convert, compress, trim, and merge videos with simple commands that just work. 100% local, free forever.",
+  description:
+    "Stop Googling ffmpeg commands. Convert, compress, trim, and merge videos with simple commands that just work. 100% local, free forever.",
   icons: {
     icon: [
       {

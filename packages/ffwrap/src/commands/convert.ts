@@ -93,7 +93,10 @@ export const convertCommand: CommandModule = {
         ["$0 convert video.mov -f webm", "Convert to WebM format"],
         ["$0 convert video.mp4 -q high", "Convert with high quality"],
         ["$0 convert video.mp4 -r 720p", "Convert and resize to 720p"],
-        ["$0 convert video.mp4 --start 00:01:00 --duration 30", "Extract 30 seconds starting at 1 minute"],
+        [
+          "$0 convert video.mp4 --start 00:01:00 --duration 30",
+          "Extract 30 seconds starting at 1 minute",
+        ],
         ["$0 convert video.mp4 audio.mp3 --strip-video", "Extract audio only"],
         ["$0 convert video.mp4 -f gif --fps 10", "Create GIF with 10 fps"],
       ])
@@ -179,9 +182,8 @@ export const convertCommand: CommandModule = {
 
         // Calculate size change
         const sizeChange = ((outputStats.size - inputStats.size) / inputStats.size) * 100
-        const sizeChangeStr = sizeChange >= 0
-          ? `+${sizeChange.toFixed(1)}%`
-          : `${sizeChange.toFixed(1)}%`
+        const sizeChangeStr =
+          sizeChange >= 0 ? `+${sizeChange.toFixed(1)}%` : `${sizeChange.toFixed(1)}%`
         details.push(`(${sizeChangeStr})`)
 
         console.log(`\n✓ Done: ${path.basename(outputPath)}`)

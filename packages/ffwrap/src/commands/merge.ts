@@ -48,11 +48,7 @@ function buildConcatDemuxerArgs(
 /**
  * Build ffmpeg arguments for concatenation using concat filter (slow, re-encode)
  */
-function buildConcatFilterArgs(
-  inputs: string[],
-  output: string,
-  overwrite: boolean
-): string[] {
+function buildConcatFilterArgs(inputs: string[], output: string, overwrite: boolean): string[] {
   const args: string[] = []
 
   if (overwrite) {
@@ -90,7 +86,7 @@ function buildConcatFilterArgs(
  * Create a temporary file list for concat demuxer
  */
 function createFileList(inputs: string[]): string {
-  const lines = inputs.map(f => `file '${path.resolve(f)}'`)
+  const lines = inputs.map((f) => `file '${path.resolve(f)}'`)
   const content = lines.join("\n")
 
   const tempFile = path.join(os.tmpdir(), `ffwrap_concat_${Date.now()}.txt`)
@@ -195,7 +191,9 @@ export const mergeCommand: CommandModule = {
       process.exit(1)
     }
 
-    console.log(`Mode:   ${reencode ? "Re-encode (slower, flexible)" : "Copy (fast, same codec required)"}`)
+    console.log(
+      `Mode:   ${reencode ? "Re-encode (slower, flexible)" : "Copy (fast, same codec required)"}`
+    )
     console.log(`Output: ${path.basename(output)}`)
     console.log(`\nMerging...`)
 
@@ -293,7 +291,12 @@ export async function merge(options: MergeOptions): Promise<{
     args = buildConcatFilterArgs(options.inputs, options.output, options.overwrite || false)
   } else {
     listFile = createFileList(options.inputs)
-    args = buildConcatDemuxerArgs(options.inputs, options.output, listFile, options.overwrite || false)
+    args = buildConcatDemuxerArgs(
+      options.inputs,
+      options.output,
+      listFile,
+      options.overwrite || false
+    )
   }
 
   const result = await runFfmpeg(args)

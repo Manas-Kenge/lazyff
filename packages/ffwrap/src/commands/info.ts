@@ -46,8 +46,10 @@ export interface DetailedMediaInfo {
  */
 export async function getDetailedMediaInfo(filePath: string): Promise<DetailedMediaInfo | null> {
   const result = await runFfprobe([
-    "-v", "quiet",
-    "-print_format", "json",
+    "-v",
+    "quiet",
+    "-print_format",
+    "json",
     "-show_format",
     "-show_streams",
     filePath,
@@ -145,11 +147,16 @@ function getChannelDescription(channels: number, layout?: string): string {
     return layout
   }
   switch (channels) {
-    case 1: return "mono"
-    case 2: return "stereo"
-    case 6: return "5.1 surround"
-    case 8: return "7.1 surround"
-    default: return `${channels} channels`
+    case 1:
+      return "mono"
+    case 2:
+      return "stereo"
+    case 6:
+      return "5.1 surround"
+    case 8:
+      return "7.1 surround"
+    default:
+      return `${channels} channels`
   }
 }
 
@@ -239,7 +246,9 @@ export const infoCommand: CommandModule = {
       console.log("Audio:")
       console.log(`  Codec:      ${info.audio.codec.toUpperCase()}`)
       console.log(`  Sample:     ${info.audio.sampleRate} Hz`)
-      console.log(`  Channels:   ${getChannelDescription(info.audio.channels, info.audio.channelLayout)}`)
+      console.log(
+        `  Channels:   ${getChannelDescription(info.audio.channels, info.audio.channelLayout)}`
+      )
       if (info.audio.bitrate) {
         console.log(`  Bitrate:    ${formatBitrate(info.audio.bitrate)}`)
       }

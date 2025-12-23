@@ -20,10 +20,10 @@ import {
   MergeDialog,
   getAvailableCommands,
 } from "./components/command-dialogs.tsx"
+import { ThemeDialog } from "./components/theme-dialog.tsx"
 import { readDirectory, filterMediaFiles } from "./utils/fs.ts"
+import { VERSION } from "../version.ts"
 import path from "path"
-
-const VERSION = "0.0.1"
 
 /** Global renderer instance for cleanup */
 let rendererInstance: CliRenderer | null = null
@@ -55,7 +55,7 @@ function MainView() {
     <box flexDirection="row" flexGrow={1} gap={1} padding={1}>
       {/* Left column: File Tree */}
       <box flexDirection="column" width={40}>
-          <FileTree focused={true} width={40} />
+        <FileTree focused={true} width={40} />
       </box>
 
       {/* Middle column: Activity/Logs */}
@@ -78,7 +78,17 @@ function MainApp() {
   const { theme } = useTheme()
   const dialog = useDialog()
   const { width, height } = useTerminalDimensions()
-  const { executeInfo, executeCompress, executeConvert, executeExtract, executeGif, executeTrim, executeThumbnail, executeMerge, selectedFile } = useCommands()
+  const {
+    executeInfo,
+    executeCompress,
+    executeConvert,
+    executeExtract,
+    executeGif,
+    executeTrim,
+    executeThumbnail,
+    executeMerge,
+    selectedFile,
+  } = useCommands()
 
   // Update terminal dimensions in app state when they change
   useEffect(() => {
@@ -96,6 +106,12 @@ function MainApp() {
     // Ctrl+P to toggle help
     if (ctrl && name === "p") {
       dialog.replace(() => <DialogHelp />)
+      return
+    }
+
+    // Ctrl+T to open theme selection
+    if (ctrl && name === "t") {
+      dialog.replace(() => <ThemeDialog />)
       return
     }
 
@@ -118,42 +134,57 @@ function MainApp() {
       case "c":
         // Compress command - open dialog to select compression target
         if (available.compress) {
-          dialog.replace(() => <CompressDialog file={selectedFile} onSelect={(options) => executeCompress(options)} />)
+          dialog.replace(() => (
+            <CompressDialog file={selectedFile} onSelect={(options) => executeCompress(options)} />
+          ))
         }
         break
 
       case "v":
         // Convert command - open dialog to select output format
         if (available.convert) {
-          dialog.replace(() => <ConvertDialog file={selectedFile} onSelect={(options) => executeConvert(options)} />)
+          dialog.replace(() => (
+            <ConvertDialog file={selectedFile} onSelect={(options) => executeConvert(options)} />
+          ))
         }
         break
 
       case "e":
         // Extract command - open dialog to select what to extract
         if (available.extract) {
-          dialog.replace(() => <ExtractDialog file={selectedFile} onSelect={(options) => executeExtract(options)} />)
+          dialog.replace(() => (
+            <ExtractDialog file={selectedFile} onSelect={(options) => executeExtract(options)} />
+          ))
         }
         break
 
       case "g":
         // GIF command - open dialog to select GIF settings
         if (available.gif) {
-          dialog.replace(() => <GifDialog file={selectedFile} onSelect={(options) => executeGif(options)} />)
+          dialog.replace(() => (
+            <GifDialog file={selectedFile} onSelect={(options) => executeGif(options)} />
+          ))
         }
         break
 
       case "r":
         // tRim command - open dialog to select trim options
         if (available.trim) {
-          dialog.replace(() => <TrimDialog file={selectedFile} onSelect={(options) => executeTrim(options)} />)
+          dialog.replace(() => (
+            <TrimDialog file={selectedFile} onSelect={(options) => executeTrim(options)} />
+          ))
         }
         break
 
       case "t":
         // Thumbnail command - open dialog to select thumbnail settings
         if (available.thumbnail) {
-          dialog.replace(() => <ThumbnailDialog file={selectedFile} onSelect={(options) => executeThumbnail(options)} />)
+          dialog.replace(() => (
+            <ThumbnailDialog
+              file={selectedFile}
+              onSelect={(options) => executeThumbnail(options)}
+            />
+          ))
         }
         break
 
@@ -178,68 +209,104 @@ function MainApp() {
   return (
     <box flexDirection="column" height={height} padding={0}>
       {/* Main container with background */}
-      <box
-        flexDirection="column"
-        flexGrow={1}
-        backgroundColor={theme.background}
-      >
+      <box flexDirection="column" flexGrow={1} backgroundColor={theme.background}>
         {/* Main three-column layout */}
         <MainView />
 
         {/* Footer with shortcuts - show contextually based on file type */}
-        <box flexDirection="row" justifyContent="space-between" paddingLeft={1} paddingRight={1} paddingBottom={1}>
+        <box
+          flexDirection="row"
+          justifyContent="space-between"
+          paddingLeft={1}
+          paddingRight={1}
+          paddingBottom={1}
+        >
           <box flexDirection="row" gap={1}>
-            <text attributes={TextAttributes.BOLD} fg={theme.text}>ctrl+p</text>
-            <text attributes={TextAttributes.DIM} fg={theme.textMuted}>help</text>
-            {selectedFile && selectedFile.type === "file" && (() => {
-              const available = getAvailableCommands(selectedFile)
-              return (
-                <>
-                  {available.compress && (
-                    <>
-                      <text attributes={TextAttributes.BOLD} fg={theme.text}>c</text>
-                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>compress</text>
-                    </>
-                  )}
-                  {available.convert && (
-                    <>
-                      <text attributes={TextAttributes.BOLD} fg={theme.text}>v</text>
-                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>convert</text>
-                    </>
-                  )}
-                  {available.extract && (
-                    <>
-                      <text attributes={TextAttributes.BOLD} fg={theme.text}>e</text>
-                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>extract</text>
-                    </>
-                  )}
-                  {available.gif && (
-                    <>
-                      <text attributes={TextAttributes.BOLD} fg={theme.text}>g</text>
-                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>gif</text>
-                    </>
-                  )}
-                  {available.trim && (
-                    <>
-                      <text attributes={TextAttributes.BOLD} fg={theme.text}>r</text>
-                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>trim</text>
-                    </>
-                  )}
-                  {available.thumbnail && (
-                    <>
-                      <text attributes={TextAttributes.BOLD} fg={theme.text}>t</text>
-                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>thumbnail</text>
-                    </>
-                  )}
-                  {available.merge && (
-                    <>
-                      <text attributes={TextAttributes.BOLD} fg={theme.text}>m</text>
-                      <text attributes={TextAttributes.DIM} fg={theme.textMuted}>merge</text>
-                    </>
-                  )}
-                </>
-              )
-            })()}
+            <text attributes={TextAttributes.BOLD} fg={theme.text}>
+              ctrl+p
+            </text>
+            <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
+              help
+            </text>
+            {selectedFile &&
+              selectedFile.type === "file" &&
+              (() => {
+                const available = getAvailableCommands(selectedFile)
+                return (
+                  <>
+                    {available.compress && (
+                      <>
+                        <text attributes={TextAttributes.BOLD} fg={theme.text}>
+                          c
+                        </text>
+                        <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
+                          compress
+                        </text>
+                      </>
+                    )}
+                    {available.convert && (
+                      <>
+                        <text attributes={TextAttributes.BOLD} fg={theme.text}>
+                          v
+                        </text>
+                        <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
+                          convert
+                        </text>
+                      </>
+                    )}
+                    {available.extract && (
+                      <>
+                        <text attributes={TextAttributes.BOLD} fg={theme.text}>
+                          e
+                        </text>
+                        <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
+                          extract
+                        </text>
+                      </>
+                    )}
+                    {available.gif && (
+                      <>
+                        <text attributes={TextAttributes.BOLD} fg={theme.text}>
+                          g
+                        </text>
+                        <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
+                          gif
+                        </text>
+                      </>
+                    )}
+                    {available.trim && (
+                      <>
+                        <text attributes={TextAttributes.BOLD} fg={theme.text}>
+                          r
+                        </text>
+                        <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
+                          trim
+                        </text>
+                      </>
+                    )}
+                    {available.thumbnail && (
+                      <>
+                        <text attributes={TextAttributes.BOLD} fg={theme.text}>
+                          t
+                        </text>
+                        <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
+                          thumbnail
+                        </text>
+                      </>
+                    )}
+                    {available.merge && (
+                      <>
+                        <text attributes={TextAttributes.BOLD} fg={theme.text}>
+                          m
+                        </text>
+                        <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
+                          merge
+                        </text>
+                      </>
+                    )}
+                  </>
+                )
+              })()}
           </box>
           <text attributes={TextAttributes.DIM} fg={theme.textMuted}>
             {VERSION}

@@ -38,22 +38,19 @@ export {
 } from "./ffmpeg/builder"
 
 // Error handling
-export { formatError, parseError, isOverwriteError, isCodecError, isFileNotFoundError } from "./ffmpeg/errors"
+export {
+  formatError,
+  parseError,
+  isOverwriteError,
+  isCodecError,
+  isFileNotFoundError,
+} from "./ffmpeg/errors"
 
 // Types
 export * from "./ffmpeg/types"
 
 // Commands - programmatic functions for TUI usage
-export {
-  convert,
-  info,
-  trim,
-  compress,
-  extract,
-  merge,
-  gif,
-  thumbnail,
-} from "./commands/index.ts"
+export { convert, info, trim, compress, extract, merge, gif, thumbnail } from "./commands/index.ts"
 
 // Command types
 export type {

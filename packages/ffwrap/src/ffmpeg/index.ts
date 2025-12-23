@@ -144,8 +144,10 @@ export interface MediaInfo {
  */
 export async function getMediaInfo(filePath: string): Promise<MediaInfo | null> {
   const result = await runFfprobe([
-    "-v", "quiet",
-    "-print_format", "json",
+    "-v",
+    "quiet",
+    "-print_format",
+    "json",
     "-show_format",
     "-show_streams",
     filePath,

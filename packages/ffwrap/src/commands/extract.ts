@@ -316,7 +316,9 @@ export const extractCommand: CommandModule = {
         // Frame sequence - count generated files
         const dir = path.dirname(outputPath)
         const baseName = path.basename(options.input, path.extname(options.input))
-        const frameFiles = fs.readdirSync(dir).filter(f => f.startsWith(`${baseName}_frame_`) && f.endsWith(".png"))
+        const frameFiles = fs
+          .readdirSync(dir)
+          .filter((f) => f.startsWith(`${baseName}_frame_`) && f.endsWith(".png"))
 
         console.log(`\n✓ Done: Extracted ${frameFiles.length} frames`)
         console.log(`        Pattern: ${path.basename(outputPath)}`)

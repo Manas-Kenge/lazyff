@@ -91,7 +91,8 @@ export function buildConvertArgs(options: ConvertOptions): BuildResult {
   const formatPreset = FORMAT_PRESETS[outputFormat as FormatPreset]
 
   // Calculate output path
-  const outputPath = options.output || generateOutputPath(options.input, formatPreset?.extension || outputFormat)
+  const outputPath =
+    options.output || generateOutputPath(options.input, formatPreset?.extension || outputFormat)
 
   // Determine video codec
   let videoCodec: string | null = null
@@ -179,13 +180,13 @@ function inferFormatFromOutput(output?: string): FormatPreset | null {
 function generateOutputPath(input: string, extension: string): string {
   const dir = path.dirname(input)
   const name = path.basename(input, path.extname(input))
-  
+
   // If converting to same format, add suffix to avoid overwriting
   const inputExt = path.extname(input).slice(1).toLowerCase()
   if (inputExt === extension) {
     return path.join(dir, `${name}_converted.${extension}`)
   }
-  
+
   return path.join(dir, `${name}.${extension}`)
 }
 

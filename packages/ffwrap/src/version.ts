@@ -31,14 +31,12 @@ export function getVersionInfo(): { version: string; repo: string } {
  */
 export async function getLatestVersion(): Promise<string | null> {
   try {
-    const response = await fetch(
-      `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`
-    )
+    const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`)
     if (!response.ok) return null
     const data = (await response.json()) as { tag_name?: string }
     const tagName = data.tag_name
     // Remove 'v' prefix if present
-    return tagName?.startsWith("v") ? tagName.slice(1) : tagName ?? null
+    return tagName?.startsWith("v") ? tagName.slice(1) : (tagName ?? null)
   } catch {
     return null
   }
@@ -70,8 +68,7 @@ export async function checkForUpdate(): Promise<{
   latestVersion: string | null
 }> {
   const latestVersion = await getLatestVersion()
-  const hasUpdate =
-    latestVersion !== null && compareVersions(latestVersion, VERSION) > 0
+  const hasUpdate = latestVersion !== null && compareVersions(latestVersion, VERSION) > 0
 
   return {
     hasUpdate,

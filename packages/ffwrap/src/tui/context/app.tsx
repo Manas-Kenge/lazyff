@@ -210,25 +210,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
     })
   }, [])
 
-  const addMessage = useCallback((message: Omit<ChatMessage, "id" | "timestamp"> & { id?: string }) => {
-    const newMessage: ChatMessage = {
-      ...message,
-      id: message.id || generateId(),
-      timestamp: Date.now(),
-    }
-    setState((s: AppState) => ({
-      ...s,
-      messages: [...s.messages, newMessage],
-    }))
-    return newMessage.id
-  }, [])
+  const addMessage = useCallback(
+    (message: Omit<ChatMessage, "id" | "timestamp"> & { id?: string }) => {
+      const newMessage: ChatMessage = {
+        ...message,
+        id: message.id || generateId(),
+        timestamp: Date.now(),
+      }
+      setState((s: AppState) => ({
+        ...s,
+        messages: [...s.messages, newMessage],
+      }))
+      return newMessage.id
+    },
+    []
+  )
 
   const updateMessage = useCallback((id: string, updates: Partial<ChatMessage>) => {
     setState((s: AppState) => ({
       ...s,
-      messages: s.messages.map((msg) =>
-        msg.id === id ? { ...msg, ...updates } : msg
-      ),
+      messages: s.messages.map((msg) => (msg.id === id ? { ...msg, ...updates } : msg)),
     }))
   }, [])
 
@@ -237,9 +238,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setState((s: AppState) => {
       const newVisible = !s.sidebarVisible
       // If hiding sidebar and it was focused, move focus to input
-      const newFocusedPanel = !newVisible && s.focusedPanel === "sidebar"
-        ? "input"
-        : s.focusedPanel
+      const newFocusedPanel = !newVisible && s.focusedPanel === "sidebar" ? "input" : s.focusedPanel
       return { ...s, sidebarVisible: newVisible, focusedPanel: newFocusedPanel }
     })
   }, [])
@@ -247,9 +246,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const setSidebarVisible = useCallback((visible: boolean) => {
     setState((s: AppState) => {
       // If hiding sidebar and it was focused, move focus to input
-      const newFocusedPanel = !visible && s.focusedPanel === "sidebar"
-        ? "input"
-        : s.focusedPanel
+      const newFocusedPanel = !visible && s.focusedPanel === "sidebar" ? "input" : s.focusedPanel
       return { ...s, sidebarVisible: visible, focusedPanel: newFocusedPanel }
     })
   }, [])
@@ -268,9 +265,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
 
       // If sidebar becomes hidden and was focused, move focus to input
-      const newFocusedPanel = !newSidebarVisible && s.focusedPanel === "sidebar"
-        ? "input"
-        : s.focusedPanel
+      const newFocusedPanel =
+        !newSidebarVisible && s.focusedPanel === "sidebar" ? "input" : s.focusedPanel
 
       return {
         ...s,

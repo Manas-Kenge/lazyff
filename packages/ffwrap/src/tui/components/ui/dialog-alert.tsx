@@ -52,11 +52,7 @@ export function DialogAlert({ title, message, onConfirm }: DialogAlertProps) {
 /**
  * Static method to show an alert dialog
  */
-DialogAlert.show = (
-  dialog: DialogContextValue,
-  title: string,
-  message: string
-): Promise<void> => {
+DialogAlert.show = (dialog: DialogContextValue, title: string, message: string): Promise<void> => {
   return new Promise<void>((resolve) => {
     dialog.replace(
       () => <DialogAlert title={title} message={message} onConfirm={() => resolve()} />,

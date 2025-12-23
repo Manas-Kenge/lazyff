@@ -46,21 +46,51 @@ function ArrowIcon() {
 function Logo() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M9.06145 23.1079C5.26816 22.3769 -3.39077 20.6274 1.4173 5.06384C9.6344 6.09939 16.9728 14.0644 9.06145 23.1079Z" fill="url(#paint0_linear)"/>
-      <path d="M8.91928 23.0939C5.27642 21.2223 0.78371 4.20891 17.0071 0C20.7569 7.19341 19.6212 16.5452 8.91928 23.0939Z" fill="url(#paint1_linear)"/>
-      <path d="M8.91388 23.0788C8.73534 19.8817 10.1585 9.08525 23.5699 13.1107C23.1812 20.1229 18.984 26.4182 8.91388 23.0788Z" fill="url(#paint2_linear)"/>
+      <path
+        d="M9.06145 23.1079C5.26816 22.3769 -3.39077 20.6274 1.4173 5.06384C9.6344 6.09939 16.9728 14.0644 9.06145 23.1079Z"
+        fill="url(#paint0_linear)"
+      />
+      <path
+        d="M8.91928 23.0939C5.27642 21.2223 0.78371 4.20891 17.0071 0C20.7569 7.19341 19.6212 16.5452 8.91928 23.0939Z"
+        fill="url(#paint1_linear)"
+      />
+      <path
+        d="M8.91388 23.0788C8.73534 19.8817 10.1585 9.08525 23.5699 13.1107C23.1812 20.1229 18.984 26.4182 8.91388 23.0788Z"
+        fill="url(#paint2_linear)"
+      />
       <defs>
-        <linearGradient id="paint0_linear" x1="3.77557" y1="5.91571" x2="5.23185" y2="21.5589" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#18E299"/>
-          <stop offset="1" stopColor="#15803D"/>
+        <linearGradient
+          id="paint0_linear"
+          x1="3.77557"
+          y1="5.91571"
+          x2="5.23185"
+          y2="21.5589"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#18E299" />
+          <stop offset="1" stopColor="#15803D" />
         </linearGradient>
-        <linearGradient id="paint1_linear" x1="12.1711" y1="-0.718425" x2="10.1897" y2="22.9832" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#16A34A"/>
-          <stop offset="1" stopColor="#4ADE80"/>
+        <linearGradient
+          id="paint1_linear"
+          x1="12.1711"
+          y1="-0.718425"
+          x2="10.1897"
+          y2="22.9832"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#16A34A" />
+          <stop offset="1" stopColor="#4ADE80" />
         </linearGradient>
-        <linearGradient id="paint2_linear" x1="23.1327" y1="15.353" x2="9.33841" y2="18.5196" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#4ADE80"/>
-          <stop offset="1" stopColor="#0D9373"/>
+        <linearGradient
+          id="paint2_linear"
+          x1="23.1327"
+          y1="15.353"
+          x2="9.33841"
+          y2="18.5196"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#4ADE80" />
+          <stop offset="1" stopColor="#0D9373" />
         </linearGradient>
       </defs>
     </svg>
@@ -69,15 +99,27 @@ function Logo() {
 
 function GitHubIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
     </svg>
   )
 }
 
 function TwitterIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path d="M18.244 2H21.5l-7.26 8.29L22.5 22h-6.19l-4.85-6.18L5.89 22H2.63l7.76-8.86L2 2h6.31l4.39 5.64L18.244 2Zm-1.09 17.18h1.8L7.94 4.7H6.02l11.134 14.48Z" />
     </svg>
   )
@@ -86,19 +128,23 @@ function TwitterIcon() {
 const features = [
   {
     title: "100% Local",
-    description: "Your files never leave your machine. Process sensitive videos without uploading anywhere.",
+    description:
+      "Your files never leave your machine. Process sensitive videos without uploading anywhere.",
   },
   {
     title: "Free Forever",
-    description: "No subscriptions, no usage limits, no hidden fees. Process as many videos as you want.",
+    description:
+      "No subscriptions, no usage limits, no hidden fees. Process as many videos as you want.",
   },
   {
     title: "Zero Ads",
-    description: "Clean, distraction-free experience. No popups, no banners, no cookie consent dialogs.",
+    description:
+      "Clean, distraction-free experience. No popups, no banners, no cookie consent dialogs.",
   },
   {
     title: "No File Limits",
-    description: "Process gigabytes without waiting. No 100MB caps, no queue times, no premium tiers.",
+    description:
+      "Process gigabytes without waiting. No 100MB caps, no queue times, no premium tiers.",
   },
   {
     title: "Lightning Fast",
@@ -118,7 +164,8 @@ const commands = [
   },
   {
     task: "Compress to 25MB",
-    ffmpeg: "ffmpeg -i input.mp4 -c:v libx264 -b:v 1.5M -maxrate 2M -bufsize 3M -c:a aac output.mp4",
+    ffmpeg:
+      "ffmpeg -i input.mp4 -c:v libx264 -b:v 1.5M -maxrate 2M -bufsize 3M -c:a aac output.mp4",
     ffwrap: "ffwrap compress input.mp4 -s 25MB",
   },
   {
@@ -128,7 +175,7 @@ const commands = [
   },
   {
     task: "Create GIF",
-    ffmpeg: "ffmpeg -ss 5 -t 3 -i input.mp4 -vf \"fps=15,scale=480:-1\" -loop 0 output.gif",
+    ffmpeg: 'ffmpeg -ss 5 -t 3 -i input.mp4 -vf "fps=15,scale=480:-1" -loop 0 output.gif',
     ffwrap: "ffwrap gif input.mp4 -s 5 -d 3",
   },
 ]
@@ -162,7 +209,8 @@ export default function Home() {
           `,
           backgroundSize: "40px 40px",
           maskImage: "radial-gradient(ellipse 80% 50% at 50% 0%, black 40%, transparent 100%)",
-          WebkitMaskImage: "radial-gradient(ellipse 80% 50% at 50% 0%, black 40%, transparent 100%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 80% 50% at 50% 0%, black 40%, transparent 100%)",
         }}
       />
 
@@ -211,8 +259,8 @@ export default function Home() {
                 FFmpeg, without the headache
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Stop Googling ffmpeg commands. Convert, compress, trim, and merge videos with
-                simple commands that just work. 100% local, free forever.
+                Stop Googling ffmpeg commands. Convert, compress, trim, and merge videos with simple
+                commands that just work. 100% local, free forever.
               </p>
             </div>
           </div>
@@ -253,7 +301,16 @@ export default function Home() {
             </div>
 
             <p className="mt-4 text-sm text-muted-foreground">
-              Requires <Link href="https://ffmpeg.org/download.html" className="text-emerald-500 hover:underline" target="_blank" rel="noopener noreferrer">ffmpeg</Link> to be installed on your system.
+              Requires{" "}
+              <Link
+                href="https://ffmpeg.org/download.html"
+                className="text-emerald-500 hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ffmpeg
+              </Link>{" "}
+              to be installed on your system.
             </p>
           </div>
         </section>
@@ -263,10 +320,10 @@ export default function Home() {
           <div className="border-b border-border/100 px-6 py-10">
             <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 aspect-video flex items-center justify-center overflow-hidden">
               <div className="text-center space-y-2 p-8">
-                <div className="text-sm text-muted-foreground font-mono">[demo.gif placeholder]</div>
-                <div className="text-xs text-muted-foreground/60">
-                  16:9 aspect ratio
+                <div className="text-sm text-muted-foreground font-mono">
+                  [demo.gif placeholder]
                 </div>
+                <div className="text-xs text-muted-foreground/60">16:9 aspect ratio</div>
               </div>
             </div>
           </div>
@@ -307,7 +364,9 @@ export default function Home() {
         {/* FFmpeg vs ffwrap comparison */}
         <section className="mx-auto w-full max-w-5xl border-x border-border/100">
           <div className="border-b border-border/100 px-6 pt-12 pb-6">
-            <h2 className="text-2xl font-bold md:text-3xl text-white">Simple commands, powerful results</h2>
+            <h2 className="text-2xl font-bold md:text-3xl text-white">
+              Simple commands, powerful results
+            </h2>
             <p className="mt-3 text-muted-foreground">
               Forget cryptic flags. Do more with less typing.
             </p>
@@ -325,16 +384,18 @@ export default function Home() {
                   </div>
                   <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border/40">
                     <div className="p-4">
-                      <div className="text-xs text-muted-foreground mb-2 uppercase tracking-wider">ffmpeg</div>
+                      <div className="text-xs text-muted-foreground mb-2 uppercase tracking-wider">
+                        ffmpeg
+                      </div>
                       <code className="text-xs font-mono text-red-400/80 break-all leading-relaxed">
                         {cmd.ffmpeg}
                       </code>
                     </div>
                     <div className="p-4 bg-emerald-500/5">
-                      <div className="text-xs text-muted-foreground mb-2 uppercase tracking-wider">ffwrap</div>
-                      <code className="text-sm font-mono text-emerald-500">
-                        {cmd.ffwrap}
-                      </code>
+                      <div className="text-xs text-muted-foreground mb-2 uppercase tracking-wider">
+                        ffwrap
+                      </div>
+                      <code className="text-sm font-mono text-emerald-500">{cmd.ffwrap}</code>
                     </div>
                   </div>
                 </div>

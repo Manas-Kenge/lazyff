@@ -31,7 +31,8 @@ const ERROR_PATTERNS: ErrorPattern[] = [
   {
     pattern: /Unknown encoder '([^']+)'/i,
     message: "Codec not available",
-    suggestion: "The requested codec is not installed. Try a different codec or install ffmpeg with full codec support",
+    suggestion:
+      "The requested codec is not installed. Try a different codec or install ffmpeg with full codec support",
   },
   {
     pattern: /Encoder ([^ ]+) not found/i,
@@ -56,12 +57,14 @@ const ERROR_PATTERNS: ErrorPattern[] = [
   {
     pattern: /height not divisible by 2/i,
     message: "Invalid resolution",
-    suggestion: "Video dimensions must be divisible by 2. Try a standard resolution like 720p or 1080p",
+    suggestion:
+      "Video dimensions must be divisible by 2. Try a standard resolution like 720p or 1080p",
   },
   {
     pattern: /width not divisible by 2/i,
     message: "Invalid resolution",
-    suggestion: "Video dimensions must be divisible by 2. Try a standard resolution like 720p or 1080p",
+    suggestion:
+      "Video dimensions must be divisible by 2. Try a standard resolution like 720p or 1080p",
   },
   {
     pattern: /No space left on device/i,
@@ -91,7 +94,8 @@ const ERROR_PATTERNS: ErrorPattern[] = [
   {
     pattern: /moov atom not found/i,
     message: "Incomplete MP4 file",
-    suggestion: "The MP4 file appears to be incomplete or corrupted. It may have been interrupted during recording",
+    suggestion:
+      "The MP4 file appears to be incomplete or corrupted. It may have been interrupted during recording",
   },
   {
     pattern: /Stream map '([^']+)' matches no streams/i,
@@ -142,14 +146,14 @@ export function parseError(stderr: string): { message: string; suggestion: strin
  */
 export function formatError(stderr: string): string {
   const parsed = parseError(stderr)
-  
+
   if (parsed) {
     return `Error: ${parsed.message}\n  → ${parsed.suggestion}`
   }
-  
+
   // Fallback: try to extract meaningful error from ffmpeg output
   const lines = stderr.split("\n")
-  
+
   // Look for lines that look like errors
   const errorLine = lines.find(
     (line) =>
@@ -161,19 +165,19 @@ export function formatError(stderr: string): string {
       line.includes("No such") ||
       line.includes("not found")
   )
-  
+
   if (errorLine) {
     // Clean up the error line
     const cleaned = errorLine
       .replace(/^\[.*?\]\s*/, "") // Remove [component] prefix
       .replace(/^\s+/, "") // Remove leading whitespace
       .trim()
-    
+
     if (cleaned) {
       return `Error: ${cleaned}`
     }
   }
-  
+
   // Last resort: generic message
   return "Error: Conversion failed. Run with --verbose for more details"
 }

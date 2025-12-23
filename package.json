@@ -33,9 +33,13 @@
     "build": "bun run --filter '@ffwrap/*' build",
     "build:ffwrap": "bun run --filter @manaskng/ffwrap build",
     "build:web": "bun run --filter @ffwrap/web build",
-    "lint": "bun run --filter @ffwrap/web lint"
+    "lint": "bun run --filter @ffwrap/web lint",
+    "format": "prettier --write ."
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "prettier": "^3.7.4"
   }
 }

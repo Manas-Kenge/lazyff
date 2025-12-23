@@ -1,17 +1,9 @@
 import { TextAttributes } from "@opentui/core"
 import { useTheme } from "../context/theme"
 
-const LOGO_LEFT = [
-  `█▀▀▀ █▀▀▀ █░░░█ `,
-  `█▀▀░ █▀▀░ █▄█▄█ `,
-  `▀░░░ ▀░░░ ▀▀░▀▀ `
-]
+const LOGO_LEFT = [`█▀▀▀ █▀▀▀ █░░░█ `, `█▀▀░ █▀▀░ █▄█▄█ `, `▀░░░ ▀░░░ ▀▀░▀▀ `]
 
-const LOGO_RIGHT = [
-  "█▀▀█░█▀▀█░█▀▀█",
-  "█▄▄▀░█▄▄█░█▄▄█",
-  "▀░▀▀░▀░░▀░▀░░░"
-]
+const LOGO_RIGHT = ["█▀▀█░█▀▀█░█▀▀█", "█▄▄▀░█▄▄█░█▄▄█", "▀░▀▀░▀░░▀░▀░░░"]
 
 export function Logo() {
   const { theme } = useTheme()

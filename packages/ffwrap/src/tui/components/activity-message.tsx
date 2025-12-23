@@ -72,5 +72,3 @@ export function ActivityMessage({ message }: ActivityMessageProps) {
     </box>
   )
 }
-
-

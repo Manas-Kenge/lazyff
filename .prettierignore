@@ -1,0 +1,9 @@
+node_modules
+dist
+build
+.git
+bun.lock
+package-lock.json
+*.log
+.ffwrap
+packages/docs

@@ -23,39 +23,48 @@ export function DialogHelp() {
         <text fg={theme.textMuted}>esc</text>
       </box>
       <box paddingBottom={1} gap={1}>
-        <text fg={theme.text} attributes={TextAttributes.BOLD}>
+        <text fg={theme.secondary} attributes={TextAttributes.BOLD}>
           Commands
         </text>
-        <box paddingLeft={2}>
-          <text fg={theme.textMuted}>/convert [format]    - Convert to format</text>
-          <text fg={theme.textMuted}>/trim [start] [dur]  - Cut portion of video</text>
-          <text fg={theme.textMuted}>/compress [%|size]   - Reduce file size</text>
-          <text fg={theme.textMuted}>/extract [mode]      - Extract audio/video/frames</text>
-          <text fg={theme.textMuted}>/gif [width] [fps]   - Convert to animated GIF</text>
-          <text fg={theme.textMuted}>/thumbnail [mode]    - Generate thumbnail</text>
-          <text fg={theme.textMuted}>/info                - Show file information</text>
-          <text fg={theme.textMuted}>/quality &lt;preset&gt;    - Set quality preset</text>
-          <text fg={theme.textMuted}>/theme               - Change theme</text>
-          <text fg={theme.textMuted}>/help                - Show this help</text>
-          <text fg={theme.textMuted}>/quit                - Exit ffwrap</text>
+        <box paddingLeft={2} gap={0} flexDirection="column">
+          {[
+            { label: "Convert to format", cmd: "/convert (v)" },
+            { label: "Trim", cmd: "/trim (r)" },
+            { label: "Compress", cmd: "/compress (c)" },
+            { label: "Extract", cmd: "/extract (e)" },
+            { label: "GIF", cmd: "/gif (g)" },
+            { label: "Thumbnail", cmd: "/thumbnail (t)" },
+            { label: "Merge", cmd: "/merge (m)" },
+            { label: "Info", cmd: "/info (i)" },
+            { label: "Theme", cmd: "/theme (ctrl+t)" },
+            { label: "Help", cmd: "/help (h)" },
+            { label: "Quit", cmd: "/quit (q)" },
+          ].map((c) => (
+            <box key={c.cmd} flexDirection="row" justifyContent="space-between">
+              <text fg={theme.textMuted}>{c.label}</text>
+              <text fg={theme.textMuted}>{c.cmd}</text>
+            </box>
+          ))}
         </box>
-        <text fg={theme.text} attributes={TextAttributes.BOLD}>
+        <text fg={theme.secondary} attributes={TextAttributes.BOLD}>
           Keyboard Shortcuts
         </text>
-        <box paddingLeft={2}>
-          <text fg={theme.textMuted}>Ctrl+P - Show/hide help</text>
-          <text fg={theme.textMuted}>Ctrl+B - Toggle file tree</text>
-          <text fg={theme.textMuted}>Tab - Switch panel focus</text>
-          <text fg={theme.textMuted}>↑/↓ - Navigate file tree</text>
-          <text fg={theme.textMuted}>Enter - Select file</text>
-          <text fg={theme.textMuted}>Ctrl+C - Quit</text>
-        </box>
-        <text fg={theme.text} attributes={TextAttributes.BOLD}>
-          Formats
-        </text>
-        <box paddingLeft={2}>
-          <text fg={theme.textMuted}>Video: mp4, webm, mkv, avi, mov, gif</text>
-          <text fg={theme.textMuted}>Audio: mp3, aac, wav, flac, ogg</text>
+        <box paddingLeft={2} gap={0} flexDirection="column">
+          {[
+            { label: "Show help", key: "Ctrl+P" },
+            { label: "Navigate file tree", key: "↑/↓ or j/k" },
+            { label: "Collapse/Expand directory", key: "←/→ or h/l" },
+            { label: "Select file or Toggle directory", key: "Enter/Space" },
+            { label: "Go to parent directory", key: "Backspace" },
+            { label: "Set selected directory as root", key: "." },
+            { label: "Go to top/bottom", key: "Home/End" },
+            { label: "Quit", key: "Ctrl+C" },
+          ].map((s) => (
+            <box key={s.label} flexDirection="row" justifyContent="space-between">
+              <text fg={theme.textMuted}>{s.label}</text>
+              <text fg={theme.textMuted}>{s.key}</text>
+            </box>
+          ))}
         </box>
       </box>
     </box>

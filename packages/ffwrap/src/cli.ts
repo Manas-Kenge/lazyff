@@ -74,8 +74,7 @@ async function main() {
         })
       },
       async (argv) => {
-        const { hasUpdate, currentVersion, latestVersion } =
-          await checkForUpdate()
+        const { hasUpdate, currentVersion, latestVersion } = await checkForUpdate()
 
         if (argv.check) {
           if (hasUpdate) {

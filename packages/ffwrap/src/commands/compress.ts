@@ -97,7 +97,9 @@ function formatBitrate(bps: number): string {
 /**
  * Build ffmpeg arguments for compression
  */
-async function buildCompressArgs(options: CompressOptions): Promise<{ args: string[]; outputPath: string; targetBitrate: number }> {
+async function buildCompressArgs(
+  options: CompressOptions
+): Promise<{ args: string[]; outputPath: string; targetBitrate: number }> {
   const args: string[] = []
 
   // Get media info for duration

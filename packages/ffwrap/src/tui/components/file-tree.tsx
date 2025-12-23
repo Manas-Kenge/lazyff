@@ -64,11 +64,7 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
   const flattenTree = useCallback((): FlatNode[] => {
     const result: FlatNode[] = []
 
-    const traverse = (
-      nodes: FileNode[],
-      depth: number,
-      ancestorsAreLast: boolean[]
-    ) => {
+    const traverse = (nodes: FileNode[], depth: number, ancestorsAreLast: boolean[]) => {
       nodes.forEach((node, index) => {
         const isLast = index === nodes.length - 1
 
@@ -313,8 +309,8 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
     <box
       flexDirection="column"
       borderStyle="rounded"
-      borderColor={focused ? theme.primary : theme.border}
-      backgroundColor={theme.background}
+      borderColor={theme.border}
+      backgroundColor={theme.backgroundPanel}
       width={width}
     >
       {/* Header */}
@@ -397,14 +393,10 @@ export function FileTree({ focused, width = 40 }: FileTreeProps) {
                 backgroundColor={isSelected && focused ? theme.primary : undefined}
               >
                 {/* Indent guides */}
-                {depth > 0 && (
-                  <text fg={theme.border}>{indentGuides}</text>
-                )}
+                {depth > 0 && <text fg={theme.border}>{indentGuides}</text>}
 
                 {/* Expander */}
-                <text fg={isSelected && focused ? textColor : theme.textMuted}>
-                  {expander}
-                </text>
+                <text fg={isSelected && focused ? textColor : theme.textMuted}>{expander}</text>
 
                 {/* Icon */}
                 <text fg={textColor}>{icon} </text>

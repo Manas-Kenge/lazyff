@@ -1,23 +1,23 @@
-import React from "react";
-import { TextAttributes } from "@opentui/core";
-import { useApp } from "../context/app.tsx";
-import { useTheme } from "../context/theme.tsx";
-import { Logo } from "./logo.tsx";
-import { ActivityMessage } from "./activity-message.tsx";
+import React from "react"
+import { TextAttributes } from "@opentui/core"
+import { useApp } from "../context/app.tsx"
+import { useTheme } from "../context/theme.tsx"
+import { Logo } from "./logo.tsx"
+import { ActivityMessage } from "./activity-message.tsx"
 
 /**
  * Activity panel component to display operation history
  */
 export function Activity() {
-  const { messages } = useApp();
-  const { theme } = useTheme();
+  const { messages } = useApp()
+  const { theme } = useTheme()
 
   return (
     <box
       flexDirection="column"
       borderStyle="rounded"
       borderColor={theme.border}
-      backgroundColor={theme.background}
+      backgroundColor={theme.backgroundPanel}
       flexGrow={1}
     >
       {/* Header */}
@@ -64,5 +64,5 @@ export function Activity() {
         </scrollbox>
       )}
     </box>
-  );
+  )
 }

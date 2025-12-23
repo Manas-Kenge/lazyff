@@ -34,7 +34,7 @@ interface ScannerState {
 function getScannerState(
   frameIndex: number,
   totalChars: number,
-  options: Pick<AdvancedGradientOptions, "direction" | "holdFrames">,
+  options: Pick<AdvancedGradientOptions, "direction" | "holdFrames">
 ): ScannerState {
   const { direction = "forward", holdFrames = {} } = options
 
@@ -117,7 +117,7 @@ function calculateColorIndex(
   charIndex: number,
   totalChars: number,
   options: Pick<AdvancedGradientOptions, "direction" | "holdFrames" | "trailLength">,
-  state?: ScannerState,
+  state?: ScannerState
 ): number {
   const { trailLength } = options
   const { activePosition, isHolding, holdProgress, isMovingForward } =
@@ -156,7 +156,10 @@ function createKnightRiderTrail(options: AdvancedGradientOptions): ColorGenerato
   // Use the provided defaultColor if it's an RGBA instance, otherwise convert/default
   // We use RGBA.fromHex for the fallback to ensure we have an RGBA object.
   // Note: If defaultColor is a string, we convert it once here.
-  const defaultRgba = defaultColor instanceof RGBA ? defaultColor : RGBA.fromHex((defaultColor as string) || "#000000")
+  const defaultRgba =
+    defaultColor instanceof RGBA
+      ? defaultColor
+      : RGBA.fromHex((defaultColor as string) || "#000000")
 
   // Store the base alpha from the inactive factor
   const baseInactiveAlpha = defaultRgba.a
@@ -302,7 +305,9 @@ export function createFrames(options: KnightRiderOptions = {}): string[] {
 
   const defaultColor =
     options.defaultColor ??
-    (options.color ? deriveInactiveColor(options.color, options.inactiveFactor) : RGBA.fromHex("#330000"))
+    (options.color
+      ? deriveInactiveColor(options.color, options.inactiveFactor)
+      : RGBA.fromHex("#330000"))
 
   const trailOptions = {
     colors,
@@ -364,7 +369,9 @@ export function createColors(options: KnightRiderOptions = {}): ColorGenerator {
 
   const defaultColor =
     options.defaultColor ??
-    (options.color ? deriveInactiveColor(options.color, options.inactiveFactor) : RGBA.fromHex("#330000"))
+    (options.color
+      ? deriveInactiveColor(options.color, options.inactiveFactor)
+      : RGBA.fromHex("#330000"))
 
   const trailOptions = {
     colors,

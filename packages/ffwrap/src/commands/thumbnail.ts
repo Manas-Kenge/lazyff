@@ -30,7 +30,10 @@ export interface ThumbnailOptions {
 /**
  * Build ffmpeg arguments for single thumbnail
  */
-function buildSingleThumbnailArgs(options: ThumbnailOptions): { args: string[]; outputPath: string } {
+function buildSingleThumbnailArgs(options: ThumbnailOptions): {
+  args: string[]
+  outputPath: string
+} {
   const args: string[] = []
 
   if (options.overwrite) {
@@ -143,11 +146,7 @@ async function buildGridThumbnailArgs(
   // 1. Select frames at intervals
   // 2. Scale each frame
   // 3. Tile them into a grid
-  const filterComplex = [
-    `fps=${fps}`,
-    `scale=${tileWidth}:-1`,
-    `tile=${cols}x${rows}`,
-  ].join(",")
+  const filterComplex = [`fps=${fps}`, `scale=${tileWidth}:-1`, `tile=${cols}x${rows}`].join(",")
 
   args.push("-vf", filterComplex)
   args.push("-frames:v", "1")
@@ -316,9 +315,9 @@ export const thumbnailCommand: CommandModule = {
         const dir = path.dirname(outputPath)
         const baseName = path.basename(options.input, path.extname(options.input))
         const ext = options.format || "png"
-        const thumbFiles = fs.readdirSync(dir).filter(f =>
-          f.startsWith(`${baseName}_thumb_`) && f.endsWith(`.${ext}`)
-        )
+        const thumbFiles = fs
+          .readdirSync(dir)
+          .filter((f) => f.startsWith(`${baseName}_thumb_`) && f.endsWith(`.${ext}`))
 
         console.log(`\n✓ Done: Generated ${thumbFiles.length} thumbnails`)
         console.log(`        Pattern: ${path.basename(outputPath)}`)

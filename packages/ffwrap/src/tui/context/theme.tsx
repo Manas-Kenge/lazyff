@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useState, useMemo, useEffect, useCallback, type ReactNode } from "react"
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  useEffect,
+  useCallback,
+  type ReactNode,
+} from "react"
 import { RGBA } from "@opentui/core"
 import { loadConfig, setConfigValue } from "../utils/config"
 
@@ -207,9 +215,15 @@ export function selectedForeground(theme: Theme): RGBA {
  * Convert RGBA to hex string for terminal escape sequences
  */
 function rgbaToHex(color: RGBA): string {
-  const r = Math.round(color.r * 255).toString(16).padStart(2, "0")
-  const g = Math.round(color.g * 255).toString(16).padStart(2, "0")
-  const b = Math.round(color.b * 255).toString(16).padStart(2, "0")
+  const r = Math.round(color.r * 255)
+    .toString(16)
+    .padStart(2, "0")
+  const g = Math.round(color.g * 255)
+    .toString(16)
+    .padStart(2, "0")
+  const b = Math.round(color.b * 255)
+    .toString(16)
+    .padStart(2, "0")
   return `${r}${g}${b}`
 }
 
@@ -243,6 +257,7 @@ interface ThemeContextValue {
   themeName: ThemeName
   mode: "dark" | "light"
   setTheme: (name: ThemeName) => void
+  setThemePreview: (name: ThemeName) => void
   setMode: (mode: "dark" | "light") => void
 }
 
@@ -300,11 +315,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setConfigValue("mode", newMode)
   }, [])
 
+  const setThemePreview = useCallback((name: ThemeName) => {
+    setThemeNameState(name)
+  }, [])
+
   const value: ThemeContextValue = {
     theme,
     themeName,
     mode,
     setTheme,
+    setThemePreview,
     setMode,
   }
 

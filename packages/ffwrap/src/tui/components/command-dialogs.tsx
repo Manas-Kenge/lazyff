@@ -28,10 +28,14 @@ function parseSizeToBytes(sizeStr: string): number {
   const unit = (match[2] || "B").toUpperCase()
 
   switch (unit) {
-    case "KB": return value * 1024
-    case "MB": return value * 1024 * 1024
-    case "GB": return value * 1024 * 1024 * 1024
-    default: return value
+    case "KB":
+      return value * 1024
+    case "MB":
+      return value * 1024 * 1024
+    case "GB":
+      return value * 1024 * 1024 * 1024
+    default:
+      return value
   }
 }
 
@@ -44,7 +48,10 @@ interface DialogProps<T> {
  * Convert command dialog - select output format
  * Only available for video and audio files
  */
-export function ConvertDialog({ file, onSelect }: DialogProps<{ format: string; quality: string }>) {
+export function ConvertDialog({
+  file,
+  onSelect,
+}: DialogProps<{ format: string; quality: string }>) {
   const dialog = useDialog()
   const [showCustom, setShowCustom] = useState(false)
 
@@ -107,7 +114,10 @@ export function ConvertDialog({ file, onSelect }: DialogProps<{ format: string; 
  * Compress command dialog - select compression target
  * Only available for video and audio files
  */
-export function CompressDialog({ file, onSelect }: DialogProps<{ percent?: number; targetSize?: string }>) {
+export function CompressDialog({
+  file,
+  onSelect,
+}: DialogProps<{ percent?: number; targetSize?: string }>) {
   const dialog = useDialog()
   const [showCustom, setShowCustom] = useState(false)
   const [customType, setCustomType] = useState<"percent" | "size">("percent")
@@ -116,10 +126,27 @@ export function CompressDialog({ file, onSelect }: DialogProps<{ percent?: numbe
   const fileSizeFormatted = formatSize(fileSize)
 
   // Build compression options, filtering out target sizes larger than file
-  const compressOptions: DialogSelectOption<{ percent?: number; targetSize?: string } | "__custom_percent__" | "__custom_size__">[] = [
-    { title: "25%", value: { percent: 25 }, description: `Compress to ~${formatSize(fileSize * 0.25)}`, category: "Percentage" },
-    { title: "50%", value: { percent: 50 }, description: `Compress to ~${formatSize(fileSize * 0.5)}`, category: "Percentage" },
-    { title: "75%", value: { percent: 75 }, description: `Compress to ~${formatSize(fileSize * 0.75)}`, category: "Percentage" },
+  const compressOptions: DialogSelectOption<
+    { percent?: number; targetSize?: string } | "__custom_percent__" | "__custom_size__"
+  >[] = [
+    {
+      title: "25%",
+      value: { percent: 25 },
+      description: `Compress to ~${formatSize(fileSize * 0.25)}`,
+      category: "Percentage",
+    },
+    {
+      title: "50%",
+      value: { percent: 50 },
+      description: `Compress to ~${formatSize(fileSize * 0.5)}`,
+      category: "Percentage",
+    },
+    {
+      title: "75%",
+      value: { percent: 75 },
+      description: `Compress to ~${formatSize(fileSize * 0.75)}`,
+      category: "Percentage",
+    },
   ]
 
   // Only add target sizes smaller than current file
@@ -145,8 +172,18 @@ export function CompressDialog({ file, onSelect }: DialogProps<{ percent?: numbe
 
   // Add custom options
   compressOptions.push(
-    { title: "Custom %...", value: "__custom_percent__", description: "Enter a custom percentage", category: "Custom" },
-    { title: "Custom size...", value: "__custom_size__", description: `Enter target size (current: ${fileSizeFormatted})`, category: "Custom" },
+    {
+      title: "Custom %...",
+      value: "__custom_percent__",
+      description: "Enter a custom percentage",
+      category: "Custom",
+    },
+    {
+      title: "Custom size...",
+      value: "__custom_size__",
+      description: `Enter target size (current: ${fileSizeFormatted})`,
+      category: "Custom",
+    }
   )
 
   if (showCustom) {
@@ -212,31 +249,86 @@ export function CompressDialog({ file, onSelect }: DialogProps<{ percent?: numbe
  * Extract command dialog - select what to extract
  * Only available for video files (to extract audio) or audio files
  */
-export function ExtractDialog({ file, onSelect }: DialogProps<{ audio?: boolean; video?: boolean; frames?: boolean; format?: string }>) {
+export function ExtractDialog({
+  file,
+  onSelect,
+}: DialogProps<{ audio?: boolean; video?: boolean; frames?: boolean; format?: string }>) {
   const dialog = useDialog()
   const [showCustom, setShowCustom] = useState(false)
 
-  const extractOptions: DialogSelectOption<{ audio?: boolean; video?: boolean; frames?: boolean; format?: string } | "__custom__">[] = []
+  const extractOptions: DialogSelectOption<
+    { audio?: boolean; video?: boolean; frames?: boolean; format?: string } | "__custom__"
+  >[] = []
 
   // Audio extraction options (for video files)
   if (file.mediaType === "video") {
     extractOptions.push(
-      { title: "Audio as MP3", value: { audio: true, format: "mp3" }, description: "Extract audio track as MP3", category: "Audio" },
-      { title: "Audio as WAV", value: { audio: true, format: "wav" }, description: "Extract audio track as WAV (lossless)", category: "Audio" },
-      { title: "Audio as FLAC", value: { audio: true, format: "flac" }, description: "Extract audio track as FLAC (lossless)", category: "Audio" },
-      { title: "Audio as AAC", value: { audio: true, format: "aac" }, description: "Extract audio track as AAC", category: "Audio" },
-      { title: "Video only", value: { video: true }, description: "Remove audio, keep video", category: "Video" },
-      { title: "Single frame", value: { frames: true }, description: "Extract a single frame as image", category: "Frames" },
+      {
+        title: "Audio as MP3",
+        value: { audio: true, format: "mp3" },
+        description: "Extract audio track as MP3",
+        category: "Audio",
+      },
+      {
+        title: "Audio as WAV",
+        value: { audio: true, format: "wav" },
+        description: "Extract audio track as WAV (lossless)",
+        category: "Audio",
+      },
+      {
+        title: "Audio as FLAC",
+        value: { audio: true, format: "flac" },
+        description: "Extract audio track as FLAC (lossless)",
+        category: "Audio",
+      },
+      {
+        title: "Audio as AAC",
+        value: { audio: true, format: "aac" },
+        description: "Extract audio track as AAC",
+        category: "Audio",
+      },
+      {
+        title: "Video only",
+        value: { video: true },
+        description: "Remove audio, keep video",
+        category: "Video",
+      },
+      {
+        title: "Single frame",
+        value: { frames: true },
+        description: "Extract a single frame as image",
+        category: "Frames",
+      }
     )
   }
 
   // Audio file conversions
   if (file.mediaType === "audio") {
     extractOptions.push(
-      { title: "Convert to MP3", value: { audio: true, format: "mp3" }, description: "Convert to MP3 format", category: "Convert" },
-      { title: "Convert to WAV", value: { audio: true, format: "wav" }, description: "Convert to WAV (lossless)", category: "Convert" },
-      { title: "Convert to FLAC", value: { audio: true, format: "flac" }, description: "Convert to FLAC (lossless)", category: "Convert" },
-      { title: "Convert to AAC", value: { audio: true, format: "aac" }, description: "Convert to AAC format", category: "Convert" },
+      {
+        title: "Convert to MP3",
+        value: { audio: true, format: "mp3" },
+        description: "Convert to MP3 format",
+        category: "Convert",
+      },
+      {
+        title: "Convert to WAV",
+        value: { audio: true, format: "wav" },
+        description: "Convert to WAV (lossless)",
+        category: "Convert",
+      },
+      {
+        title: "Convert to FLAC",
+        value: { audio: true, format: "flac" },
+        description: "Convert to FLAC (lossless)",
+        category: "Convert",
+      },
+      {
+        title: "Convert to AAC",
+        value: { audio: true, format: "aac" },
+        description: "Convert to AAC format",
+        category: "Convert",
+      }
     )
   }
 
@@ -272,7 +364,9 @@ export function ExtractDialog({ file, onSelect }: DialogProps<{ audio?: boolean;
           setShowCustom(true)
         } else {
           dialog.close()
-          onSelect(option.value as { audio?: boolean; video?: boolean; frames?: boolean; format?: string })
+          onSelect(
+            option.value as { audio?: boolean; video?: boolean; frames?: boolean; format?: string }
+          )
         }
       }}
     />
@@ -283,17 +377,59 @@ export function ExtractDialog({ file, onSelect }: DialogProps<{ audio?: boolean;
  * GIF command dialog - select GIF settings
  * Only available for video files
  */
-export function GifDialog({ file, onSelect }: DialogProps<{ duration?: string; width?: number; fps?: number; highQuality?: boolean; startTime?: string }>) {
+export function GifDialog({
+  file,
+  onSelect,
+}: DialogProps<{
+  duration?: string
+  width?: number
+  fps?: number
+  highQuality?: boolean
+  startTime?: string
+}>) {
   const dialog = useDialog()
   const [showCustom, setShowCustom] = useState(false)
 
-  const gifOptions: DialogSelectOption<{ duration?: string; width?: number; fps?: number; highQuality?: boolean; startTime?: string } | "__custom__">[] = [
-    { title: "Quick (3s, 320px)", value: { duration: "3", width: 320, fps: 10 }, description: "Small 3-second GIF", category: "Presets" },
-    { title: "Standard (5s, 480px)", value: { duration: "5", width: 480, fps: 15 }, description: "Standard 5-second GIF", category: "Presets" },
-    { title: "Large (10s, 640px)", value: { duration: "10", width: 640, fps: 15 }, description: "Larger 10-second GIF", category: "Presets" },
-    { title: "High Quality (5s, 480px)", value: { duration: "5", width: 480, fps: 15, highQuality: true }, description: "Better colors, larger file", category: "Quality" },
-    { title: "Full video (480px)", value: { width: 480, fps: 15 }, description: "Convert entire video to GIF", category: "Full" },
-    { title: "Custom...", value: "__custom__", description: "Specify duration and start time", category: "Other" },
+  const gifOptions: DialogSelectOption<
+    | { duration?: string; width?: number; fps?: number; highQuality?: boolean; startTime?: string }
+    | "__custom__"
+  >[] = [
+    {
+      title: "Quick (3s, 320px)",
+      value: { duration: "3", width: 320, fps: 10 },
+      description: "Small 3-second GIF",
+      category: "Presets",
+    },
+    {
+      title: "Standard (5s, 480px)",
+      value: { duration: "5", width: 480, fps: 15 },
+      description: "Standard 5-second GIF",
+      category: "Presets",
+    },
+    {
+      title: "Large (10s, 640px)",
+      value: { duration: "10", width: 640, fps: 15 },
+      description: "Larger 10-second GIF",
+      category: "Presets",
+    },
+    {
+      title: "High Quality (5s, 480px)",
+      value: { duration: "5", width: 480, fps: 15, highQuality: true },
+      description: "Better colors, larger file",
+      category: "Quality",
+    },
+    {
+      title: "Full video (480px)",
+      value: { width: 480, fps: 15 },
+      description: "Convert entire video to GIF",
+      category: "Full",
+    },
+    {
+      title: "Custom...",
+      value: "__custom__",
+      description: "Specify duration and start time",
+      category: "Other",
+    },
   ]
 
   if (showCustom) {
@@ -302,7 +438,7 @@ export function GifDialog({ file, onSelect }: DialogProps<{ duration?: string; w
         title="Enter GIF options"
         placeholder="duration,width,fps,start (e.g., 5,480,15,10)"
         onConfirm={(value) => {
-          const parts = value.split(",").map(s => s.trim())
+          const parts = value.split(",").map((s) => s.trim())
           dialog.close()
           onSelect({
             duration: parts[0] || "5",
@@ -326,7 +462,14 @@ export function GifDialog({ file, onSelect }: DialogProps<{ duration?: string; w
           setShowCustom(true)
         } else {
           dialog.close()
-          onSelect(option.value as { duration?: string; width?: number; fps?: number; highQuality?: boolean })
+          onSelect(
+            option.value as {
+              duration?: string
+              width?: number
+              fps?: number
+              highQuality?: boolean
+            }
+          )
         }
       }}
     />
@@ -337,19 +480,64 @@ export function GifDialog({ file, onSelect }: DialogProps<{ duration?: string; w
  * Trim command dialog - select trim duration
  * Only available for video and audio files
  */
-export function TrimDialog({ file, onSelect }: DialogProps<{ startTime?: string; duration?: string; endTime?: string }>) {
+export function TrimDialog({
+  file,
+  onSelect,
+}: DialogProps<{ startTime?: string; duration?: string; endTime?: string }>) {
   const dialog = useDialog()
   const [showCustom, setShowCustom] = useState(false)
 
-  const trimOptions: DialogSelectOption<{ startTime?: string; duration?: string; endTime?: string } | "__custom__">[] = [
-    { title: "First 10 seconds", value: { startTime: "0", duration: "10" }, description: "Keep first 10 seconds", category: "Beginning" },
-    { title: "First 30 seconds", value: { startTime: "0", duration: "30" }, description: "Keep first 30 seconds", category: "Beginning" },
-    { title: "First minute", value: { startTime: "0", duration: "60" }, description: "Keep first minute", category: "Beginning" },
-    { title: "Skip first 10s", value: { startTime: "10" }, description: "Remove first 10 seconds", category: "Skip" },
-    { title: "Skip first 30s", value: { startTime: "30" }, description: "Remove first 30 seconds", category: "Skip" },
-    { title: "10s to 30s", value: { startTime: "10", endTime: "30" }, description: "Extract from 10s to 30s", category: "Range" },
-    { title: "30s to 1min", value: { startTime: "30", endTime: "60" }, description: "Extract from 30s to 1 minute", category: "Range" },
-    { title: "Custom...", value: "__custom__", description: "Enter custom start/end times", category: "Other" },
+  const trimOptions: DialogSelectOption<
+    { startTime?: string; duration?: string; endTime?: string } | "__custom__"
+  >[] = [
+    {
+      title: "First 10 seconds",
+      value: { startTime: "0", duration: "10" },
+      description: "Keep first 10 seconds",
+      category: "Beginning",
+    },
+    {
+      title: "First 30 seconds",
+      value: { startTime: "0", duration: "30" },
+      description: "Keep first 30 seconds",
+      category: "Beginning",
+    },
+    {
+      title: "First minute",
+      value: { startTime: "0", duration: "60" },
+      description: "Keep first minute",
+      category: "Beginning",
+    },
+    {
+      title: "Skip first 10s",
+      value: { startTime: "10" },
+      description: "Remove first 10 seconds",
+      category: "Skip",
+    },
+    {
+      title: "Skip first 30s",
+      value: { startTime: "30" },
+      description: "Remove first 30 seconds",
+      category: "Skip",
+    },
+    {
+      title: "10s to 30s",
+      value: { startTime: "10", endTime: "30" },
+      description: "Extract from 10s to 30s",
+      category: "Range",
+    },
+    {
+      title: "30s to 1min",
+      value: { startTime: "30", endTime: "60" },
+      description: "Extract from 30s to 1 minute",
+      category: "Range",
+    },
+    {
+      title: "Custom...",
+      value: "__custom__",
+      description: "Enter custom start/end times",
+      category: "Other",
+    },
   ]
 
   if (showCustom) {
@@ -358,7 +546,7 @@ export function TrimDialog({ file, onSelect }: DialogProps<{ startTime?: string;
         title="Enter trim range"
         placeholder="start,end or start,+duration (e.g., 10,30 or 5,+15)"
         onConfirm={(value) => {
-          const parts = value.split(",").map(s => s.trim())
+          const parts = value.split(",").map((s) => s.trim())
           const start = parts[0] || "0"
           const end = parts[1] || ""
 
@@ -397,20 +585,70 @@ export function TrimDialog({ file, onSelect }: DialogProps<{ startTime?: string;
  * Thumbnail command dialog - select thumbnail settings
  * Available for video files only
  */
-export function ThumbnailDialog({ file, onSelect }: DialogProps<{ time?: string; count?: number; grid?: string; width?: number }>) {
+export function ThumbnailDialog({
+  file,
+  onSelect,
+}: DialogProps<{ time?: string; count?: number; grid?: string; width?: number }>) {
   const dialog = useDialog()
   const [showCustom, setShowCustom] = useState(false)
 
-  const thumbnailOptions: DialogSelectOption<{ time?: string; count?: number; grid?: string; width?: number } | "__custom__">[] = [
-    { title: "At 1 second", value: { time: "1" }, description: "Capture at 1 second", category: "Single" },
-    { title: "At 5 seconds", value: { time: "5" }, description: "Capture at 5 seconds", category: "Single" },
-    { title: "At 10 seconds", value: { time: "10" }, description: "Capture at 10 seconds", category: "Single" },
-    { title: "At 30 seconds", value: { time: "30" }, description: "Capture at 30 seconds", category: "Single" },
-    { title: "Grid 3x3", value: { count: 9, grid: "3x3" }, description: "9 thumbnails in a 3x3 grid", category: "Grid" },
-    { title: "Grid 4x4", value: { count: 16, grid: "4x4" }, description: "16 thumbnails in a 4x4 grid", category: "Grid" },
-    { title: "5 thumbnails", value: { count: 5 }, description: "5 evenly spaced thumbnails", category: "Multiple" },
-    { title: "10 thumbnails", value: { count: 10 }, description: "10 evenly spaced thumbnails", category: "Multiple" },
-    { title: "Custom time...", value: "__custom__", description: "Enter custom timestamp", category: "Other" },
+  const thumbnailOptions: DialogSelectOption<
+    { time?: string; count?: number; grid?: string; width?: number } | "__custom__"
+  >[] = [
+    {
+      title: "At 1 second",
+      value: { time: "1" },
+      description: "Capture at 1 second",
+      category: "Single",
+    },
+    {
+      title: "At 5 seconds",
+      value: { time: "5" },
+      description: "Capture at 5 seconds",
+      category: "Single",
+    },
+    {
+      title: "At 10 seconds",
+      value: { time: "10" },
+      description: "Capture at 10 seconds",
+      category: "Single",
+    },
+    {
+      title: "At 30 seconds",
+      value: { time: "30" },
+      description: "Capture at 30 seconds",
+      category: "Single",
+    },
+    {
+      title: "Grid 3x3",
+      value: { count: 9, grid: "3x3" },
+      description: "9 thumbnails in a 3x3 grid",
+      category: "Grid",
+    },
+    {
+      title: "Grid 4x4",
+      value: { count: 16, grid: "4x4" },
+      description: "16 thumbnails in a 4x4 grid",
+      category: "Grid",
+    },
+    {
+      title: "5 thumbnails",
+      value: { count: 5 },
+      description: "5 evenly spaced thumbnails",
+      category: "Multiple",
+    },
+    {
+      title: "10 thumbnails",
+      value: { count: 10 },
+      description: "10 evenly spaced thumbnails",
+      category: "Multiple",
+    },
+    {
+      title: "Custom time...",
+      value: "__custom__",
+      description: "Enter custom timestamp",
+      category: "Other",
+    },
   ]
 
   if (showCustom) {
@@ -451,7 +689,7 @@ export function ThumbnailDialog({ file, onSelect }: DialogProps<{ time?: string;
 export function MergeDialog({
   file,
   siblingFiles,
-  onSelect
+  onSelect,
 }: {
   file: FileNode
   siblingFiles: FileNode[]
@@ -463,15 +701,16 @@ export function MergeDialog({
   const [step, setStep] = useState<"select" | "options">("select")
 
   // Filter to only show compatible files (same media type)
-  const compatibleFiles = siblingFiles.filter(f =>
-    f.type === "file" &&
-    f.mediaType === file.mediaType &&
-    (f.mediaType === "video" || f.mediaType === "audio")
+  const compatibleFiles = siblingFiles.filter(
+    (f) =>
+      f.type === "file" &&
+      f.mediaType === file.mediaType &&
+      (f.mediaType === "video" || f.mediaType === "audio")
   )
 
   // Toggle file selection
   const toggleFile = (path: string) => {
-    setSelectedFiles(prev => {
+    setSelectedFiles((prev) => {
       const next = new Set(prev)
       if (next.has(path)) {
         // Don't allow deselecting if it's the last file
@@ -491,17 +730,17 @@ export function MergeDialog({
         title: "Fast (Copy)",
         value: { reencode: false },
         description: "Quick merge - requires same codec in all files",
-        category: "Mode"
+        category: "Mode",
       },
       {
         title: "Re-encode",
         value: { reencode: true },
         description: "Slower but works with different codecs/formats",
-        category: "Mode"
+        category: "Mode",
       },
     ]
 
-    const filesToMerge = compatibleFiles.filter(f => selectedFiles.has(f.path))
+    const filesToMerge = compatibleFiles.filter((f) => selectedFiles.has(f.path))
 
     return (
       <DialogSelect
@@ -517,7 +756,7 @@ export function MergeDialog({
   }
 
   // File selection step
-  const fileOptions: DialogSelectOption<string>[] = compatibleFiles.map(f => ({
+  const fileOptions: DialogSelectOption<string>[] = compatibleFiles.map((f) => ({
     title: f.name,
     value: f.path,
     description: formatSize(f.size || 0),
