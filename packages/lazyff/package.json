@@ -1,11 +1,11 @@
 {
   "name": "lazyff",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple, powerful wrapper around ffmpeg for the terminal",
   "author": "Manas Kenge",
   "license": "MIT",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "dist/cli.js",
   "bin": {
     "lazyff": "./bin/lazyff"
   },
@@ -33,12 +33,13 @@
   },
   "files": [
     "bin",
-    "src"
+    "dist/cli.js",
+    "README.md"
   ],
   "scripts": {
     "dev": "bun run src/cli.ts",
     "dev:tui": "bun run src/tui/index.tsx",
-    "build": "bun build src/cli.ts --outdir dist --target bun"
+    "build": "bun build src/cli.ts --outdir dist --target bun --minify"
   },
   "dependencies": {
     "@opentui/core": "^0.1.59",

@@ -1,0 +1,14 @@
+# Development artifacts
+src/
+tsconfig.json
+*.tgz
+dist-test/
+temp_wasm/
+
+# Bundled assets (excl. cli.js)
+dist/*.wasm
+dist/*.scm
+
+# System files
+.DS_Store
+*.log
