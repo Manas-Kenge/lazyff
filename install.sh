@@ -109,6 +109,7 @@ detect_platform() {
             ;;
         *)
             print_message error "Unsupported OS/architecture combination: $os/$arch"
+            print_message info "Supported combinations: linux-x64, linux-arm64, darwin-x64, darwin-arm64, windows-x64"
             exit 1
             ;;
     esac
@@ -135,37 +136,11 @@ detect_musl() {
     fi
 }
 
-detect_baseline() {
-    needs_baseline=false
-
-    if [ "$arch" != "x64" ]; then
-        return
-    fi
-
-    # Check for AVX2 support on Linux
-    if [ "$os" = "linux" ]; then
-        if ! grep -qi avx2 /proc/cpuinfo 2>/dev/null; then
-            needs_baseline=true
-        fi
-    fi
-
-    # Check for AVX2 support on macOS
-    if [ "$os" = "darwin" ]; then
-        avx2=$(sysctl -n hw.optional.avx2_0 2>/dev/null || echo 0)
-        if [ "$avx2" != "1" ]; then
-            needs_baseline=true
-        fi
-    fi
-}
-
 build_target() {
     target="$os-$arch"
 
-    if [ "$needs_baseline" = "true" ]; then
-        target="$target-baseline"
-    fi
-
-    if [ "$is_musl" = "true" ]; then
+    # musl suffix only applies to linux-x64
+    if [ "$is_musl" = "true" ] && [ "$os" = "linux" ] && [ "$arch" = "x64" ]; then
         target="$target-musl"
     fi
 }
@@ -419,21 +394,32 @@ download_and_install() {
         unzip -q "$tmp_dir/$filename" -d "$tmp_dir"
     fi
 
-    # Find and move the binary
-    if [ -f "$tmp_dir/lazyff" ]; then
-        mv "$tmp_dir/lazyff" "$INSTALL_DIR/"
-    elif [ -f "$tmp_dir/${APP}" ]; then
-        mv "$tmp_dir/${APP}" "$INSTALL_DIR/"
+    if [ "$os" = "windows" ]; then
+        if [ -f "$tmp_dir/lazyff.exe" ]; then
+            mv "$tmp_dir/lazyff.exe" "$INSTALL_DIR/"
+            chmod 755 "${INSTALL_DIR}/lazyff.exe"
+            print_message success "  Installed to ${INSTALL_DIR}/lazyff.exe"
+        else
+            print_message error "Binary not found in archive (expected lazyff.exe)"
+            rm -rf "$tmp_dir"
+            exit 1
+        fi
     else
-        print_message error "Binary not found in archive"
-        rm -rf "$tmp_dir"
-        exit 1
+        # Unix binary (no extension)
+        if [ -f "$tmp_dir/lazyff" ]; then
+            mv "$tmp_dir/lazyff" "$INSTALL_DIR/"
+        elif [ -f "$tmp_dir/${APP}" ]; then
+            mv "$tmp_dir/${APP}" "$INSTALL_DIR/"
+        else
+            print_message error "Binary not found in archive"
+            rm -rf "$tmp_dir"
+            exit 1
+        fi
+        chmod 755 "${INSTALL_DIR}/lazyff"
+        print_message success "  Installed to ${INSTALL_DIR}/lazyff"
     fi
 
-    chmod 755 "${INSTALL_DIR}/lazyff"
     rm -rf "$tmp_dir"
-
-    print_message success "  Installed to ${INSTALL_DIR}/lazyff"
 }
 
 # ============================================================================
@@ -589,7 +575,6 @@ main() {
     print_step "Detecting platform..."
     detect_platform
     detect_musl
-    detect_baseline
     build_target
     print_message success "  Detected: ${target}"
 
