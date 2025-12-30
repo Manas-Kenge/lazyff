@@ -2,7 +2,7 @@
 
 A simple, powerful wrapper around ffmpeg for the terminal.
 
-[![npm version](https://img.shields.io/npm/v/@manaskng/lazyff.svg)](https://www.npmjs.com/package/@manaskng/lazyff)
+[![npm version](https://img.shields.io/npm/v/lazyff.svg)](https://www.npmjs.com/package/lazyff)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![GitHub stars](https://img.shields.io/github/stars/Manas-Kenge/lazyff.svg)](https://github.com/Manas-Kenge/lazyff/stargazers)
 
@@ -44,16 +44,16 @@ curl -fsSL https://raw.githubusercontent.com/Manas-Kenge/lazyff/main/install.sh 
 
 ```bash
 # Using Bun (recommended)
-bun install -g @manaskng/lazyff
+bun install -g lazyff
 
 # Using npm
-npm install -g @manaskng/lazyff
+npm install -g lazyff
 
 # Using pnpm
-pnpm add -g @manaskng/lazyff
+pnpm add -g lazyff
 
 # Using yarn
-yarn global add @manaskng/lazyff
+yarn global add lazyff
 ```
 
 ### Verify installation

@@ -27,7 +27,7 @@
 
 ## Architecture
 
-- Single package: `@manaskng/lazyff` (published to npm) containing CLI + TUI
+- Single package: `lazyff` (published to npm) containing CLI + TUI
 - CLI entry: `cli.ts`; args built via `ffmpeg/builder.ts`; presets in `ffmpeg/presets.ts`
 - TUI entry: `src/tui/index.tsx`; uses context providers (app, theme) and `fuzzysort` for autocomplete
 - Web package: `@lazyff/web` (Next.js) for documentation website (not published to npm)

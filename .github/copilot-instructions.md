@@ -5,7 +5,7 @@ These instructions guide AI coding agents to work productively in this repo. Foc
 ## Project Overview
 
 - Monorepo (`workspaces: packages/*`) with two packages:
-  - `@manaskng/lazyff`: Bun-based CLI + TUI wrapper around ffmpeg (published to npm).
+  - `lazyff`: Bun-based CLI + TUI wrapper around ffmpeg (published to npm).
   - `@lazyff/web`: Next.js web interface for documentation (not published).
 - Goal: opencode.ai-like guided ffmpeg interface for terminal.
 
