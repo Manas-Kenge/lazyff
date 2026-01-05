@@ -22,24 +22,30 @@ jobs:
           # Linux x64
           - os: ubuntu-latest
             target: linux-x64
+            bun-target: bun-linux-x64
             archive: tar.gz
           - os: ubuntu-latest
             target: linux-x64-musl
+            bun-target: bun-linux-x64-musl
             archive: tar.gz
           # Linux arm64
           - os: ubuntu-latest
             target: linux-arm64
+            bun-target: bun-linux-arm64
             archive: tar.gz
           # macOS
           - os: macos-latest
             target: darwin-x64
+            bun-target: bun-darwin-x64
             archive: zip
           - os: macos-latest
             target: darwin-arm64
+            bun-target: bun-darwin-arm64
             archive: zip
           # Windows
           - os: windows-latest
             target: windows-x64
+            bun-target: bun-windows-x64
             archive: zip
 
     runs-on: ${{ matrix.os }}
@@ -56,56 +62,31 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Get version
+      - name: Get version from tag
         id: version
         shell: bash
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+            VERSION="${{ inputs.version }}"
           else
-            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+            VERSION="${GITHUB_REF#refs/tags/v}"
           fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Building version: $VERSION"
 
-      - name: Update version in source
-        shell: bash
+      - name: Build binary (Unix)
+        if: matrix.os != 'windows-latest'
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          # Update version in version.ts
-          if [[ "$RUNNER_OS" == "macOS" ]]; then
-            sed -i '' "s/export const VERSION = \".*\"/export const VERSION = \"$VERSION\"/" packages/lazyff/src/version.ts
-          else
-            sed -i "s/export const VERSION = \".*\"/export const VERSION = \"$VERSION\"/" packages/lazyff/src/version.ts
-          fi
+          bun build packages/lazyff/src/cli.ts \
+            --compile \
+            --outfile lazyff \
+            --target ${{ matrix.bun-target }} \
+            --define "process.env.LAZYFF_VERSION='${{ steps.version.outputs.version }}'"
 
-      - name: Build binary (Linux x64)
-        if: matrix.target == 'linux-x64'
+      - name: Build binary (Windows)
+        if: matrix.os == 'windows-latest'
         run: |
-          bun build packages/lazyff/src/cli.ts --compile --outfile lazyff --target bun-linux-x64
-
-      - name: Build binary (Linux x64 musl)
-        if: matrix.target == 'linux-x64-musl'
-        run: |
-          bun build packages/lazyff/src/cli.ts --compile --outfile lazyff --target bun-linux-x64-musl
-
-      - name: Build binary (Linux arm64)
-        if: matrix.target == 'linux-arm64'
-        run: |
-          bun build packages/lazyff/src/cli.ts --compile --outfile lazyff --target bun-linux-arm64
-
-      - name: Build binary (macOS x64)
-        if: matrix.target == 'darwin-x64'
-        run: |
-          bun build packages/lazyff/src/cli.ts --compile --outfile lazyff --target bun-darwin-x64
-
-      - name: Build binary (macOS arm64)
-        if: matrix.target == 'darwin-arm64'
-        run: |
-          bun build packages/lazyff/src/cli.ts --compile --outfile lazyff --target bun-darwin-arm64
-
-      - name: Build binary (Windows x64)
-        if: matrix.target == 'windows-x64'
-        run: |
-          bun build packages/lazyff/src/cli.ts --compile --outfile lazyff.exe --target bun-windows-x64
+          bun build packages/lazyff/src/cli.ts --compile --outfile lazyff.exe --target ${{ matrix.bun-target }} "--define=process.env.LAZYFF_VERSION='${{ steps.version.outputs.version }}'"
 
       - name: Create archive (tar.gz)
         if: matrix.archive == 'tar.gz'
@@ -136,7 +117,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Get version
+      - name: Get version from tag
         id: version
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -189,14 +170,16 @@ jobs:
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22" # Ensure you use a modern version
+          node-version: "22"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Get version
+      - name: Get version from tag
         id: version
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -205,19 +188,16 @@ jobs:
             echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
           fi
 
-      - name: Update version in source
-        run: |
-          sed -i "s/export const VERSION = \".*\"/export const VERSION = \"${{ steps.version.outputs.version }}\"/" packages/lazyff/src/version.ts
-
       - name: Install dependencies
         run: bun install
 
-      - name: Update package version
+      - name: Set package version from tag
+        working-directory: packages/lazyff
         run: |
-          cd packages/lazyff
-          npm version ${{ steps.version.outputs.version }} --no-git-tag-version
+          npm version ${{ steps.version.outputs.version }} --no-git-tag-version --allow-same-version
 
-      - name: Build packages
+      - name: Build package
+        working-directory: packages/lazyff
         run: bun run build
 
       - name: Publish to npm

@@ -1,14 +1,53 @@
 /**
  * Version management for lazyff CLI
- * Reads version from package.json at runtime for development
- * and uses embedded version for compiled binaries
+ *
+ * Version resolution priority:
+ * 1. LAZYFF_VERSION env var (injected at build time for compiled binaries)
+ * 2. package.json version (for development)
+ * 3. Fallback "0.0.0-dev"
  */
 
 import { resolve, dirname } from "path"
 import { fileURLToPath } from "url"
+import { readFileSync } from "fs"
+
+/**
+ * Get version from package.json (for development and npm package)
+ */
+function getPackageVersion(): string | null {
+  try {
+    const __dirname = dirname(fileURLToPath(import.meta.url))
+    const packagePath = resolve(__dirname, "../package.json")
+    const packageJson = JSON.parse(readFileSync(packagePath, "utf-8")) as { version?: string }
+    return packageJson.version ?? null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Get version with priority:
+ * 1. LAZYFF_VERSION env (set at compile time via --define)
+ * 2. package.json (development)
+ * 3. Fallback
+ */
+function resolveVersion(): string {
+  // Check for build-time injected version
+  if (typeof process !== "undefined" && process.env.LAZYFF_VERSION) {
+    return process.env.LAZYFF_VERSION
+  }
+
+  // Try package.json for development
+  const pkgVersion = getPackageVersion()
+  if (pkgVersion) {
+    return pkgVersion
+  }
+
+  return "0.0.0-dev"
+}
 
 /** Current lazyff version */
-export const VERSION = "0.1.0"
+export const VERSION = resolveVersion()
 
 /** GitHub repository for releases */
 export const GITHUB_REPO = "Manas-Kenge/lazyff"
