@@ -186,9 +186,9 @@ export default function Home() {
 
   const installCommands = {
     curl: "curl -fsSL https://raw.githubusercontent.com/Manas-Kenge/lazyff/main/install.sh | bash",
-    npm: "npm install -g @lazyff/cli",
-    bun: "bun install -g @lazyff/cli",
-    pnpm: "pnpm add -g @lazyff/cli",
+    bun: "bun install -g lazyff",
+    npm: "npm install -g lazyff",
+    pnpm: "pnpm add -g lazyff",
   }
 
   const handleCopy = () => {
