@@ -319,12 +319,10 @@ export default function Home() {
         <section className="mx-auto w-full max-w-5xl border-x border-border/100">
           <div className="border-b border-border/100 px-6 py-10">
             <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 aspect-video flex items-center justify-center overflow-hidden">
-              <div className="text-center space-y-2 p-8">
-                <div className="text-sm text-muted-foreground font-mono">
-                  [demo.gif placeholder]
-                </div>
-                <div className="text-xs text-muted-foreground/60">16:9 aspect ratio</div>
-              </div>
+              <video className="w-full h-full object-cover" muted loop autoPlay playsInline>
+                <source src="/demo.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
           </div>
         </section>

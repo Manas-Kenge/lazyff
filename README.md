@@ -7,7 +7,7 @@ A simple, powerful wrapper around ffmpeg for the terminal.
 [![GitHub stars](https://img.shields.io/github/stars/Manas-Kenge/lazyff.svg)](https://github.com/Manas-Kenge/lazyff/stargazers)
 
 <p align="center">
-  <img src="docs/images/demo.gif" alt="lazyff demo" width="600">
+  <video src="packages/docs/images/demo.mp4" alt="lazyff demo" width="1000" autoplay muted loop></video>
 </p>
 
 ## Why lazyff?
