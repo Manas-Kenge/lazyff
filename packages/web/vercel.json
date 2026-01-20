@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/docs",
+      "destination": "https://manas-e652cd8c.mintlify.dev/docs"
+    },
+    {
+      "source": "/docs/:match*",
+      "destination": "https://manas-e652cd8c.mintlify.dev/docs/:match*"
+    }
+  ]
+}
